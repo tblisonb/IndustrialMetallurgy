@@ -116,7 +116,10 @@ public class CrusherBlock extends Block implements EntityBlock {
         if (!level.isClientSide()) {
             BlockEntity tile = level.getBlockEntity(pos);
             if (tile instanceof MenuProvider menuProvider) {
-                player.openMenu(menuProvider);
+                // CRUSHER's MenuType was registered via IMenuTypeExtension, which reads a BlockPos
+                // out of the open-screen packet client-side (see CrusherContainer's 3-arg ctor) --
+                // openMenu(MenuProvider) alone sends no extra data and the client fails to decode it.
+                player.openMenu(menuProvider, pos);
                 return InteractionResult.CONSUME;
             }
         }
