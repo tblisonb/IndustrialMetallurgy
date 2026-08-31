@@ -1,6 +1,7 @@
 package com.onlytanner.industrialmetallurgy.init;
 
 import com.onlytanner.industrialmetallurgy.IndustrialMetallurgy;
+import com.onlytanner.industrialmetallurgy.containers.AdvancedForgeContainer;
 import com.onlytanner.industrialmetallurgy.containers.BasicForgeContainer;
 import com.onlytanner.industrialmetallurgy.containers.CokeOvenContainer;
 import com.onlytanner.industrialmetallurgy.containers.CrusherContainer;
@@ -30,6 +31,12 @@ public class ModContainerTypes {
 
     public static final DeferredHolder<MenuType<?>, MenuType<BasicForgeContainer>> FORGE_TIER2 =
             CONTAINER_TYPES.register("forge_tier2", () -> IMenuTypeExtension.create(BasicForgeContainer::new));
+
+    public static final DeferredHolder<MenuType<?>, MenuType<AdvancedForgeContainer>> FORGE_TIER3 =
+            CONTAINER_TYPES.register("forge_tier3", () -> IMenuTypeExtension.create(AdvancedForgeContainer::new));
+
+    public static final DeferredHolder<MenuType<?>, MenuType<AdvancedForgeContainer>> FORGE_TIER4 =
+            CONTAINER_TYPES.register("forge_tier4", () -> IMenuTypeExtension.create(AdvancedForgeContainer::new));
 
     public static void init(IEventBus modEventBus) {
         CONTAINER_TYPES.register(modEventBus);

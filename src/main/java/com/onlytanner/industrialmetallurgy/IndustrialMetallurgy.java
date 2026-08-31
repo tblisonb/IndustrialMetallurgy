@@ -58,6 +58,10 @@ public class IndustrialMetallurgy {
                 (blockEntity, side) -> blockEntity.getEnergyHandler());
         event.registerBlockEntity(Capabilities.Energy.BLOCK, ModTileEntityTypes.THERMOELECTRIC_GENERATOR.get(),
                 (blockEntity, side) -> blockEntity.getEnergyHandler());
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, ModTileEntityTypes.FORGE_TIER3.get(),
+                (blockEntity, side) -> blockEntity.getEnergyHandler());
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, ModTileEntityTypes.FORGE_TIER4.get(),
+                (blockEntity, side) -> blockEntity.getEnergyHandler());
     }
 
 }

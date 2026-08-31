@@ -5,6 +5,8 @@ import com.onlytanner.industrialmetallurgy.blocks.*;
 import com.onlytanner.industrialmetallurgy.init.ModTileEntityTypes;
 import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier1BlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier2BlockEntity;
+import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier3BlockEntity;
+import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier4BlockEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -227,10 +229,16 @@ public class RegistryHandler {
     public static final DeferredBlock<Block> COKE_OVEN = BLOCKS.registerBlock("coke_oven", CokeOvenBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
     public static final DeferredBlock<Block> THERMOELECTRIC_GENERATOR = BLOCKS.registerBlock("thermoelectric_generator", ThermoelectricGeneratorBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
     public static final DeferredBlock<Block> FORGE_TIER1 = BLOCKS.registerBlock("forge_tier1",
-            props -> new BasicForgeBlock(props, () -> ModTileEntityTypes.FORGE_TIER1.get(), ForgeTier1BlockEntity::new),
+            props -> new ForgeBlock(props, () -> ModTileEntityTypes.FORGE_TIER1.get(), ForgeTier1BlockEntity::new),
             () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
     public static final DeferredBlock<Block> FORGE_TIER2 = BLOCKS.registerBlock("forge_tier2",
-            props -> new BasicForgeBlock(props, () -> ModTileEntityTypes.FORGE_TIER2.get(), ForgeTier2BlockEntity::new),
+            props -> new ForgeBlock(props, () -> ModTileEntityTypes.FORGE_TIER2.get(), ForgeTier2BlockEntity::new),
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
+    public static final DeferredBlock<Block> FORGE_TIER3 = BLOCKS.registerBlock("forge_tier3",
+            props -> new ForgeBlock(props, () -> ModTileEntityTypes.FORGE_TIER3.get(), ForgeTier3BlockEntity::new),
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
+    public static final DeferredBlock<Block> FORGE_TIER4 = BLOCKS.registerBlock("forge_tier4",
+            props -> new ForgeBlock(props, () -> ModTileEntityTypes.FORGE_TIER4.get(), ForgeTier4BlockEntity::new),
             () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
 
     // Block Items
@@ -290,6 +298,8 @@ public class RegistryHandler {
     public static final DeferredItem<BlockItem> THERMOELECTRIC_GENERATOR_ITEM = ITEMS.registerSimpleBlockItem("thermoelectric_generator", THERMOELECTRIC_GENERATOR);
     public static final DeferredItem<BlockItem> FORGE_TIER1_ITEM = ITEMS.registerSimpleBlockItem("forge_tier1", FORGE_TIER1);
     public static final DeferredItem<BlockItem> FORGE_TIER2_ITEM = ITEMS.registerSimpleBlockItem("forge_tier2", FORGE_TIER2);
+    public static final DeferredItem<BlockItem> FORGE_TIER3_ITEM = ITEMS.registerSimpleBlockItem("forge_tier3", FORGE_TIER3);
+    public static final DeferredItem<BlockItem> FORGE_TIER4_ITEM = ITEMS.registerSimpleBlockItem("forge_tier4", FORGE_TIER4);
 
     public static void init(IEventBus modEventBus) {
         ITEMS.register(modEventBus);

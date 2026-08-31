@@ -1,6 +1,6 @@
 package com.onlytanner.industrialmetallurgy.blocks;
 
-import com.onlytanner.industrialmetallurgy.tileentity.BasicForgeBlockEntity;
+import com.onlytanner.industrialmetallurgy.tileentity.ForgeBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.component.DataComponents;
@@ -33,11 +33,11 @@ import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 /**
- * Shared by all four forge tiers (solid-fuel tiers 1-2 and, eventually, electric tiers 3-4) --
- * only the block entity behavior differs per tier, so one Block class is parameterized with a
- * factory for its block entity and the registered type to tick against.
+ * Shared by all four forge tiers (solid-fuel tiers 1-2 and electric tiers 3-4) -- only the block
+ * entity behavior differs per tier, so one Block class is parameterized with a factory for its
+ * block entity and the registered type to tick against.
  */
-public class BasicForgeBlock extends Block implements EntityBlock {
+public class ForgeBlock extends Block implements EntityBlock {
 
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
@@ -45,7 +45,7 @@ public class BasicForgeBlock extends Block implements EntityBlock {
     private final Supplier<BlockEntityType<?>> typeSupplier;
     private final BiFunction<BlockPos, BlockState, BlockEntity> blockEntityFactory;
 
-    public BasicForgeBlock(Properties properties, Supplier<BlockEntityType<?>> typeSupplier, BiFunction<BlockPos, BlockState, BlockEntity> blockEntityFactory) {
+    public ForgeBlock(Properties properties, Supplier<BlockEntityType<?>> typeSupplier, BiFunction<BlockPos, BlockState, BlockEntity> blockEntityFactory) {
         super(properties);
         this.typeSupplier = typeSupplier;
         this.blockEntityFactory = blockEntityFactory;
@@ -70,7 +70,7 @@ public class BasicForgeBlock extends Block implements EntityBlock {
         if (level.isClientSide()) {
             return null;
         }
-        return type == this.typeSupplier.get() ? (lvl, pos, st, be) -> ((BasicForgeBlockEntity) be).tick() : null;
+        return type == this.typeSupplier.get() ? (lvl, pos, st, be) -> ((ForgeBlockEntity) be).tick() : null;
     }
 
     @Override
@@ -83,7 +83,7 @@ public class BasicForgeBlock extends Block implements EntityBlock {
         super.setPlacedBy(level, pos, state, placer, stack);
         if (stack.hasNonDefault(DataComponents.CUSTOM_NAME)) {
             BlockEntity tile = level.getBlockEntity(pos);
-            if (tile instanceof BasicForgeBlockEntity forge) {
+            if (tile instanceof ForgeBlockEntity forge) {
                 forge.setCustomName(stack.getHoverName());
             }
         }

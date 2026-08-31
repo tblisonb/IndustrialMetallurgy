@@ -1,7 +1,7 @@
 package com.onlytanner.industrialmetallurgy.tileentity;
 
 import com.onlytanner.industrialmetallurgy.blocks.ForgeBlock;
-import com.onlytanner.industrialmetallurgy.containers.BasicForgeContainer;
+import com.onlytanner.industrialmetallurgy.containers.AdvancedForgeContainer;
 import com.onlytanner.industrialmetallurgy.init.ModRecipes;
 import com.onlytanner.industrialmetallurgy.recipes.ForgeRecipe;
 import com.onlytanner.industrialmetallurgy.recipes.ForgeRecipeInput;
@@ -24,6 +24,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.transfer.energy.EnergyHandler;
+import net.neoforged.neoforge.transfer.energy.SimpleEnergyHandler;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -31,24 +33,22 @@ import java.util.Optional;
 import java.util.Set;
 
 /**
- * Shared logic for the solid-fuel forges (tiers 1-2; tiers 3-4 run on electricity instead, see
- * a future AdvancedForgeBlockEntity). A forge has 4 input slots, 1 fuel slot, 1 output slot, and
- * ramps a "temperature" up while lit/burning; recipes only run once past a per-tier threshold.
+ * Electric counterpart to BasicForgeBlockEntity (tiers 3-4): no fuel slot, draws from a
+ * SimpleEnergyHandler instead -- same energy-capability pattern as the crusher.
  */
-public abstract class BasicForgeBlockEntity extends BlockEntity implements MenuProvider, ForgeBlockEntity {
+public abstract class AdvancedForgeBlockEntity extends BlockEntity implements MenuProvider, ForgeBlockEntity {
 
     public static final int NUM_INPUT_SLOTS = 4;
-    public static final int FUEL_ID = 4;
-    public static final int OUTPUT_ID = 5;
-    public static final int MAX_BURN_TIME = 1600;
+    public static final int OUTPUT_ID = 4;
+    public static final int MAX_ENERGY = 100000;
+    public static final int ENERGY_USAGE_PER_TICK = 40;
 
     private static final RecipeManager.CachedCheck<ForgeRecipeInput, ForgeRecipe> QUICK_CHECK =
             RecipeManager.createCheck(ModRecipes.FORGE_TYPE.get());
 
-    protected final ModItemHandler inventory = new ModItemHandler(6);
+    protected final ModItemHandler inventory = new ModItemHandler(5);
     protected Component customName;
     public int currentSmeltTime;
-    public int burnTimeRemaining;
     public int currentTemperature;
     public final int maxSmeltTime;
     public final int maxTemperature;
@@ -56,11 +56,17 @@ public abstract class BasicForgeBlockEntity extends BlockEntity implements MenuP
     public final int minRunningTemperature;
     private final Set<String> acceptedTiers;
     private final Component defaultName;
-    private final MenuType<BasicForgeContainer> menuType;
+    private final MenuType<AdvancedForgeContainer> menuType;
+    private final SimpleEnergyHandler energyHandler = new SimpleEnergyHandler(MAX_ENERGY) {
+        @Override
+        protected void onEnergyChanged(int previousAmount) {
+            AdvancedForgeBlockEntity.this.setChanged();
+        }
+    };
 
-    protected BasicForgeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state,
-                                     int maxSmeltTime, int maxTemperature, int degreesPerTick, int minRunningTemperature,
-                                     Set<String> acceptedTiers, Component defaultName, MenuType<BasicForgeContainer> menuType) {
+    protected AdvancedForgeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state,
+                                        int maxSmeltTime, int maxTemperature, int degreesPerTick, int minRunningTemperature,
+                                        Set<String> acceptedTiers, Component defaultName, MenuType<AdvancedForgeContainer> menuType) {
         super(type, pos, state);
         this.maxSmeltTime = maxSmeltTime;
         this.maxTemperature = maxTemperature;
@@ -71,18 +77,20 @@ public abstract class BasicForgeBlockEntity extends BlockEntity implements MenuP
         this.menuType = menuType;
     }
 
-    public MenuType<BasicForgeContainer> getMenuType() {
+    public MenuType<AdvancedForgeContainer> getMenuType() {
         return this.menuType;
     }
 
+    @Override
     public void tick() {
         boolean dirty = false;
         if (this.level instanceof ServerLevel serverLevel) {
             Optional<RecipeHolder<ForgeRecipe>> recipe = getRecipe(serverLevel);
-            if (recipe.isPresent() && canProcess(recipe.get()) && burnTimeRemaining > 0 && currentTemperature > minRunningTemperature) {
+            int energy = this.energyHandler.getAmountAsInt();
+            if (recipe.isPresent() && canProcess(recipe.get()) && energy >= ENERGY_USAGE_PER_TICK && currentTemperature > minRunningTemperature) {
                 this.level.setBlockAndUpdate(this.getBlockPos(), this.getBlockState().setValue(ForgeBlock.LIT, true));
                 heatUp();
-                this.burnTimeRemaining--;
+                this.energyHandler.set(energy - ENERGY_USAGE_PER_TICK);
                 if (this.currentSmeltTime != this.maxSmeltTime) {
                     this.currentSmeltTime++;
                 } else {
@@ -90,16 +98,11 @@ public abstract class BasicForgeBlockEntity extends BlockEntity implements MenuP
                     processRecipe(recipe.get());
                 }
                 dirty = true;
-            } else if (this.burnTimeRemaining == 0 && hasFuel() && recipe.isPresent() && canProcess(recipe.get())) {
+            } else if (recipe.isPresent() && canProcess(recipe.get()) && energy >= ENERGY_USAGE_PER_TICK) {
                 this.level.setBlockAndUpdate(this.getBlockPos(), this.getBlockState().setValue(ForgeBlock.LIT, true));
                 heatUp();
-                consumeFuel();
+                this.energyHandler.set(energy - ENERGY_USAGE_PER_TICK);
                 dirty = true;
-            } else if (burnTimeRemaining > 0) {
-                this.level.setBlockAndUpdate(this.getBlockPos(), this.getBlockState().setValue(ForgeBlock.LIT, true));
-                heatUp();
-                this.burnTimeRemaining--;
-                currentSmeltTime = 0;
             } else {
                 this.level.setBlockAndUpdate(this.getBlockPos(), this.getBlockState().setValue(ForgeBlock.LIT, false));
                 this.currentTemperature = Math.max(0, this.currentTemperature - 1);
@@ -142,15 +145,7 @@ public abstract class BasicForgeBlockEntity extends BlockEntity implements MenuP
                 .filter(holder -> this.acceptedTiers.contains(holder.value().tier()));
     }
 
-    public boolean hasFuel() {
-        return this.inventory.getStackInSlot(FUEL_ID).getCount() > 0;
-    }
-
-    public void consumeFuel() {
-        this.inventory.decrStackSize(FUEL_ID, 1);
-        this.burnTimeRemaining = MAX_BURN_TIME;
-    }
-
+    @Override
     public void setCustomName(Component name) {
         this.customName = name;
     }
@@ -175,7 +170,7 @@ public abstract class BasicForgeBlockEntity extends BlockEntity implements MenuP
         this.inventory.deserialize(input.childOrEmpty("Inventory"));
         this.currentSmeltTime = input.getIntOr("CurrentSmeltTime", 0);
         this.currentTemperature = input.getIntOr("CurrentTemperature", 0);
-        this.burnTimeRemaining = input.getIntOr("BurnTimeRemaining", 0);
+        this.energyHandler.deserialize(input.childOrEmpty("Energy"));
     }
 
     @Override
@@ -187,17 +182,29 @@ public abstract class BasicForgeBlockEntity extends BlockEntity implements MenuP
         this.inventory.serialize(output.child("Inventory"));
         output.putInt("CurrentSmeltTime", this.currentSmeltTime);
         output.putInt("CurrentTemperature", this.currentTemperature);
-        output.putInt("BurnTimeRemaining", this.burnTimeRemaining);
+        this.energyHandler.serialize(output.child("Energy"));
     }
 
     public final IItemHandlerModifiable getInventory() {
         return this.inventory;
     }
 
+    public final EnergyHandler getEnergyHandler() {
+        return this.energyHandler;
+    }
+
+    public int getEnergyAmount() {
+        return this.energyHandler.getAmountAsInt();
+    }
+
+    public void setEnergyAmount(int amount) {
+        this.energyHandler.set(Math.max(0, amount));
+    }
+
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
-        return new BasicForgeContainer(containerId, playerInventory, this);
+        return new AdvancedForgeContainer(containerId, playerInventory, this);
     }
 
 }

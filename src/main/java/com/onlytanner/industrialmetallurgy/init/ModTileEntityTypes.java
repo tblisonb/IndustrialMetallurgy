@@ -5,6 +5,8 @@ import com.onlytanner.industrialmetallurgy.tileentity.CokeOvenBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.CrusherBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier1BlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier2BlockEntity;
+import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier3BlockEntity;
+import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier4BlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ThermoelectricGeneratorBlockEntity;
 import com.onlytanner.industrialmetallurgy.util.RegistryHandler;
 import net.minecraft.core.registries.Registries;
@@ -31,6 +33,12 @@ public class ModTileEntityTypes {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ForgeTier2BlockEntity>> FORGE_TIER2 =
             BLOCK_ENTITY_TYPES.register("forge_tier2", () -> new BlockEntityType<>(ForgeTier2BlockEntity::new, RegistryHandler.FORGE_TIER2.get()));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ForgeTier3BlockEntity>> FORGE_TIER3 =
+            BLOCK_ENTITY_TYPES.register("forge_tier3", () -> new BlockEntityType<>(ForgeTier3BlockEntity::new, RegistryHandler.FORGE_TIER3.get()));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ForgeTier4BlockEntity>> FORGE_TIER4 =
+            BLOCK_ENTITY_TYPES.register("forge_tier4", () -> new BlockEntityType<>(ForgeTier4BlockEntity::new, RegistryHandler.FORGE_TIER4.get()));
 
     public static void init(IEventBus modEventBus) {
         BLOCK_ENTITY_TYPES.register(modEventBus);

@@ -1,0 +1,13 @@
+{
+    "variants": {
+        "facing=north,lit=false":  { "model": "industrialmetallurgy:block/forge_tier4" },
+        "facing=east,lit=false":   { "model": "industrialmetallurgy:block/forge_tier4", "y": 90 },
+        "facing=south,lit=false":   { "model": "industrialmetallurgy:block/forge_tier4", "y": 180 },
+        "facing=west,lit=false":   { "model": "industrialmetallurgy:block/forge_tier4", "y": 270 },
+
+        "facing=north,lit=true":  { "model": "industrialmetallurgy:block/lit_forge_tier4" },
+        "facing=east,lit=true":   { "model": "industrialmetallurgy:block/lit_forge_tier4", "y": 90 },
+        "facing=south,lit=true":   { "model": "industrialmetallurgy:block/lit_forge_tier4", "y": 180 },
+        "facing=west,lit=true":   { "model": "industrialmetallurgy:block/lit_forge_tier4", "y": 270 }
+    }
+}
