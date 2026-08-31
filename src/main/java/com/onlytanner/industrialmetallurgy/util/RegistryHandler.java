@@ -1,0 +1,284 @@
+package com.onlytanner.industrialmetallurgy.util;
+
+import com.onlytanner.industrialmetallurgy.IndustrialMetallurgy;
+import com.onlytanner.industrialmetallurgy.blocks.*;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredRegister;
+
+public class RegistryHandler {
+
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(IndustrialMetallurgy.MODID);
+    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(IndustrialMetallurgy.MODID);
+
+    // Items
+    // Metal Ingots
+    public static final DeferredItem<Item> ALNICO_INGOT = ITEMS.registerSimpleItem("alnico_ingot");
+    public static final DeferredItem<Item> ALUMINUM_INGOT = ITEMS.registerSimpleItem("aluminum_ingot");
+    public static final DeferredItem<Item> BRASS_INGOT = ITEMS.registerSimpleItem("brass_ingot");
+    public static final DeferredItem<Item> BRONZE_INGOT = ITEMS.registerSimpleItem("bronze_ingot");
+    public static final DeferredItem<Item> CHROMIUM_INGOT = ITEMS.registerSimpleItem("chromium_ingot");
+    public static final DeferredItem<Item> COBALT_INGOT = ITEMS.registerSimpleItem("cobalt_ingot");
+    public static final DeferredItem<Item> COBALT_STEEL_INGOT = ITEMS.registerSimpleItem("cobalt_steel_ingot");
+    public static final DeferredItem<Item> CONSTANTAN_INGOT = ITEMS.registerSimpleItem("constantan_ingot");
+    public static final DeferredItem<Item> COPPER_INGOT = ITEMS.registerSimpleItem("copper_ingot");
+    public static final DeferredItem<Item> COPPER_TUNGSTEN_INGOT = ITEMS.registerSimpleItem("copper_tungsten_ingot");
+    public static final DeferredItem<Item> ELECTRUM_INGOT = ITEMS.registerSimpleItem("electrum_ingot");
+    public static final DeferredItem<Item> INVAR_INGOT = ITEMS.registerSimpleItem("invar_ingot");
+    public static final DeferredItem<Item> KANTHAL_INGOT = ITEMS.registerSimpleItem("kanthal_ingot");
+    public static final DeferredItem<Item> LEAD_INGOT = ITEMS.registerSimpleItem("lead_ingot");
+    public static final DeferredItem<Item> MANGANESE_INGOT = ITEMS.registerSimpleItem("manganese_ingot");
+    public static final DeferredItem<Item> NEQUITUM_INGOT = ITEMS.registerSimpleItem("nequitum_ingot");
+    public static final DeferredItem<Item> NICKEL_INGOT = ITEMS.registerSimpleItem("nickel_ingot");
+    public static final DeferredItem<Item> NICHROME_INGOT = ITEMS.registerSimpleItem("nichrome_ingot");
+    public static final DeferredItem<Item> NIKROTHAL_INGOT = ITEMS.registerSimpleItem("nikrothal_ingot");
+    public static final DeferredItem<Item> NITINOL_INGOT = ITEMS.registerSimpleItem("nitinol_ingot");
+    public static final DeferredItem<Item> SILVER_INGOT = ITEMS.registerSimpleItem("silver_ingot");
+    public static final DeferredItem<Item> SOLDER_INGOT = ITEMS.registerSimpleItem("solder_ingot");
+    public static final DeferredItem<Item> STEEL_INGOT = ITEMS.registerSimpleItem("steel_ingot");
+    public static final DeferredItem<Item> STELLITE_INGOT = ITEMS.registerSimpleItem("stellite_ingot");
+    public static final DeferredItem<Item> TIN_INGOT = ITEMS.registerSimpleItem("tin_ingot");
+    public static final DeferredItem<Item> TITANIUM_INGOT = ITEMS.registerSimpleItem("titanium_ingot");
+    public static final DeferredItem<Item> TUNGSTEN_INGOT = ITEMS.registerSimpleItem("tungsten_ingot");
+    public static final DeferredItem<Item> TUNGSTEN_STEEL_INGOT = ITEMS.registerSimpleItem("tungsten_steel_ingot");
+    public static final DeferredItem<Item> ZINC_INGOT = ITEMS.registerSimpleItem("zinc_ingot");
+    // Metal Nuggets
+    public static final DeferredItem<Item> ALNICO_NUGGET = ITEMS.registerSimpleItem("alnico_nugget");
+    public static final DeferredItem<Item> ALUMINUM_NUGGET = ITEMS.registerSimpleItem("aluminum_nugget");
+    public static final DeferredItem<Item> BRASS_NUGGET = ITEMS.registerSimpleItem("brass_nugget");
+    public static final DeferredItem<Item> BRONZE_NUGGET = ITEMS.registerSimpleItem("bronze_nugget");
+    public static final DeferredItem<Item> CHROMIUM_NUGGET = ITEMS.registerSimpleItem("chromium_nugget");
+    public static final DeferredItem<Item> COBALT_NUGGET = ITEMS.registerSimpleItem("cobalt_nugget");
+    public static final DeferredItem<Item> COBALT_STEEL_NUGGET = ITEMS.registerSimpleItem("cobalt_steel_nugget");
+    public static final DeferredItem<Item> CONSTANTAN_NUGGET = ITEMS.registerSimpleItem("constantan_nugget");
+    public static final DeferredItem<Item> COPPER_NUGGET = ITEMS.registerSimpleItem("copper_nugget");
+    public static final DeferredItem<Item> COPPER_TUNGSTEN_NUGGET = ITEMS.registerSimpleItem("copper_tungsten_nugget");
+    public static final DeferredItem<Item> ELECTRUM_NUGGET = ITEMS.registerSimpleItem("electrum_nugget");
+    public static final DeferredItem<Item> INVAR_NUGGET = ITEMS.registerSimpleItem("invar_nugget");
+    public static final DeferredItem<Item> KANTHAL_NUGGET = ITEMS.registerSimpleItem("kanthal_nugget");
+    public static final DeferredItem<Item> LEAD_NUGGET = ITEMS.registerSimpleItem("lead_nugget");
+    public static final DeferredItem<Item> MANGANESE_NUGGET = ITEMS.registerSimpleItem("manganese_nugget");
+    public static final DeferredItem<Item> NEQUITUM_NUGGET = ITEMS.registerSimpleItem("nequitum_nugget");
+    public static final DeferredItem<Item> NICHROME_NUGGET = ITEMS.registerSimpleItem("nichrome_nugget");
+    public static final DeferredItem<Item> NICKEL_NUGGET = ITEMS.registerSimpleItem("nickel_nugget");
+    public static final DeferredItem<Item> NIKROTHAL_NUGGET = ITEMS.registerSimpleItem("nikrothal_nugget");
+    public static final DeferredItem<Item> NITINOL_NUGGET = ITEMS.registerSimpleItem("nitinol_nugget");
+    public static final DeferredItem<Item> SILVER_NUGGET = ITEMS.registerSimpleItem("silver_nugget");
+    public static final DeferredItem<Item> SOLDER_NUGGET = ITEMS.registerSimpleItem("solder_nugget");
+    public static final DeferredItem<Item> STEEL_NUGGET = ITEMS.registerSimpleItem("steel_nugget");
+    public static final DeferredItem<Item> STELLITE_NUGGET = ITEMS.registerSimpleItem("stellite_nugget");
+    public static final DeferredItem<Item> TIN_NUGGET = ITEMS.registerSimpleItem("tin_nugget");
+    public static final DeferredItem<Item> TITANIUM_NUGGET = ITEMS.registerSimpleItem("titanium_nugget");
+    public static final DeferredItem<Item> TUNGSTEN_NUGGET = ITEMS.registerSimpleItem("tungsten_nugget");
+    public static final DeferredItem<Item> TUNGSTEN_STEEL_NUGGET = ITEMS.registerSimpleItem("tungsten_steel_nugget");
+    public static final DeferredItem<Item> ZINC_NUGGET = ITEMS.registerSimpleItem("zinc_nugget");
+    // Crushed Ores
+    public static final DeferredItem<Item> CRUSHED_ARGENTITE_ORE = ITEMS.registerSimpleItem("crushed_argentite_ore");
+    public static final DeferredItem<Item> CRUSHED_BAUXITE_ORE = ITEMS.registerSimpleItem("crushed_bauxite_ore");
+    public static final DeferredItem<Item> CRUSHED_CASSITERITE_ORE = ITEMS.registerSimpleItem("crushed_cassiterite_ore");
+    public static final DeferredItem<Item> CRUSHED_CHROMITE_ORE = ITEMS.registerSimpleItem("crushed_chromite_ore");
+    public static final DeferredItem<Item> CRUSHED_COBALTITE_ORE = ITEMS.registerSimpleItem("crushed_cobaltite_ore");
+    public static final DeferredItem<Item> CRUSHED_CUPRITE_ORE = ITEMS.registerSimpleItem("crushed_cuprite_ore");
+    public static final DeferredItem<Item> CRUSHED_GALENA_ORE = ITEMS.registerSimpleItem("crushed_galena_ore");
+    public static final DeferredItem<Item> CRUSHED_GARNIERITE_ORE = ITEMS.registerSimpleItem("crushed_garnierite_ore");
+    public static final DeferredItem<Item> CRUSHED_GOLD_ORE = ITEMS.registerSimpleItem("crushed_gold_ore");
+    public static final DeferredItem<Item> CRUSHED_IRON_ORE = ITEMS.registerSimpleItem("crushed_iron_ore");
+    public static final DeferredItem<Item> CRUSHED_PYROLUSITE_ORE = ITEMS.registerSimpleItem("crushed_pyrolusite_ore");
+    public static final DeferredItem<Item> CRUSHED_RUTILE_ORE = ITEMS.registerSimpleItem("crushed_rutile_ore");
+    public static final DeferredItem<Item> CRUSHED_SPHALERITE_ORE = ITEMS.registerSimpleItem("crushed_sphalerite_ore");
+    public static final DeferredItem<Item> CRUSHED_SCHEELITE_ORE = ITEMS.registerSimpleItem("crushed_scheelite_ore");
+    // Misc Resources
+    public static final DeferredItem<Item> LEPIDOLITE = ITEMS.registerSimpleItem("lepidolite");
+    public static final DeferredItem<Item> LITHIUM_DUST = ITEMS.registerSimpleItem("lithium_dust");
+    public static final DeferredItem<Item> CRUSHED_COAL = ITEMS.registerSimpleItem("crushed_coal");
+    public static final DeferredItem<Item> CRUSHED_DIAMOND = ITEMS.registerSimpleItem("crushed_diamond");
+    public static final DeferredItem<Item> TUNGSTEN_CARBIDE_DUST = ITEMS.registerSimpleItem("tungsten_carbide_dust");
+    public static final DeferredItem<Item> SULFUR = ITEMS.registerSimpleItem("sulfur");
+    public static final DeferredItem<Item> PHOSPHORUS = ITEMS.registerSimpleItem("phosphorus");
+    public static final DeferredItem<Item> ARSENIC = ITEMS.registerSimpleItem("arsenic");
+    public static final DeferredItem<Item> LEAD_SULFATE = ITEMS.registerSimpleItem("lead_sulfate");
+    public static final DeferredItem<Item> CALCIUM_OXIDE = ITEMS.registerSimpleItem("calcium_oxide");
+    public static final DeferredItem<Item> POTASSIUM_NITRATE = ITEMS.registerSimpleItem("potassium_nitrate");
+    public static final DeferredItem<Item> LITHIUM_IRON_PHOSPHATE = ITEMS.registerSimpleItem("lithium_iron_phosphate");
+    public static final DeferredItem<Item> WELDING_FLUX = ITEMS.registerSimpleItem("welding_flux");
+    public static final DeferredItem<Item> ETHYLENE_BOTTLE = ITEMS.registerSimpleItem("ethylene_bottle");
+    public static final DeferredItem<Item> ETHYLENE_GLYCOL_BOTTLE = ITEMS.registerSimpleItem("ethylene_glycol_bottle");
+    public static final DeferredItem<Item> METHANE_BOTTLE = ITEMS.registerSimpleItem("methane_bottle");
+    public static final DeferredItem<Item> PETROLEUM_BOTTLE = ITEMS.registerSimpleItem("petroleum_bottle");
+    public static final DeferredItem<Item> SULFURIC_ACID_BOTTLE = ITEMS.registerSimpleItem("sulfuric_acid_bottle");
+    public static final DeferredItem<Item> COAL_COKE = ITEMS.registerSimpleItem("coal_coke");
+    public static final DeferredItem<Item> SILICON = ITEMS.registerSimpleItem("silicon");
+    public static final DeferredItem<Item> BITUMEN = ITEMS.registerSimpleItem("bitumen");
+    public static final DeferredItem<Item> PEAT = ITEMS.registerSimpleItem("peat");
+    public static final DeferredItem<Item> FERTILIZER = ITEMS.registerSimpleItem("fertilizer");
+    public static final DeferredItem<Item> HDPE_SHEET = ITEMS.registerSimpleItem("hdpe_sheet");
+    public static final DeferredItem<Item> CERAMIC_FIBER = ITEMS.registerSimpleItem("ceramic_fiber");
+    public static final DeferredItem<Item> GRAPHITE_ROD = ITEMS.registerSimpleItem("graphite_rod");
+    public static final DeferredItem<Item> REFRACTORY_BRICK = ITEMS.registerSimpleItem("refractory_brick");
+    public static final DeferredItem<Item> REFRACTORY_COMPOSITE = ITEMS.registerSimpleItem("refractory_composite");
+    public static final DeferredItem<Item> PERMANENT_MAGNET = ITEMS.registerSimpleItem("permanent_magnet");
+    public static final DeferredItem<Item> DRY_CELL = ITEMS.registerSimpleItem("dry_cell");
+    public static final DeferredItem<Item> DRY_CELL_BANK = ITEMS.registerSimpleItem("dry_cell_bank");
+    public static final DeferredItem<Item> BATTERY_CELL = ITEMS.registerSimpleItem("battery_cell");
+    public static final DeferredItem<Item> BATTERY_BANK = ITEMS.registerSimpleItem("battery_bank");
+    public static final DeferredItem<Item> LITHIUM_BATTERY_CELL = ITEMS.registerSimpleItem("lithium_battery_cell");
+    public static final DeferredItem<Item> LITHIUM_BATTERY_BANK = ITEMS.registerSimpleItem("lithium_battery_bank");
+    public static final DeferredItem<Item> CONDUCTING_ELEMENT = ITEMS.registerSimpleItem("conducting_element");
+    public static final DeferredItem<Item> PRINTED_CIRCUIT_BOARD = ITEMS.registerSimpleItem("printed_circuit_board");
+    public static final DeferredItem<Item> INTEGRATED_CIRCUIT = ITEMS.registerSimpleItem("integrated_circuit");
+    public static final DeferredItem<Item> CONTROLLER_BOARD = ITEMS.registerSimpleItem("controller_board");
+    public static final DeferredItem<Item> CERAMIC_CAPACITOR = ITEMS.registerSimpleItem("ceramic_capacitor");
+    public static final DeferredItem<Item> ELECTROLYTIC_CAPACITOR = ITEMS.registerSimpleItem("electrolytic_capacitor");
+    public static final DeferredItem<Item> ELECTRIC_MOTOR = ITEMS.registerSimpleItem("electric_motor");
+    public static final DeferredItem<Item> STATOR = ITEMS.registerSimpleItem("stator");
+    public static final DeferredItem<Item> ROTOR = ITEMS.registerSimpleItem("rotor");
+    public static final DeferredItem<Item> FIELD_COIL = ITEMS.registerSimpleItem("field_coil");
+    public static final DeferredItem<Item> GEAR = ITEMS.registerSimpleItem("gear");
+    public static final DeferredItem<Item> HEAT_SINK = ITEMS.registerSimpleItem("heat_sink");
+    public static final DeferredItem<Item> HEATING_ELEMENT = ITEMS.registerSimpleItem("heating_element");
+    public static final DeferredItem<Item> INDUCTION_CORE = ITEMS.registerSimpleItem("induction_core");
+    public static final DeferredItem<Item> MAGNET_WIRE = ITEMS.registerSimpleItem("magnet_wire");
+    public static final DeferredItem<Item> MEMORY_WIRE = ITEMS.registerSimpleItem("memory_wire");
+    public static final DeferredItem<Item> RESISTANCE_WIRE = ITEMS.registerSimpleItem("resistance_wire");
+    public static final DeferredItem<Item> SOLDER_WIRE = ITEMS.registerSimpleItem("solder_wire");
+    // Burr sets have 480 durability; matches the original mod's behavior where wearing one out
+    // shrinks the stack instead of "breaking" it (see CrusherBlockEntity#processRecipe).
+    public static final DeferredItem<Item> BRASS_BURR_SET = ITEMS.registerSimpleItem("brass_burr_set", props -> props.durability(480));
+    public static final DeferredItem<Item> STEEL_BURR_SET = ITEMS.registerSimpleItem("steel_burr_set", props -> props.durability(480));
+    public static final DeferredItem<Item> CHROMIUM_BURR_SET = ITEMS.registerSimpleItem("chromium_burr_set", props -> props.durability(480));
+    public static final DeferredItem<Item> TUNGSTEN_CARBIDE_BURR_SET = ITEMS.registerSimpleItem("tungsten_carbide_burr_set", props -> props.durability(480));
+    // Preserved from the original mod: the nequitum burr set has no durability set (never wears out).
+    public static final DeferredItem<Item> NEQUITUM_BURR_SET = ITEMS.registerSimpleItem("nequitum_burr_set");
+    public static final DeferredItem<Item> LEAD_SULFATE_PLATE = ITEMS.registerSimpleItem("lead_sulfate_plate");
+    public static final DeferredItem<Item> SILICON_PLATE = ITEMS.registerSimpleItem("silicon_plate");
+    public static final DeferredItem<Item> STEEL_PLATE = ITEMS.registerSimpleItem("steel_plate");
+    public static final DeferredItem<Item> COPPER_PLATE = ITEMS.registerSimpleItem("copper_plate");
+    public static final DeferredItem<Item> INVAR_PLATE = ITEMS.registerSimpleItem("invar_plate");
+    public static final DeferredItem<Item> ALUMINUM_PLATE = ITEMS.registerSimpleItem("aluminum_plate");
+    public static final DeferredItem<Item> ALUMINUM_FOIL = ITEMS.registerSimpleItem("aluminum_foil");
+    // NOTE: Tools (steel/nequitum pickaxe/shovel/sword/axe/hoe) are deliberately not ported yet.
+    // Modern NeoForge builds tool items via Item.Properties#pickaxe/axe/sword/shovel/hoe(ToolMaterial, ...)
+    // backed by block tags for "incorrect for this tool" and repair-ingredient tags, replacing the old
+    // ModItemTiers/IItemTier subclassing approach entirely. That needs new tag JSON files and is left
+    // for a follow-up pass rather than guessed at here.
+
+    // Blocks
+    // Metal Blocks
+    public static final DeferredBlock<Block> ALNICO_BLOCK = BLOCKS.registerBlock("alnico_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> ALUMINUM_BLOCK = BLOCKS.registerBlock("aluminum_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> BRASS_BLOCK = BLOCKS.registerBlock("brass_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> BRONZE_BLOCK = BLOCKS.registerBlock("bronze_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> CHROMIUM_BLOCK = BLOCKS.registerBlock("chromium_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> COBALT_BLOCK = BLOCKS.registerBlock("cobalt_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> COBALT_STEEL_BLOCK = BLOCKS.registerBlock("cobalt_steel_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> CONSTANTAN_BLOCK = BLOCKS.registerBlock("constantan_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> COPPER_BLOCK = BLOCKS.registerBlock("copper_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> COPPER_TUNSTEN_BLOCK = BLOCKS.registerBlock("copper_tungsten_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> ELECTRUM_BLOCK = BLOCKS.registerBlock("electrum_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> INVAR_BLOCK = BLOCKS.registerBlock("invar_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> KANTHAL_BLOCK = BLOCKS.registerBlock("kanthal_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> LEAD_BLOCK = BLOCKS.registerBlock("lead_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> MANGANESE_BLOCK = BLOCKS.registerBlock("manganese_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> NEQUITUM_BLOCK = BLOCKS.registerBlock("nequitum_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> NICHROME_BLOCK = BLOCKS.registerBlock("nichrome_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> NICKEL_BLOCK = BLOCKS.registerBlock("nickel_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> NIKROTHAL_BLOCK = BLOCKS.registerBlock("nikrothal_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> NITINOL_BLOCK = BLOCKS.registerBlock("nitinol_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> SILVER_BLOCK = BLOCKS.registerBlock("silver_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> SOLDER_BLOCK = BLOCKS.registerBlock("solder_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> STEEL_BLOCK = BLOCKS.registerBlock("steel_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> STELLITE_BLOCK = BLOCKS.registerBlock("stellite_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> TIN_BLOCK = BLOCKS.registerBlock("tin_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> TITANIUM_BLOCK = BLOCKS.registerBlock("titanium_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> TUNGSTEN_BLOCK = BLOCKS.registerBlock("tungsten_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> TUNGSTEN_STEEL_BLOCK = BLOCKS.registerBlock("tungsten_steel_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> ZINC_BLOCK = BLOCKS.registerBlock("zinc_block", MetalBlock::new, MetalBlock::newProperties);
+    // Ores
+    public static final DeferredBlock<Block> ARGENTITE_ORE = BLOCKS.registerBlock("argentite_ore", Tier2OreBlock::new, Tier2OreBlock::newProperties);
+    public static final DeferredBlock<Block> BAUXITE_ORE = BLOCKS.registerBlock("bauxite_ore", Tier1OreBlock::new, Tier1OreBlock::newProperties);
+    public static final DeferredBlock<Block> CASSITERITE_ORE = BLOCKS.registerBlock("cassiterite_ore", Tier1OreBlock::new, Tier1OreBlock::newProperties);
+    public static final DeferredBlock<Block> CHROMITE_ORE = BLOCKS.registerBlock("chromite_ore", Tier3OreBlock::new, Tier3OreBlock::newProperties);
+    public static final DeferredBlock<Block> COBALTITE_ORE = BLOCKS.registerBlock("cobaltite_ore", Tier3OreBlock::new, Tier3OreBlock::newProperties);
+    public static final DeferredBlock<Block> CUPRITE_ORE = BLOCKS.registerBlock("cuprite_ore", Tier1OreBlock::new, Tier1OreBlock::newProperties);
+    public static final DeferredBlock<Block> GALENA_ORE = BLOCKS.registerBlock("galena_ore", Tier2OreBlock::new, Tier2OreBlock::newProperties);
+    public static final DeferredBlock<Block> GARNIERITE_ORE = BLOCKS.registerBlock("garnierite_ore", Tier1OreBlock::new, Tier1OreBlock::newProperties);
+    public static final DeferredBlock<Block> LEPIDOLITE_ORE = BLOCKS.registerBlock("lepidolite_ore", Tier4OreBlock::new, Tier4OreBlock::newProperties);
+    public static final DeferredBlock<Block> PYROLUSITE_ORE = BLOCKS.registerBlock("pyrolusite_ore", Tier2OreBlock::new, Tier2OreBlock::newProperties);
+    public static final DeferredBlock<Block> RUTILE_ORE = BLOCKS.registerBlock("rutile_ore", Tier2OreBlock::new, Tier2OreBlock::newProperties);
+    public static final DeferredBlock<Block> SPHALERITE_ORE = BLOCKS.registerBlock("sphalerite_ore", Tier1OreBlock::new, Tier1OreBlock::newProperties);
+    public static final DeferredBlock<Block> SCHEELITE_ORE = BLOCKS.registerBlock("scheelite_ore", Tier4OreBlock::new, Tier4OreBlock::newProperties);
+    // Other Resources
+    public static final DeferredBlock<Block> OIL_SAND = BLOCKS.registerBlock("oil_sand", OilSandBlock::new, OilSandBlock::newProperties);
+    // Machines
+    public static final DeferredBlock<Block> IRON_FORGE_CORE = BLOCKS.registerBlock("iron_forge_core", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> STEEL_FORGE_CORE = BLOCKS.registerBlock("steel_forge_core", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> COBALT_FORGE_CORE = BLOCKS.registerBlock("cobalt_forge_core", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> TUNGSTEN_FORGE_CORE = BLOCKS.registerBlock("tungsten_forge_core", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> CRUSHER = BLOCKS.registerBlock("crusher", CrusherBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
+
+    // Block Items
+    // Metal Blocks
+    public static final DeferredItem<BlockItem> ALNICO_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("alnico_block", ALNICO_BLOCK);
+    public static final DeferredItem<BlockItem> ALUMINUM_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("aluminum_block", ALUMINUM_BLOCK);
+    public static final DeferredItem<BlockItem> BRASS_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("brass_block", BRASS_BLOCK);
+    public static final DeferredItem<BlockItem> BRONZE_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("bronze_block", BRONZE_BLOCK);
+    public static final DeferredItem<BlockItem> CHROMIUM_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("chromium_block", CHROMIUM_BLOCK);
+    public static final DeferredItem<BlockItem> COBALT_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("cobalt_block", COBALT_BLOCK);
+    public static final DeferredItem<BlockItem> COBALT_STEEL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("cobalt_steel_block", COBALT_STEEL_BLOCK);
+    public static final DeferredItem<BlockItem> CONSTANTAN_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("constantan_block", CONSTANTAN_BLOCK);
+    public static final DeferredItem<BlockItem> COPPER_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("copper_block", COPPER_BLOCK);
+    public static final DeferredItem<BlockItem> COPPER_TUNGSTEN_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("copper_tungsten_block", COPPER_TUNSTEN_BLOCK);
+    public static final DeferredItem<BlockItem> ELECTRUM_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("electrum_block", ELECTRUM_BLOCK);
+    public static final DeferredItem<BlockItem> INVAR_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("invar_block", INVAR_BLOCK);
+    public static final DeferredItem<BlockItem> KANTHAL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("kanthal_block", KANTHAL_BLOCK);
+    public static final DeferredItem<BlockItem> LEAD_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("lead_block", LEAD_BLOCK);
+    public static final DeferredItem<BlockItem> MANGANESE_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("manganese_block", MANGANESE_BLOCK);
+    public static final DeferredItem<BlockItem> NEQUITUM_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("nequitum_block", NEQUITUM_BLOCK);
+    public static final DeferredItem<BlockItem> NICHROME_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("nichrome_block", NICHROME_BLOCK);
+    public static final DeferredItem<BlockItem> NICKEL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("nickel_block", NICKEL_BLOCK);
+    public static final DeferredItem<BlockItem> NIKROTHAL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("nikrothal_block", NIKROTHAL_BLOCK);
+    public static final DeferredItem<BlockItem> NITINOL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("nitinol_block", NITINOL_BLOCK);
+    public static final DeferredItem<BlockItem> SILVER_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("silver_block", SILVER_BLOCK);
+    public static final DeferredItem<BlockItem> SOLDER_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("solder_block", SOLDER_BLOCK);
+    public static final DeferredItem<BlockItem> STEEL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("steel_block", STEEL_BLOCK);
+    public static final DeferredItem<BlockItem> STELLITE_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("stellite_block", STELLITE_BLOCK);
+    public static final DeferredItem<BlockItem> TIN_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("tin_block", TIN_BLOCK);
+    public static final DeferredItem<BlockItem> TITANIUM_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("titanium_block", TITANIUM_BLOCK);
+    public static final DeferredItem<BlockItem> TUNGSTEN_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("tungsten_block", TUNGSTEN_BLOCK);
+    public static final DeferredItem<BlockItem> TUNGSTEN_STEEL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("tungsten_steel_block", TUNGSTEN_STEEL_BLOCK);
+    public static final DeferredItem<BlockItem> ZINC_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("zinc_block", ZINC_BLOCK);
+    // Ores
+    public static final DeferredItem<BlockItem> ARGENTITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("argentite_ore", ARGENTITE_ORE);
+    public static final DeferredItem<BlockItem> BAUXITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("bauxite_ore", BAUXITE_ORE);
+    public static final DeferredItem<BlockItem> CASSITERITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("cassiterite_ore", CASSITERITE_ORE);
+    public static final DeferredItem<BlockItem> CHROMITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("chromite_ore", CHROMITE_ORE);
+    public static final DeferredItem<BlockItem> COBALTITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("cobaltite_ore", COBALTITE_ORE);
+    public static final DeferredItem<BlockItem> CUPRITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("cuprite_ore", CUPRITE_ORE);
+    public static final DeferredItem<BlockItem> GALENA_ORE_ITEM = ITEMS.registerSimpleBlockItem("galena_ore", GALENA_ORE);
+    public static final DeferredItem<BlockItem> GARNIERITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("garnierite_ore", GARNIERITE_ORE);
+    public static final DeferredItem<BlockItem> LEPIDOLITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("lepidolite_ore", LEPIDOLITE_ORE);
+    public static final DeferredItem<BlockItem> PYROLUSITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("pyrolusite_ore", PYROLUSITE_ORE);
+    public static final DeferredItem<BlockItem> RUTILE_ORE_ITEM = ITEMS.registerSimpleBlockItem("rutile_ore", RUTILE_ORE);
+    public static final DeferredItem<BlockItem> SPHALERITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("sphalerite_ore", SPHALERITE_ORE);
+    public static final DeferredItem<BlockItem> SCHEELITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("scheelite_ore", SCHEELITE_ORE);
+    // Other Resources
+    public static final DeferredItem<BlockItem> OIL_SAND_ITEM = ITEMS.registerSimpleBlockItem("oil_sand", OIL_SAND);
+    // Machines
+    public static final DeferredItem<BlockItem> IRON_FORGE_CORE_ITEM = ITEMS.registerSimpleBlockItem("iron_forge_core", IRON_FORGE_CORE);
+    public static final DeferredItem<BlockItem> STEEL_FORGE_CORE_ITEM = ITEMS.registerSimpleBlockItem("steel_forge_core", STEEL_FORGE_CORE);
+    public static final DeferredItem<BlockItem> COBALT_FORGE_CORE_ITEM = ITEMS.registerSimpleBlockItem("cobalt_forge_core", COBALT_FORGE_CORE);
+    public static final DeferredItem<BlockItem> TUNGSTEN_FORGE_CORE_ITEM = ITEMS.registerSimpleBlockItem("tungsten_forge_core", TUNGSTEN_FORGE_CORE);
+    public static final DeferredItem<BlockItem> CRUSHER_ITEM = ITEMS.registerSimpleBlockItem("crusher", CRUSHER);
+
+    public static void init(IEventBus modEventBus) {
+        ITEMS.register(modEventBus);
+        BLOCKS.register(modEventBus);
+    }
+
+}
