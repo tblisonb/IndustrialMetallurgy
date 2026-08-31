@@ -1,7 +1,7 @@
 package com.onlytanner.industrialmetallurgy.containers;
 
 import com.onlytanner.industrialmetallurgy.init.ModContainerTypes;
-import com.onlytanner.industrialmetallurgy.tileentity.CrusherBlockEntity;
+import com.onlytanner.industrialmetallurgy.tileentity.ThermoelectricGeneratorBlockEntity;
 import com.onlytanner.industrialmetallurgy.util.FunctionalIntReferenceHolder;
 import com.onlytanner.industrialmetallurgy.util.RegistryHandler;
 import net.minecraft.core.BlockPos;
@@ -14,45 +14,25 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 
-public class CrusherContainer extends AbstractContainerMenu {
+public class ThermoelectricGeneratorContainer extends AbstractContainerMenu {
 
-    public final CrusherBlockEntity blockEntity;
+    public final ThermoelectricGeneratorBlockEntity blockEntity;
     private final ContainerLevelAccess canInteractWithCallable;
-    public FunctionalIntReferenceHolder currentSmeltTime;
+    public FunctionalIntReferenceHolder burnTimeRemaining;
     public FunctionalIntReferenceHolder currentEnergy;
-    public FunctionalIntReferenceHolder acidLevel;
-    private final Inventory playerInventory;
+    public FunctionalIntReferenceHolder currentMaxBurnTime;
 
-    public CrusherContainer(final int id, final Inventory player, final CrusherBlockEntity blockEntity) {
-        super(ModContainerTypes.CRUSHER.get(), id);
+    public ThermoelectricGeneratorContainer(final int id, final Inventory player, final ThermoelectricGeneratorBlockEntity blockEntity) {
+        super(ModContainerTypes.THERMOELECTRIC_GENERATOR.get(), id);
         this.blockEntity = blockEntity;
         this.canInteractWithCallable = ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos());
-        this.playerInventory = player;
 
         IItemHandler inventory = blockEntity.getInventory();
-        this.addSlot(new SlotItemHandler(inventory, CrusherBlockEntity.INPUT_ID, 56, 35));
-        this.addSlot(new SlotItemHandler(inventory, CrusherBlockEntity.BURR_SET_ID, 152, 8) {
-            @Override
-            public boolean mayPlace(ItemStack stack) {
-                return stack.getItem().equals(RegistryHandler.BRASS_BURR_SET.get()) ||
-                        stack.getItem().equals(RegistryHandler.STEEL_BURR_SET.get()) ||
-                        stack.getItem().equals(RegistryHandler.CHROMIUM_BURR_SET.get()) ||
-                        stack.getItem().equals(RegistryHandler.TUNGSTEN_CARBIDE_BURR_SET.get()) ||
-                        stack.getItem().equals(RegistryHandler.NEQUITUM_BURR_SET.get());
-            }
-        });
-        this.addSlot(new SlotItemHandler(inventory, CrusherBlockEntity.OUTPUT_ID, 116, 35) {
-            @Override
-            public boolean mayPlace(ItemStack stack) {
-                return false;
-            }
-        });
-        this.addSlot(new SlotItemHandler(inventory, CrusherBlockEntity.ACID_ID, 152, 62) {
-            @Override
-            public boolean mayPlace(ItemStack stack) {
-                return stack.getItem().equals(RegistryHandler.SULFURIC_ACID_BOTTLE.get());
-            }
-        });
+        this.addSlot(new FuelSlot(inventory, ThermoelectricGeneratorBlockEntity.FUEL_ID, 80, 35));
+        this.addSlot(new FuelSlot(inventory, 1, 8, 8));
+        this.addSlot(new FuelSlot(inventory, 2, 8, 26));
+        this.addSlot(new FuelSlot(inventory, 3, 8, 44));
+        this.addSlot(new FuelSlot(inventory, 4, 8, 62));
 
         // Player Inventory
         for (int i = 0; i < 3; i++) {
@@ -65,27 +45,27 @@ public class CrusherContainer extends AbstractContainerMenu {
             this.addSlot(new Slot(player, i, 8 + (18 * i), 142));
         }
 
-        this.addDataSlot(currentSmeltTime = new FunctionalIntReferenceHolder(() -> this.blockEntity.currentSmeltTime, value -> this.blockEntity.currentSmeltTime = value));
+        this.addDataSlot(burnTimeRemaining = new FunctionalIntReferenceHolder(() -> this.blockEntity.burnTimeRemaining, value -> this.blockEntity.burnTimeRemaining = value));
         this.addDataSlot(currentEnergy = new FunctionalIntReferenceHolder(this.blockEntity::getEnergyAmount, this.blockEntity::setEnergyAmount));
-        this.addDataSlot(acidLevel = new FunctionalIntReferenceHolder(() -> this.blockEntity.acidLevel, value -> this.blockEntity.acidLevel = value));
+        this.addDataSlot(currentMaxBurnTime = new FunctionalIntReferenceHolder(() -> this.blockEntity.currentMaxBurnTime, value -> this.blockEntity.currentMaxBurnTime = value));
     }
 
-    public CrusherContainer(final int id, final Inventory player, final net.minecraft.network.RegistryFriendlyByteBuf data) {
+    public ThermoelectricGeneratorContainer(final int id, final Inventory player, final net.minecraft.network.RegistryFriendlyByteBuf data) {
         this(id, player, getBlockEntity(player, data));
     }
 
-    private static CrusherBlockEntity getBlockEntity(final Inventory playerInv, final net.minecraft.network.RegistryFriendlyByteBuf data) {
+    private static ThermoelectricGeneratorBlockEntity getBlockEntity(final Inventory playerInv, final net.minecraft.network.RegistryFriendlyByteBuf data) {
         BlockPos pos = data.readBlockPos();
         var blockEntity = playerInv.player.level().getBlockEntity(pos);
-        if (blockEntity instanceof CrusherBlockEntity crusher) {
-            return crusher;
+        if (blockEntity instanceof ThermoelectricGeneratorBlockEntity generator) {
+            return generator;
         }
         throw new IllegalStateException("BlockEntity is not correct " + blockEntity);
     }
 
     @Override
     public boolean stillValid(Player player) {
-        return stillValid(canInteractWithCallable, player, RegistryHandler.CRUSHER.get());
+        return stillValid(canInteractWithCallable, player, RegistryHandler.THERMOELECTRIC_GENERATOR.get());
     }
 
     @Override
@@ -117,22 +97,30 @@ public class CrusherContainer extends AbstractContainerMenu {
         return returnStack;
     }
 
-    public int getSmeltProgressionScaled() {
-        return this.currentSmeltTime.get() != 0
-                ? this.currentSmeltTime.get() * 24 / CrusherBlockEntity.MAX_SMELT_TIME
-                : 0;
-    }
-
     public int getCurrentEnergyScaled() {
         return this.currentEnergy.get() != 0
-                ? this.currentEnergy.get() * 70 / CrusherBlockEntity.MAX_ENERGY
+                ? this.currentEnergy.get() * 70 / ThermoelectricGeneratorBlockEntity.MAX_ENERGY
                 : 0;
     }
 
-    public int getAcidLevelScaled() {
-        return this.acidLevel.get() != 0
-                ? this.acidLevel.get() * 28 / CrusherBlockEntity.MAX_ACID_LEVEL
+    public int getBurnTimeScaled() {
+        return this.burnTimeRemaining.get() != 0 && this.currentMaxBurnTime.get() != 0
+                ? this.burnTimeRemaining.get() * 14 / this.currentMaxBurnTime.get()
                 : 0;
+    }
+
+    private class FuelSlot extends SlotItemHandler {
+
+        public FuelSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+            super(itemHandler, index, xPosition, yPosition);
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack stack) {
+            return (blockEntity.getLevel() != null && blockEntity.getLevel().fuelValues().burnDuration(stack) > 0)
+                    || stack.getItem().equals(RegistryHandler.COAL_COKE.get());
+        }
+
     }
 
 }

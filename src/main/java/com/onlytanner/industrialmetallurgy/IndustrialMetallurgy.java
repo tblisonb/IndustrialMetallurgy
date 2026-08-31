@@ -15,6 +15,8 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -43,6 +45,19 @@ public class IndustrialMetallurgy {
         ModContainerTypes.init(modEventBus);
         ModRecipes.init(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
+
+        modEventBus.addListener(this::registerCapabilities);
+    }
+
+    private void registerCapabilities(RegisterCapabilitiesEvent event) {
+        // NOTE: item-handler capability exposure (for hoppers/pipes) still uses the deprecated
+        // ItemStackHandler/IItemHandler internally and hasn't been migrated to the new
+        // net.neoforged.neoforge.transfer resource API -- only energy is exposed for now, since
+        // that's what's needed for a power-generating machine to charge the crusher.
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, ModTileEntityTypes.CRUSHER.get(),
+                (blockEntity, side) -> blockEntity.getEnergyHandler());
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, ModTileEntityTypes.THERMOELECTRIC_GENERATOR.get(),
+                (blockEntity, side) -> blockEntity.getEnergyHandler());
     }
 
 }

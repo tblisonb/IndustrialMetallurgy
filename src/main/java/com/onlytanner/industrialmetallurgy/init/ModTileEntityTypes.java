@@ -3,6 +3,7 @@ package com.onlytanner.industrialmetallurgy.init;
 import com.onlytanner.industrialmetallurgy.IndustrialMetallurgy;
 import com.onlytanner.industrialmetallurgy.tileentity.CokeOvenBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.CrusherBlockEntity;
+import com.onlytanner.industrialmetallurgy.tileentity.ThermoelectricGeneratorBlockEntity;
 import com.onlytanner.industrialmetallurgy.util.RegistryHandler;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -19,6 +20,9 @@ public class ModTileEntityTypes {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CokeOvenBlockEntity>> COKE_OVEN =
             BLOCK_ENTITY_TYPES.register("coke_oven", () -> new BlockEntityType<>(CokeOvenBlockEntity::new, RegistryHandler.COKE_OVEN.get()));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ThermoelectricGeneratorBlockEntity>> THERMOELECTRIC_GENERATOR =
+            BLOCK_ENTITY_TYPES.register("thermoelectric_generator", () -> new BlockEntityType<>(ThermoelectricGeneratorBlockEntity::new, RegistryHandler.THERMOELECTRIC_GENERATOR.get()));
 
     public static void init(IEventBus modEventBus) {
         BLOCK_ENTITY_TYPES.register(modEventBus);

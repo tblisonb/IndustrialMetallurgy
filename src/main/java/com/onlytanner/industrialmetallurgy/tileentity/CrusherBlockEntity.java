@@ -25,6 +25,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.transfer.energy.EnergyHandler;
+import net.neoforged.neoforge.transfer.energy.SimpleEnergyHandler;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -45,9 +47,14 @@ public class CrusherBlockEntity extends BlockEntity implements MenuProvider {
 
     private Component customName;
     public int currentSmeltTime;
-    public int energy;
     public int acidLevel;
     private final ModItemHandler inventory = new ModItemHandler(4);
+    private final SimpleEnergyHandler energyHandler = new SimpleEnergyHandler(MAX_ENERGY) {
+        @Override
+        protected void onEnergyChanged(int previousAmount) {
+            CrusherBlockEntity.this.setChanged();
+        }
+    };
 
     public CrusherBlockEntity(BlockPos pos, BlockState state) {
         super(ModTileEntityTypes.CRUSHER.get(), pos, state);
@@ -61,7 +68,7 @@ public class CrusherBlockEntity extends BlockEntity implements MenuProvider {
                 this.acidLevel = MAX_ACID_LEVEL;
             }
             Optional<RecipeHolder<CrusherRecipe>> recipe = getRecipe(serverLevel);
-            if (recipe.isPresent() && canProcess(recipe.get()) && this.inventory.getStackInSlot(BURR_SET_ID).getCount() > 0 && energy >= ENERGY_USAGE_PER_TICK) {
+            if (recipe.isPresent() && canProcess(recipe.get()) && this.inventory.getStackInSlot(BURR_SET_ID).getCount() > 0 && this.energyHandler.getAmountAsInt() >= ENERGY_USAGE_PER_TICK) {
                 this.level.setBlockAndUpdate(this.getBlockPos(), this.getBlockState().setValue(CrusherBlock.LIT, true));
                 if (this.currentSmeltTime != MAX_SMELT_TIME) {
                     this.currentSmeltTime++;
@@ -69,7 +76,7 @@ public class CrusherBlockEntity extends BlockEntity implements MenuProvider {
                     this.currentSmeltTime = 0;
                     processRecipe(recipe.get());
                 }
-                this.energy -= ENERGY_USAGE_PER_TICK;
+                this.energyHandler.set(this.energyHandler.getAmountAsInt() - ENERGY_USAGE_PER_TICK);
                 dirty = true;
             } else {
                 this.level.setBlockAndUpdate(this.getBlockPos(), this.getBlockState().setValue(CrusherBlock.LIT, false));
@@ -166,7 +173,7 @@ public class CrusherBlockEntity extends BlockEntity implements MenuProvider {
         this.customName = input.read("CustomName", ComponentSerialization.CODEC).orElse(null);
         this.inventory.deserialize(input.childOrEmpty("Inventory"));
         this.currentSmeltTime = input.getIntOr("CurrentSmeltTime", 0);
-        this.energy = input.getIntOr("Energy", 0);
+        this.energyHandler.deserialize(input.childOrEmpty("Energy"));
         this.acidLevel = input.getIntOr("AcidLevel", 0);
     }
 
@@ -178,12 +185,25 @@ public class CrusherBlockEntity extends BlockEntity implements MenuProvider {
         }
         this.inventory.serialize(output.child("Inventory"));
         output.putInt("CurrentSmeltTime", this.currentSmeltTime);
-        output.putInt("Energy", this.energy);
+        this.energyHandler.serialize(output.child("Energy"));
         output.putInt("AcidLevel", this.acidLevel);
     }
 
     public final IItemHandlerModifiable getInventory() {
         return this.inventory;
+    }
+
+    public final EnergyHandler getEnergyHandler() {
+        return this.energyHandler;
+    }
+
+    /** For the menu's synced energy DataSlot; see FunctionalIntReferenceHolder. */
+    public int getEnergyAmount() {
+        return this.energyHandler.getAmountAsInt();
+    }
+
+    public void setEnergyAmount(int amount) {
+        this.energyHandler.set(Math.max(0, amount));
     }
 
     @Nullable
