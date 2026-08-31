@@ -1,8 +1,6 @@
 {
   "type": "industrialmetallurgy:crusher",
-  "ingredient": {
-    "item": "industrialmetallurgy:argentite_ore"
-  },
+  "ingredient": "industrialmetallurgy:argentite_ore",
   "result": {
     "id": "industrialmetallurgy:crushed_argentite_ore"
   }

@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "industrialmetallurgy:items/brass_burr_set"
+    "layer0": "industrialmetallurgy:item/brass_burr_set"
   }
 }
