@@ -1,6 +1,7 @@
 package com.onlytanner.industrialmetallurgy.init;
 
 import com.onlytanner.industrialmetallurgy.IndustrialMetallurgy;
+import com.onlytanner.industrialmetallurgy.tileentity.CokeOvenBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.CrusherBlockEntity;
 import com.onlytanner.industrialmetallurgy.util.RegistryHandler;
 import net.minecraft.core.registries.Registries;
@@ -15,6 +16,9 @@ public class ModTileEntityTypes {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CrusherBlockEntity>> CRUSHER =
             BLOCK_ENTITY_TYPES.register("crusher", () -> new BlockEntityType<>(CrusherBlockEntity::new, RegistryHandler.CRUSHER.get()));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<CokeOvenBlockEntity>> COKE_OVEN =
+            BLOCK_ENTITY_TYPES.register("coke_oven", () -> new BlockEntityType<>(CokeOvenBlockEntity::new, RegistryHandler.COKE_OVEN.get()));
 
     public static void init(IEventBus modEventBus) {
         BLOCK_ENTITY_TYPES.register(modEventBus);

@@ -1,0 +1,14 @@
+{
+  "type": "industrialmetallurgy:coke_oven",
+  "ingredient": [
+    {
+      "item": "minecraft:coal"
+    },
+    {
+      "item": "minecraft:charcoal"
+    }
+  ],
+  "result": {
+    "id": "industrialmetallurgy:coal_coke"
+  }
+}

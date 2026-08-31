@@ -1,5 +1,6 @@
 package com.onlytanner.industrialmetallurgy;
 
+import com.onlytanner.industrialmetallurgy.client.gui.CokeOvenScreen;
 import com.onlytanner.industrialmetallurgy.client.gui.CrusherScreen;
 import com.onlytanner.industrialmetallurgy.init.ModContainerTypes;
 import net.neoforged.api.distmarker.Dist;
@@ -17,6 +18,7 @@ public class IndustrialMetallurgyClient {
     @SubscribeEvent
     static void onRegisterScreens(RegisterMenuScreensEvent event) {
         event.register(ModContainerTypes.CRUSHER.get(), CrusherScreen::new);
+        event.register(ModContainerTypes.COKE_OVEN.get(), CokeOvenScreen::new);
     }
 
 }

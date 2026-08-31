@@ -221,6 +221,7 @@ public class RegistryHandler {
     public static final DeferredBlock<Block> COBALT_FORGE_CORE = BLOCKS.registerBlock("cobalt_forge_core", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> TUNGSTEN_FORGE_CORE = BLOCKS.registerBlock("tungsten_forge_core", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> CRUSHER = BLOCKS.registerBlock("crusher", CrusherBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
+    public static final DeferredBlock<Block> COKE_OVEN = BLOCKS.registerBlock("coke_oven", CokeOvenBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
 
     // Block Items
     // Metal Blocks
@@ -275,6 +276,7 @@ public class RegistryHandler {
     public static final DeferredItem<BlockItem> COBALT_FORGE_CORE_ITEM = ITEMS.registerSimpleBlockItem("cobalt_forge_core", COBALT_FORGE_CORE);
     public static final DeferredItem<BlockItem> TUNGSTEN_FORGE_CORE_ITEM = ITEMS.registerSimpleBlockItem("tungsten_forge_core", TUNGSTEN_FORGE_CORE);
     public static final DeferredItem<BlockItem> CRUSHER_ITEM = ITEMS.registerSimpleBlockItem("crusher", CRUSHER);
+    public static final DeferredItem<BlockItem> COKE_OVEN_ITEM = ITEMS.registerSimpleBlockItem("coke_oven", COKE_OVEN);
 
     public static void init(IEventBus modEventBus) {
         ITEMS.register(modEventBus);

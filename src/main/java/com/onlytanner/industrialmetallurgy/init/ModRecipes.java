@@ -1,6 +1,7 @@
 package com.onlytanner.industrialmetallurgy.init;
 
 import com.onlytanner.industrialmetallurgy.IndustrialMetallurgy;
+import com.onlytanner.industrialmetallurgy.recipes.CokeOvenRecipe;
 import com.onlytanner.industrialmetallurgy.recipes.CrusherRecipe;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -27,6 +28,19 @@ public class ModRecipes {
             RECIPE_SERIALIZERS.register("crusher", () -> new RecipeSerializer<>(
                     SingleItemRecipe.simpleMapCodec(CrusherRecipe::new),
                     SingleItemRecipe.simpleStreamCodec(CrusherRecipe::new)));
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<CokeOvenRecipe>> COKE_OVEN_TYPE =
+            RECIPE_TYPES.register("coke_oven", () -> new RecipeType<CokeOvenRecipe>() {
+                @Override
+                public String toString() {
+                    return IndustrialMetallurgy.MODID + ":coke_oven";
+                }
+            });
+
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CokeOvenRecipe>> COKE_OVEN_SERIALIZER =
+            RECIPE_SERIALIZERS.register("coke_oven", () -> new RecipeSerializer<>(
+                    SingleItemRecipe.simpleMapCodec(CokeOvenRecipe::new),
+                    SingleItemRecipe.simpleStreamCodec(CokeOvenRecipe::new)));
 
     public static void init(IEventBus modEventBus) {
         RECIPE_TYPES.register(modEventBus);

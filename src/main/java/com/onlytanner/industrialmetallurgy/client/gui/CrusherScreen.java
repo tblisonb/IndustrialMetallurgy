@@ -18,6 +18,15 @@ public class CrusherScreen extends AbstractContainerScreen<CrusherContainer> {
     }
 
     @Override
+    protected void init() {
+        super.init();
+        // Default label positions collide with the burr-set/energy/acid slots along the top and
+        // right edge of this layout; center the title and nudge the inventory label clear of them.
+        this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
+        this.inventoryLabelX += 20;
+    }
+
+    @Override
     public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         super.extractBackground(graphics, mouseX, mouseY, partialTick);
         int x = this.leftPos;
