@@ -1,5 +1,6 @@
 package com.onlytanner.industrialmetallurgy;
 
+import com.onlytanner.industrialmetallurgy.client.gui.BasicForgeScreen;
 import com.onlytanner.industrialmetallurgy.client.gui.CokeOvenScreen;
 import com.onlytanner.industrialmetallurgy.client.gui.CrusherScreen;
 import com.onlytanner.industrialmetallurgy.client.gui.ThermoelectricGeneratorScreen;
@@ -21,6 +22,8 @@ public class IndustrialMetallurgyClient {
         event.register(ModContainerTypes.CRUSHER.get(), CrusherScreen::new);
         event.register(ModContainerTypes.COKE_OVEN.get(), CokeOvenScreen::new);
         event.register(ModContainerTypes.THERMOELECTRIC_GENERATOR.get(), ThermoelectricGeneratorScreen::new);
+        event.register(ModContainerTypes.FORGE_TIER1.get(), BasicForgeScreen::new);
+        event.register(ModContainerTypes.FORGE_TIER2.get(), BasicForgeScreen::new);
     }
 
 }

@@ -1,0 +1,10 @@
+{
+  "type": "industrialmetallurgy:forge",
+  "input": [
+    "industrialmetallurgy:copper_ingot",
+    "industrialmetallurgy:tin_nugget",
+    "industrialmetallurgy:aluminum_nugget"
+  ],
+  "output": { "id": "industrialmetallurgy:bronze_ingot" },
+  "tier": "iron"
+}

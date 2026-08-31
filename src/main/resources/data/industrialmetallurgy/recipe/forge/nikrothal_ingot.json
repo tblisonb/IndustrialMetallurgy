@@ -1,0 +1,9 @@
+{
+  "type": "industrialmetallurgy:forge",
+  "input": [
+    "industrialmetallurgy:nichrome_ingot",
+    "industrialmetallurgy:kanthal_ingot"
+  ],
+  "output": { "id": "industrialmetallurgy:nikrothal_ingot" },
+  "tier": "steel"
+}

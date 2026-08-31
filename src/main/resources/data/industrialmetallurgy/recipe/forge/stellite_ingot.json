@@ -1,0 +1,11 @@
+{
+  "type": "industrialmetallurgy:forge",
+  "input": [
+    "industrialmetallurgy:cobalt_ingot",
+    "industrialmetallurgy:titanium_nugget",
+    "industrialmetallurgy:tungsten_nugget",
+    "industrialmetallurgy:silicon"
+  ],
+  "output": { "id": "industrialmetallurgy:stellite_ingot" },
+  "tier": "cobalt"
+}

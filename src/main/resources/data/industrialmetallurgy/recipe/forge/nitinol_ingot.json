@@ -1,0 +1,9 @@
+{
+  "type": "industrialmetallurgy:forge",
+  "input": [
+    "industrialmetallurgy:nickel_ingot",
+    "industrialmetallurgy:titanium_ingot"
+  ],
+  "output": { "id": "industrialmetallurgy:nitinol_ingot" },
+  "tier": "steel"
+}

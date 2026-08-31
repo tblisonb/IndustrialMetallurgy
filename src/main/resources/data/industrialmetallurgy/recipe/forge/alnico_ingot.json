@@ -1,0 +1,11 @@
+{
+  "type": "industrialmetallurgy:forge",
+  "input": [
+    "minecraft:iron_ingot",
+    "industrialmetallurgy:aluminum_nugget",
+    "industrialmetallurgy:nickel_nugget",
+    "industrialmetallurgy:cobalt_nugget"
+  ],
+  "output": { "id": "industrialmetallurgy:alnico_ingot" },
+  "tier": "cobalt"
+}

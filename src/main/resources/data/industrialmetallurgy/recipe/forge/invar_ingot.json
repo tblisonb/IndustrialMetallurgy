@@ -1,0 +1,10 @@
+{
+  "type": "industrialmetallurgy:forge",
+  "input": [
+    "minecraft:iron_ingot",
+    "industrialmetallurgy:nickel_ingot",
+    "industrialmetallurgy:manganese_nugget"
+  ],
+  "output": { "id": "industrialmetallurgy:invar_ingot" },
+  "tier": "iron"
+}

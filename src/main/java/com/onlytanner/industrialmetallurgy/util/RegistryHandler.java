@@ -2,6 +2,9 @@ package com.onlytanner.industrialmetallurgy.util;
 
 import com.onlytanner.industrialmetallurgy.IndustrialMetallurgy;
 import com.onlytanner.industrialmetallurgy.blocks.*;
+import com.onlytanner.industrialmetallurgy.init.ModTileEntityTypes;
+import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier1BlockEntity;
+import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier2BlockEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -223,6 +226,12 @@ public class RegistryHandler {
     public static final DeferredBlock<Block> CRUSHER = BLOCKS.registerBlock("crusher", CrusherBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
     public static final DeferredBlock<Block> COKE_OVEN = BLOCKS.registerBlock("coke_oven", CokeOvenBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
     public static final DeferredBlock<Block> THERMOELECTRIC_GENERATOR = BLOCKS.registerBlock("thermoelectric_generator", ThermoelectricGeneratorBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
+    public static final DeferredBlock<Block> FORGE_TIER1 = BLOCKS.registerBlock("forge_tier1",
+            props -> new BasicForgeBlock(props, () -> ModTileEntityTypes.FORGE_TIER1.get(), ForgeTier1BlockEntity::new),
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
+    public static final DeferredBlock<Block> FORGE_TIER2 = BLOCKS.registerBlock("forge_tier2",
+            props -> new BasicForgeBlock(props, () -> ModTileEntityTypes.FORGE_TIER2.get(), ForgeTier2BlockEntity::new),
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
 
     // Block Items
     // Metal Blocks
@@ -279,6 +288,8 @@ public class RegistryHandler {
     public static final DeferredItem<BlockItem> CRUSHER_ITEM = ITEMS.registerSimpleBlockItem("crusher", CRUSHER);
     public static final DeferredItem<BlockItem> COKE_OVEN_ITEM = ITEMS.registerSimpleBlockItem("coke_oven", COKE_OVEN);
     public static final DeferredItem<BlockItem> THERMOELECTRIC_GENERATOR_ITEM = ITEMS.registerSimpleBlockItem("thermoelectric_generator", THERMOELECTRIC_GENERATOR);
+    public static final DeferredItem<BlockItem> FORGE_TIER1_ITEM = ITEMS.registerSimpleBlockItem("forge_tier1", FORGE_TIER1);
+    public static final DeferredItem<BlockItem> FORGE_TIER2_ITEM = ITEMS.registerSimpleBlockItem("forge_tier2", FORGE_TIER2);
 
     public static void init(IEventBus modEventBus) {
         ITEMS.register(modEventBus);

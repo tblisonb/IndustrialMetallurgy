@@ -1,6 +1,7 @@
 package com.onlytanner.industrialmetallurgy.init;
 
 import com.onlytanner.industrialmetallurgy.IndustrialMetallurgy;
+import com.onlytanner.industrialmetallurgy.containers.BasicForgeContainer;
 import com.onlytanner.industrialmetallurgy.containers.CokeOvenContainer;
 import com.onlytanner.industrialmetallurgy.containers.CrusherContainer;
 import com.onlytanner.industrialmetallurgy.containers.ThermoelectricGeneratorContainer;
@@ -23,6 +24,12 @@ public class ModContainerTypes {
 
     public static final DeferredHolder<MenuType<?>, MenuType<ThermoelectricGeneratorContainer>> THERMOELECTRIC_GENERATOR =
             CONTAINER_TYPES.register("thermoelectric_generator", () -> IMenuTypeExtension.create(ThermoelectricGeneratorContainer::new));
+
+    public static final DeferredHolder<MenuType<?>, MenuType<BasicForgeContainer>> FORGE_TIER1 =
+            CONTAINER_TYPES.register("forge_tier1", () -> IMenuTypeExtension.create(BasicForgeContainer::new));
+
+    public static final DeferredHolder<MenuType<?>, MenuType<BasicForgeContainer>> FORGE_TIER2 =
+            CONTAINER_TYPES.register("forge_tier2", () -> IMenuTypeExtension.create(BasicForgeContainer::new));
 
     public static void init(IEventBus modEventBus) {
         CONTAINER_TYPES.register(modEventBus);

@@ -1,0 +1,10 @@
+{
+  "type": "industrialmetallurgy:forge",
+  "input": [
+    "minecraft:iron_ingot",
+    "industrialmetallurgy:chromium_nugget",
+    "industrialmetallurgy:aluminum_nugget"
+  ],
+  "output": { "id": "industrialmetallurgy:kanthal_ingot" },
+  "tier": "steel"
+}

@@ -1,0 +1,9 @@
+{
+  "type": "industrialmetallurgy:forge",
+  "input": [
+    "industrialmetallurgy:copper_ingot",
+    "industrialmetallurgy:nickel_ingot"
+  ],
+  "output": { "id": "industrialmetallurgy:constantan_ingot" },
+  "tier": "steel"
+}
