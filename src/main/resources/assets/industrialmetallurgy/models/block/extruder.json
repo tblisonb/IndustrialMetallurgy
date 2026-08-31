@@ -1,8 +1,0 @@
-{
-    "parent": "block/orientable",
-    "textures": {
-      "top": "industrialmetallurgy:blocks/manganese_block",
-      "front": "industrialmetallurgy:blocks/extruder",
-      "side": "industrialmetallurgy:blocks/manganese_block"
-    }
-}

@@ -1,9 +1,0 @@
-{
-    "parent": "block/orientable",
-    "textures": {
-        "top": "industrialmetallurgy:blocks/crusher_top_off",
-		"front": "industrialmetallurgy:blocks/crusher_front_off",
-        "side": "industrialmetallurgy:blocks/crusher_side",
-		"bottom": "blocks/obsidian"
-    }
-}

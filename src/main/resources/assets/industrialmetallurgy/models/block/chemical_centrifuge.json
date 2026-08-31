@@ -1,8 +1,0 @@
-{
-    "parent": "block/orientable",
-    "textures": {
-      "top": "industrialmetallurgy:blocks/electrum_block",
-      "front": "industrialmetallurgy:blocks/chemical_centrifuge",
-      "side": "industrialmetallurgy:blocks/electrum_block"
-    }
-}

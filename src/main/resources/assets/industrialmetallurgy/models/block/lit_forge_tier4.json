@@ -1,8 +1,0 @@
-{
-  "parent": "block/orientable",
-  "textures": {
-    "top": "industrialmetallurgy:blocks/tungsten_forge_top_on",
-    "front": "industrialmetallurgy:blocks/tungsten_forge_front_on",
-    "side": "industrialmetallurgy:blocks/tungsten_forge_side"
-  }
-}

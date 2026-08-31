@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "industrialmetallurgy:refractory_composite"
-  },
-  "result": "industrialmetallurgy:refractory_brick",
-  "experience": 0.2,
-  "cookingtime": 200
-}

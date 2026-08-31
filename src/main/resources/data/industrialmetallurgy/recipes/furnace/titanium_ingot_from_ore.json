@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "industrialmetallurgy:rutile_ore"
-  },
-  "result": "industrialmetallurgy:titanium_ingot",
-  "experience": 0.7,
-  "cookingtime": 200
-}

@@ -1,8 +1,0 @@
-{
-  "parent": "block/orientable",
-  "textures": {
-    "top": "industrialmetallurgy:blocks/refractory_bricks",
-    "front": "industrialmetallurgy:blocks/coke_oven_front_off",
-    "side": "industrialmetallurgy:blocks/refractory_bricks"
-  }
-}

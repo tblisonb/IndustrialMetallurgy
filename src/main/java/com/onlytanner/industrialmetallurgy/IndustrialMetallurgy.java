@@ -1,80 +1,117 @@
 package com.onlytanner.industrialmetallurgy;
 
-import com.onlytanner.industrialmetallurgy.client.gui.*;
-import com.onlytanner.industrialmetallurgy.init.ModContainerTypes;
-import com.onlytanner.industrialmetallurgy.init.ModTileEntityTypes;
-import com.onlytanner.industrialmetallurgy.recipes.RecipeSerializerInit;
-import com.onlytanner.industrialmetallurgy.util.ConfigHandler;
-import com.onlytanner.industrialmetallurgy.util.RegistryHandler;
-import com.onlytanner.industrialmetallurgy.world.gen.OreGenHandler;
-import com.onlytanner.industrialmetallurgy.world.gen.feature.OreFeatureHandler;
-import net.minecraft.client.gui.ScreenManager;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLPaths;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
-// The value here should match an entry in the META-INF/mods.toml file
-@Mod("industrialmetallurgy")
-public class IndustrialMetallurgy
-{
-    // Directly reference a log4j logger.
-    private static final Logger LOGGER = LogManager.getLogger();
-    public static final String MOD_ID = "industrialmetallurgy";
+import com.mojang.logging.LogUtils;
 
-    public IndustrialMetallurgy() {
-        // Register the doClientStuff method for modloading
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient);
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
-        // Registers and Loads Config File
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigHandler.COMMON_CONFIG);
-        ConfigHandler.loadConfig(ConfigHandler.COMMON_CONFIG, FMLPaths.CONFIGDIR.get().resolve("industrialmetallurgy-common.toml"));
+// The value here should match an entry in the META-INF/neoforge.mods.toml file
+@Mod(IndustrialMetallurgy.MODID)
+public class IndustrialMetallurgy {
+    // Define mod id in a common place for everything to reference
+    public static final String MODID = "industrialmetallurgy";
+    // Directly reference a slf4j logger
+    public static final Logger LOGGER = LogUtils.getLogger();
+    // Create a Deferred Register to hold Blocks which will all be registered under the "examplemod" namespace
+    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(MODID);
+    // Create a Deferred Register to hold Items which will all be registered under the "examplemod" namespace
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(MODID);
+    // Create a Deferred Register to hold CreativeModeTabs which will all be registered under the "examplemod" namespace
+    public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
-        RegistryHandler.init();
-        RecipeSerializerInit.init();
-        ModContainerTypes.init();
-        ModTileEntityTypes.init();
+    // Creates a new Block with the id "examplemod:example_block", combining the namespace and path
+    public static final DeferredBlock<Block> EXAMPLE_BLOCK = BLOCKS.registerSimpleBlock("example_block", p -> p.mapColor(MapColor.STONE));
+    // Creates a new BlockItem with the id "examplemod:example_block", combining the namespace and path
+    public static final DeferredItem<BlockItem> EXAMPLE_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("example_block", EXAMPLE_BLOCK);
 
-        // Register ourselves for server and other game events we are interested in
-        MinecraftForge.EVENT_BUS.register(this);
+    // Creates a new food item with the id "examplemod:example_id", nutrition 1 and saturation 2
+    public static final DeferredItem<Item> EXAMPLE_ITEM = ITEMS.registerSimpleItem("example_item", p -> p.food(new FoodProperties.Builder()
+            .alwaysEdible().nutrition(1).saturationModifier(2f).build()));
+
+    // Creates a creative tab with the id "examplemod:example_tab" for the example item, that is placed after the combat tab
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> EXAMPLE_TAB = CREATIVE_MODE_TABS.register("example_tab", () -> CreativeModeTab.builder()
+            .title(Component.translatable("itemGroup.industrialmetallurgy")) //The language key for the title of your CreativeModeTab
+            .withTabsBefore(CreativeModeTabs.COMBAT)
+            .icon(() -> EXAMPLE_ITEM.get().getDefaultInstance())
+            .displayItems((parameters, output) -> {
+                output.accept(EXAMPLE_ITEM.get());// Add the example item to the tab. For your own tabs, this method is preferred over the event
+            }).build());
+
+    // The constructor for the mod class is the first code that is run when your mod is loaded.
+    // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
+    public IndustrialMetallurgy(IEventBus modEventBus, ModContainer modContainer) {
+        // Register the commonSetup method for modloading
+        modEventBus.addListener(this::commonSetup);
+
+        // Register the Deferred Register to the mod event bus so blocks get registered
+        BLOCKS.register(modEventBus);
+        // Register the Deferred Register to the mod event bus so items get registered
+        ITEMS.register(modEventBus);
+        // Register the Deferred Register to the mod event bus so tabs get registered
+        CREATIVE_MODE_TABS.register(modEventBus);
+
+        // Register ourselves for server and other game events we are interested in.
+        // Note that this is necessary if and only if we want *this* class (IndustrialMetallurgy) to respond directly to events.
+        // Do not add this line if there are no @SubscribeEvent-annotated functions in this class, like onServerStarting() below.
+        NeoForge.EVENT_BUS.register(this);
+
+        // Register the item to a creative tab
+        modEventBus.addListener(this::addCreative);
+
+        // Register our mod's ModConfigSpec so that FML can create and load the config file for us
+        modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
-    private void setup(final FMLCommonSetupEvent event) {
-        OreFeatureHandler.initModFeatures();
-        OreGenHandler.generateOres();
-    }
+    private void commonSetup(FMLCommonSetupEvent event) {
+        // Some common setup code
+        LOGGER.info("HELLO FROM COMMON SETUP");
 
-    @OnlyIn(Dist.CLIENT)
-    private void setupClient(final FMLClientSetupEvent event) {
-        ScreenManager.registerFactory(ModContainerTypes.FORGE_TIER1.get(), BasicForgeScreen::new);
-        ScreenManager.registerFactory(ModContainerTypes.FORGE_TIER2.get(), BasicForgeScreen::new);
-        ScreenManager.registerFactory(ModContainerTypes.FORGE_TIER3.get(), AdvancedForgeScreen::new);
-        ScreenManager.registerFactory(ModContainerTypes.FORGE_TIER4.get(), AdvancedForgeScreen::new);
-        ScreenManager.registerFactory(ModContainerTypes.CRUSHER.get(), CrusherScreen::new);
-        ScreenManager.registerFactory(ModContainerTypes.COKE_OVEN.get(), CokeOvenScreen::new);
-        ScreenManager.registerFactory(ModContainerTypes.CHEMICAL_CENTRIFUGE.get(), ChemicalCentrifugeScreen::new);
-        ScreenManager.registerFactory(ModContainerTypes.CHEMICAL_REACTOR.get(), ChemicalReactorScreen::new);
-        ScreenManager.registerFactory(ModContainerTypes.EXTRUDER.get(), ExtruderScreen::new);
-        ScreenManager.registerFactory(ModContainerTypes.SOLDERING_STATION.get(), SolderingStationScreen::new);
-        ScreenManager.registerFactory(ModContainerTypes.THERMOELECTRIC_GENERATOR.get(), ThermoelectricGeneratorScreen::new);
-    }
-
-    public static final ItemGroup TAB = new ItemGroup("industrialMetallurgy") {
-        @Override
-        public ItemStack createIcon() {
-            return new ItemStack(RegistryHandler.TUNGSTEN_INGOT.get());
+        if (Config.LOG_DIRT_BLOCK.getAsBoolean()) {
+            LOGGER.info("DIRT BLOCK >> {}", BuiltInRegistries.BLOCK.getKey(Blocks.DIRT));
         }
-    };
 
+        LOGGER.info("{}{}", Config.MAGIC_NUMBER_INTRODUCTION.get(), Config.MAGIC_NUMBER.getAsInt());
+
+        Config.ITEM_STRINGS.get().forEach((item) -> LOGGER.info("ITEM >> {}", item));
+    }
+
+    // Add the example block item to the building blocks tab
+    private void addCreative(BuildCreativeModeTabContentsEvent event) {
+        if (event.getTabKey() == CreativeModeTabs.BUILDING_BLOCKS) {
+            event.accept(EXAMPLE_BLOCK_ITEM);
+        }
+    }
+
+    // You can use SubscribeEvent and let the Event Bus discover methods to call
+    @SubscribeEvent
+    public void onServerStarting(ServerStartingEvent event) {
+        // Do something when the server starts
+        LOGGER.info("HELLO from server starting");
+    }
 }

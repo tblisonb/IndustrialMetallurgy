@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:smelting",
-  "ingredient": {
-    "item": "industrialmetallurgy:crushed_garnierite_ore"
-  },
-  "result": "industrialmetallurgy:nickel_ingot",
-  "experience": 0.7,
-  "cookingtime": 200
-}

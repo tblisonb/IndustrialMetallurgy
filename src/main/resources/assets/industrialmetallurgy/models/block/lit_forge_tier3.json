@@ -1,8 +1,0 @@
-{
-  "parent": "block/orientable",
-  "textures": {
-    "top": "industrialmetallurgy:blocks/cobalt_forge_top_on",
-    "front": "industrialmetallurgy:blocks/cobalt_forge_front_on",
-    "side": "industrialmetallurgy:blocks/cobalt_forge_side"
-  }
-}

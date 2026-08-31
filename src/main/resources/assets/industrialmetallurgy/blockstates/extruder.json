@@ -1,8 +1,0 @@
-{
-    "variants": {
-        "facing=north":  { "model": "industrialmetallurgy:block/extruder" },
-        "facing=east":   { "model": "industrialmetallurgy:block/extruder", "y": 90 },
-        "facing=south":   { "model": "industrialmetallurgy:block/extruder", "y": 180 },
-        "facing=west":   { "model": "industrialmetallurgy:block/extruder", "y": 270 }
-    }
-}

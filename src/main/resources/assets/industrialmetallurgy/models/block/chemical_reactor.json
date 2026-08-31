@@ -1,8 +1,0 @@
-{
-    "parent": "block/orientable",
-    "textures": {
-      "top": "industrialmetallurgy:blocks/constantan_block",
-      "front": "industrialmetallurgy:blocks/chemical_reactor",
-      "side": "industrialmetallurgy:blocks/constantan_block"
-    }
-}
