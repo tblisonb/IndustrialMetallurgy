@@ -163,11 +163,11 @@ Left open at the end of this pass; picked up immediately after as the first item
 ## Part 3 — Ideas for giving real jobs to underutilized items
 
 Organized by theme. Each ties back to a specific item above and to the real-world property that
-justified adding that material in the first place. Four of these (Battery Box and the two
-dead-end recipe edits from Part 2, Electric Furnace, and the tool/armor tier) are now done, and
-are left here with a status note rather than removed, since the rest of the section still reads
-as a single set of ideas. What's left below (Blast/Arc Furnace, Solar Panel, powered tools) is
-its own bigger scope of work, not blocked on anything from this pass.
+justified adding that material in the first place. Six of these (Battery Box and the two dead-end
+recipe edits from Part 2, Electric Furnace, the tool/armor tier, and powered tools) are now done,
+and are left here with a status note rather than removed, since the rest of the section still
+reads as a single set of ideas. What's left below (Blast/Arc Furnace, Solar Panel, powered armor)
+is its own bigger scope of work, not blocked on anything from this pass.
 
 ### Electric Furnace — **done**
 Built as a direct follow-on to Part 2 (same session, right after): a 7th FE-family machine,
@@ -196,10 +196,7 @@ behind it — would give `graphite_rod` a second, larger use beyond the Chemical
 rod (Part 2) and give titanium a reason to feel like a distinct tier rather than "steel but
 renamed."
 
-### Rechargeable battery-powered tools
-Battery Box (Part 2) already gave FE a place to live outside a machine's internal buffer. Now that
-the hand-tool line exists (Part 6), a powered drill/chainsaw variant that recharges from that same
-battery chain instead of needing its own fuel is the natural next step.
+### Rechargeable battery-powered tools — **done, see Part 7**
 
 ### Solar panel — uses `silicon_plate`
 Real photovoltaic cells are silicon. You already mine toward silicon (lepidolite → silicon →
@@ -213,11 +210,14 @@ something else, and it's now literally what the Thermoelectric Generator's own c
 uses (Part 1 §1). An efficiency upgrade/component built the same way would extend that loop
 further.
 
-### Powered tools — uses `electric_motor`, `gear`, battery items
-An electric drill/chainsaw line, separate from the plain hand-tool tiers (Part 6), rechargeable
-from the battery chain above.
+### Powered tools — **done, see Part 7**
 
 ### Titanium/Steel/Cobalt Steel/Stellite/Tungsten Steel tools & armor — **done, see Part 6**
+
+### Powered armor (exoskeleton) — flagged, not started
+Raised alongside power tools as a "maybe" — a real follow-up idea, but its own design surface
+(per-slot effects, FE drain rates, what it does differently from Nequitum armor) rather than a
+small extension of Part 6 or 7.
 
 ---
 
@@ -284,6 +284,80 @@ All 41 new items (icons) and 4 new armor materials (worn-armor textures via the 
 `assets/industrialmetallurgy/equipment/*.json` asset system) use vanilla iron tool/armor textures
 recolored per material via ImageMagick, not hand-drawn art. Correctly shaped and immediately
 readable, but not final.
+
+---
+
+## Part 7 — Power tools — **DONE**
+
+FE-powered hand tools with a real, distinct value proposition each — not just faster versions of
+the hand tools, but tools that do something the hand tiers structurally can't. Also introduces the
+mod's first per-item (not per-block) FE storage, and its first item that degrades and gets
+replaced in place instead of re-crafted.
+
+### The core idea: two live sockets, not five more item tiers
+Each tool (Power Drill, Chainsaw, Cultivator) is crafted **once**. What determines its mining tier
+and how much charge it has are two separate items you socket into it:
+
+- **An implement** (Drill Bit / Chain / Cultivator Blade) — same 5-tier ladder as the hand tools
+  (`ModToolMaterials`), same durability numbers, and it's genuinely what determines mining
+  speed/harvest level: the tool's own `getDestroySpeed`/`isCorrectToolForDrops` just read whatever
+  `Tool` data component the socketed implement carries, exactly the way a plain pickaxe reads its
+  own. When it wears out it's consumed (Nequitum implements never wear out, same as the Nequitum
+  hand tools), and you craft a replacement for a couple of ingots — not a whole new tool.
+- **A Battery Pack** — a new, genuinely rechargeable item (unlike the mod's existing 6 battery
+  items, which are one-shot fuel). Crafted from `lithium_battery_cell` specifically: lithium-ion is
+  the only chemistry in the mod actually right for a cordless power tool (lead-acid/dry-cell are
+  the wrong tech for that). An **Advanced Battery Pack** upgrade (Battery Pack +
+  `lithium_battery_bank`) gives more capacity. Recharges by sitting in a new 6th slot on Battery
+  Box (Part 2) that tops it up in place, same FE rate as the box already pushes to neighbors.
+
+Swapping either one uses the exact click-onto-item interaction vanilla Bundles already use
+(`Item#overrideOtherStackedOnMe`) — left-click a valid implement or pack onto the tool to install
+it, right-click the tool with an empty cursor to pull whichever's currently in (implement first,
+then battery) back out. No dedicated screen. A tooltip always shows both socket states, explicitly
+flagging either one as "not installed" per your ask.
+
+### What each tool actually does
+- **Power Drill** — breaks a fixed 3x3 plane (perpendicular to your facing) around whatever you
+  mine, capped by nothing but the socketed bit's own harvest-level gate — same fixed size at every
+  tier, matching Tinkers' Construct's hammer, so tier is purely "what can this bit cut," not "how
+  big an area."
+- **Chainsaw** — fells a whole tree in one swing: breaks the targeted log and flood-fills through
+  every connected log block. Wood isn't hardness-gated in vanilla, so a Chain's tier doesn't gate
+  anything — instead it raises the felling cap (16 logs at Steel/Cobalt Steel, 32 at
+  Stellite/Tungsten Steel, 64 at Nequitum), which is the one place a power tool's tier changes area
+  instead of just gate/durability.
+- **Cultivator** — tills a 3x3 and plants a seed from your inventory into each freshly-tilled block
+  in the same action, reusing NeoForge's own `getToolModifiedState`/`ItemAbilities.HOE_TILL` so it
+  respects whatever any other mod's blocks define as tillable, not just vanilla dirt/grass.
+
+Every extra block beyond the one you'd get for free costs FE, drawn straight from the socketed
+Battery Pack; running out just means the tool falls back to single-block behavior rather than
+becoming completely unusable.
+
+### Implementation notes
+- Two new mod-registered `DataComponentType`s (`socketed_bit`, `socketed_battery`) reusing
+  `ItemContainerContents` — the same value type vanilla's shulker boxes use — sized to one slot,
+  purely to reuse its existing codec rather than writing a new one. A third
+  (`stored_energy: Integer`) backs the Battery Pack's own charge.
+- Deliberately skipped `Capabilities.Energy.ITEM` (the formal item-energy capability system) even
+  though it exists in this version and was the original plan — it requires bridging the old
+  `IItemHandlerModifiable` slots every machine in this mod already uses with a newer
+  `ItemAccess`/`ResourceHandler` API that's never been touched anywhere else in the codebase, for
+  no real benefit here: Battery Box and the power tools are the only two things that ever need to
+  read a Battery Pack's charge, and they can both just read/write the `stored_energy` component
+  directly. Worth revisiting only if a reason to interop with something external ever comes up.
+- Also fixed a real bug found while wiring this up: Battery Box and Electric Furnace's energy
+  capability was never registered in `IndustrialMetallurgy#registerCapabilities` — meaning neither
+  could actually receive FE pushed from a neighboring block. For Electric Furnace specifically that
+  meant it had no working power source at all since it shipped in Part 3.
+
+### Placeholder art
+All 20 new items (15 implements + 2 battery packs + 3 tool bodies) reuse vanilla iron tool/nugget/
+ingot shapes recolored per material, same approach as Parts 3 and 6. The 15 implements in
+particular all reuse the same nugget silhouette regardless of type (bit vs. chain vs. blade look
+identical within a material tier) — the roughest placeholder in the mod right now, flagged for
+whenever real art happens.
 
 ---
 

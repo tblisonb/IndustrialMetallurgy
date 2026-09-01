@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "industrialmetallurgy:steel_ingot",
+    "industrialmetallurgy:steel_ingot"
+  ],
+  "result": {
+    "id": "industrialmetallurgy:steel_chain"
+  }
+}

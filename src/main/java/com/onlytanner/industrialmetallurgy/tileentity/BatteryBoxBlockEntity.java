@@ -3,7 +3,9 @@ package com.onlytanner.industrialmetallurgy.tileentity;
 import com.onlytanner.industrialmetallurgy.IndustrialMetallurgy;
 import com.onlytanner.industrialmetallurgy.blocks.BatteryBoxBlock;
 import com.onlytanner.industrialmetallurgy.containers.BatteryBoxContainer;
+import com.onlytanner.industrialmetallurgy.init.ModDataComponents;
 import com.onlytanner.industrialmetallurgy.init.ModTileEntityTypes;
+import com.onlytanner.industrialmetallurgy.items.BatteryPackItem;
 import com.onlytanner.industrialmetallurgy.util.ModItemHandler;
 import com.onlytanner.industrialmetallurgy.util.RegistryHandler;
 import net.minecraft.core.BlockPos;
@@ -36,9 +38,11 @@ public class BatteryBoxBlockEntity extends BlockEntity implements MenuProvider {
 
     public static final int FUEL_ID = 0;
     public static final int NUM_EXTRA_FUEL_SLOTS = 4;
+    public static final int CHARGE_SLOT_ID = 5;
     public static final int MAX_ENERGY = 500000;
     public static final int MAX_ENERGY_PROVIDED = 80;
     public static final int ENERGY_GENERATED_PER_TICK = 80;
+    public static final int PACK_CHARGE_RATE = 80;
 
     private static final Map<Item, Integer> ENERGY_VALUES = Map.of(
             RegistryHandler.DRY_CELL.get(), 8000,
@@ -52,7 +56,7 @@ public class BatteryBoxBlockEntity extends BlockEntity implements MenuProvider {
     private Component customName;
     public int burnTimeRemaining;
     public int currentMaxBurnTime;
-    private final ModItemHandler inventory = new ModItemHandler(5);
+    private final ModItemHandler inventory = new ModItemHandler(6);
     private final SimpleEnergyHandler energyHandler = new SimpleEnergyHandler(MAX_ENERGY) {
         @Override
         protected void onEnergyChanged(int previousAmount) {
@@ -96,6 +100,8 @@ public class BatteryBoxBlockEntity extends BlockEntity implements MenuProvider {
                 dirty = true;
             }
 
+            chargeBatteryPack();
+
             if (this.energyHandler.getAmountAsInt() > 0) {
                 providePowerToNeighbors(serverLevel);
             }
@@ -103,6 +109,25 @@ public class BatteryBoxBlockEntity extends BlockEntity implements MenuProvider {
         if (dirty) {
             this.setChanged();
         }
+    }
+
+    // Tops up a Battery Pack sitting in the charge slot directly from this box's own buffer,
+    // in place -- the pack is never consumed here, unlike the disposable batteries in the fuel
+    // slot above.
+    private void chargeBatteryPack() {
+        ItemStack stack = this.inventory.getStackInSlot(CHARGE_SLOT_ID);
+        if (!(stack.getItem() instanceof BatteryPackItem)) {
+            return;
+        }
+        int capacity = BatteryPackItem.capacityOf(stack.getItem());
+        int stored = stack.getOrDefault(ModDataComponents.STORED_ENERGY.get(), 0);
+        int available = this.energyHandler.getAmountAsInt();
+        int toTransfer = Math.min(PACK_CHARGE_RATE, Math.min(capacity - stored, available));
+        if (toTransfer <= 0) {
+            return;
+        }
+        stack.set(ModDataComponents.STORED_ENERGY.get(), stored + toTransfer);
+        this.energyHandler.set(available - toTransfer);
     }
 
     private void providePowerToNeighbors(ServerLevel level) {

@@ -7,6 +7,10 @@ import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier1BlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier2BlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier3BlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier4BlockEntity;
+import com.onlytanner.industrialmetallurgy.items.BatteryPackItem;
+import com.onlytanner.industrialmetallurgy.items.ChainsawItem;
+import com.onlytanner.industrialmetallurgy.items.CultivatorItem;
+import com.onlytanner.industrialmetallurgy.items.PowerDrillItem;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.HoeItem;
@@ -228,6 +232,40 @@ public class RegistryHandler {
     public static final DeferredItem<Item> NEQUITUM_CHESTPLATE = ITEMS.registerSimpleItem("nequitum_chestplate", props -> props.humanoidArmor(ModArmorMaterials.NEQUITUM, ArmorType.CHESTPLATE));
     public static final DeferredItem<Item> NEQUITUM_LEGGINGS = ITEMS.registerSimpleItem("nequitum_leggings", props -> props.humanoidArmor(ModArmorMaterials.NEQUITUM, ArmorType.LEGGINGS));
     public static final DeferredItem<Item> NEQUITUM_BOOTS = ITEMS.registerSimpleItem("nequitum_boots", props -> props.humanoidArmor(ModArmorMaterials.NEQUITUM, ArmorType.BOOTS));
+
+    // Power tool implements -- worn/replaced independently of the tool body they're socketed
+    // into. Same 5-tier durability ladder as the hand tools (ModToolMaterials), but each gets the
+    // Tool component matching what it actually does: drill bits mine (pickaxe rules), chains fell
+    // trees (axe rules -- logs are axe-mineable, not hardness-gated), cultivator blades till
+    // (hoe rules, mostly just for durability/enchantability since tilling isn't tier-gated).
+    public static final DeferredItem<Item> STEEL_DRILL_BIT = ITEMS.registerSimpleItem("steel_drill_bit", props -> props.pickaxe(ModToolMaterials.STEEL, 1.0F, -2.8F));
+    public static final DeferredItem<Item> COBALT_STEEL_DRILL_BIT = ITEMS.registerSimpleItem("cobalt_steel_drill_bit", props -> props.pickaxe(ModToolMaterials.COBALT_STEEL, 1.0F, -2.8F));
+    public static final DeferredItem<Item> STELLITE_DRILL_BIT = ITEMS.registerSimpleItem("stellite_drill_bit", props -> props.pickaxe(ModToolMaterials.STELLITE, 1.0F, -2.8F));
+    public static final DeferredItem<Item> TUNGSTEN_STEEL_DRILL_BIT = ITEMS.registerSimpleItem("tungsten_steel_drill_bit", props -> props.pickaxe(ModToolMaterials.TUNGSTEN_STEEL, 1.0F, -2.8F));
+    public static final DeferredItem<Item> NEQUITUM_DRILL_BIT = ITEMS.registerSimpleItem("nequitum_drill_bit", props -> props.pickaxe(ModToolMaterials.NEQUITUM, 1.0F, -2.8F));
+
+    public static final DeferredItem<Item> STEEL_CHAIN = ITEMS.registerSimpleItem("steel_chain", props -> props.axe(ModToolMaterials.STEEL, 5.0F, -3.0F));
+    public static final DeferredItem<Item> COBALT_STEEL_CHAIN = ITEMS.registerSimpleItem("cobalt_steel_chain", props -> props.axe(ModToolMaterials.COBALT_STEEL, 5.0F, -3.0F));
+    public static final DeferredItem<Item> STELLITE_CHAIN = ITEMS.registerSimpleItem("stellite_chain", props -> props.axe(ModToolMaterials.STELLITE, 5.0F, -3.0F));
+    public static final DeferredItem<Item> TUNGSTEN_STEEL_CHAIN = ITEMS.registerSimpleItem("tungsten_steel_chain", props -> props.axe(ModToolMaterials.TUNGSTEN_STEEL, 5.0F, -3.0F));
+    public static final DeferredItem<Item> NEQUITUM_CHAIN = ITEMS.registerSimpleItem("nequitum_chain", props -> props.axe(ModToolMaterials.NEQUITUM, 5.0F, -3.0F));
+
+    public static final DeferredItem<Item> STEEL_CULTIVATOR_BLADE = ITEMS.registerSimpleItem("steel_cultivator_blade", props -> props.hoe(ModToolMaterials.STEEL, -3.0F, 0.0F));
+    public static final DeferredItem<Item> COBALT_STEEL_CULTIVATOR_BLADE = ITEMS.registerSimpleItem("cobalt_steel_cultivator_blade", props -> props.hoe(ModToolMaterials.COBALT_STEEL, -3.0F, 0.0F));
+    public static final DeferredItem<Item> STELLITE_CULTIVATOR_BLADE = ITEMS.registerSimpleItem("stellite_cultivator_blade", props -> props.hoe(ModToolMaterials.STELLITE, -3.0F, 0.0F));
+    public static final DeferredItem<Item> TUNGSTEN_STEEL_CULTIVATOR_BLADE = ITEMS.registerSimpleItem("tungsten_steel_cultivator_blade", props -> props.hoe(ModToolMaterials.TUNGSTEN_STEEL, -3.0F, 0.0F));
+    public static final DeferredItem<Item> NEQUITUM_CULTIVATOR_BLADE = ITEMS.registerSimpleItem("nequitum_cultivator_blade", props -> props.hoe(ModToolMaterials.NEQUITUM, -3.0F, 0.0F));
+
+    // Battery packs -- rechargeable FE storage for the power tools, crafted from the lithium
+    // battery chain (the only chemistry in the mod that's actually right for a cordless tool).
+    public static final DeferredItem<BatteryPackItem> BATTERY_PACK = ITEMS.registerItem("battery_pack", props -> new BatteryPackItem(props, 100_000), UnaryOperator.identity());
+    public static final DeferredItem<BatteryPackItem> ADVANCED_BATTERY_PACK = ITEMS.registerItem("advanced_battery_pack", props -> new BatteryPackItem(props, 300_000), UnaryOperator.identity());
+
+    // Power tool bodies -- crafted once; the socketed implement and battery pack (Part 7) are
+    // what actually determine what the tool can do and how well.
+    public static final DeferredItem<PowerDrillItem> POWER_DRILL = ITEMS.registerItem("power_drill", props -> new PowerDrillItem(props.stacksTo(1)), UnaryOperator.identity());
+    public static final DeferredItem<ChainsawItem> CHAINSAW = ITEMS.registerItem("chainsaw", props -> new ChainsawItem(props.stacksTo(1)), UnaryOperator.identity());
+    public static final DeferredItem<CultivatorItem> CULTIVATOR = ITEMS.registerItem("cultivator", props -> new CultivatorItem(props.stacksTo(1)), UnaryOperator.identity());
 
     // Blocks
     // Metal Blocks

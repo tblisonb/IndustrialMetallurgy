@@ -1,6 +1,7 @@
 package com.onlytanner.industrialmetallurgy.containers;
 
 import com.onlytanner.industrialmetallurgy.init.ModContainerTypes;
+import com.onlytanner.industrialmetallurgy.items.BatteryPackItem;
 import com.onlytanner.industrialmetallurgy.tileentity.BatteryBoxBlockEntity;
 import com.onlytanner.industrialmetallurgy.util.FunctionalIntReferenceHolder;
 import com.onlytanner.industrialmetallurgy.util.RegistryHandler;
@@ -33,6 +34,7 @@ public class BatteryBoxContainer extends AbstractContainerMenu {
         this.addSlot(new BatterySlot(inventory, 2, 8, 26));
         this.addSlot(new BatterySlot(inventory, 3, 8, 44));
         this.addSlot(new BatterySlot(inventory, 4, 8, 62));
+        this.addSlot(new ChargeSlot(inventory, BatteryBoxBlockEntity.CHARGE_SLOT_ID, 134, 35));
 
         // Player Inventory
         for (int i = 0; i < 3; i++) {
@@ -118,6 +120,19 @@ public class BatteryBoxContainer extends AbstractContainerMenu {
         @Override
         public boolean mayPlace(ItemStack stack) {
             return BatteryBoxBlockEntity.isBatteryItem(stack);
+        }
+
+    }
+
+    private static class ChargeSlot extends SlotItemHandler {
+
+        public ChargeSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+            super(itemHandler, index, xPosition, yPosition);
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack stack) {
+            return stack.getItem() instanceof BatteryPackItem;
         }
 
     }

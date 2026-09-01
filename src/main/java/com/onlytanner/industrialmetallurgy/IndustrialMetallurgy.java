@@ -1,6 +1,7 @@
 package com.onlytanner.industrialmetallurgy;
 
 import com.onlytanner.industrialmetallurgy.init.ModContainerTypes;
+import com.onlytanner.industrialmetallurgy.init.ModDataComponents;
 import com.onlytanner.industrialmetallurgy.init.ModRecipes;
 import com.onlytanner.industrialmetallurgy.init.ModTileEntityTypes;
 import com.onlytanner.industrialmetallurgy.util.RegistryHandler;
@@ -40,6 +41,7 @@ public class IndustrialMetallurgy {
     // The constructor for the mod class is the first code that is run when your mod is loaded.
     // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
     public IndustrialMetallurgy(IEventBus modEventBus, ModContainer modContainer) {
+        ModDataComponents.init(modEventBus);
         RegistryHandler.init(modEventBus);
         ModTileEntityTypes.init(modEventBus);
         ModContainerTypes.init(modEventBus);
@@ -69,6 +71,10 @@ public class IndustrialMetallurgy {
         event.registerBlockEntity(Capabilities.Energy.BLOCK, ModTileEntityTypes.CHEMICAL_CENTRIFUGE.get(),
                 (blockEntity, side) -> blockEntity.getEnergyHandler());
         event.registerBlockEntity(Capabilities.Energy.BLOCK, ModTileEntityTypes.CHEMICAL_REACTOR.get(),
+                (blockEntity, side) -> blockEntity.getEnergyHandler());
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, ModTileEntityTypes.BATTERY_BOX.get(),
+                (blockEntity, side) -> blockEntity.getEnergyHandler());
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, ModTileEntityTypes.ELECTRIC_FURNACE.get(),
                 (blockEntity, side) -> blockEntity.getEnergyHandler());
     }
 

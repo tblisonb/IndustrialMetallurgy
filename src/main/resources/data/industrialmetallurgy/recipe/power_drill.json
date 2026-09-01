@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sxs",
+    "gmg",
+    "ppp"
+  ],
+  "key": {
+    "s": "industrialmetallurgy:conducting_element",
+    "x": "industrialmetallurgy:tungsten_steel_ingot",
+    "g": "industrialmetallurgy:gear",
+    "m": "industrialmetallurgy:electric_motor",
+    "p": "industrialmetallurgy:steel_plate"
+  },
+  "result": {
+    "id": "industrialmetallurgy:power_drill"
+  }
+}
