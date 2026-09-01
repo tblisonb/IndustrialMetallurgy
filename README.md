@@ -45,10 +45,11 @@ tracks the NeoForge rewrite (the pre-rewrite 1.16.4 Forge codebase is preserved 
 
 Since that initial rewrite: recipe/progression gaps closed, a full tool tier (Steel/Cobalt
 Steel/Stellite/Tungsten Steel/Tungsten-Rhenium) and 4-set armor line, FE-powered hand tools
-(Power Drill/Chainsaw/Cultivator) with swappable bit/battery sockets, Battery Box, Electric
-Furnace, and Arc Furnace (a higher-yield/faster 5th Forge tier). Nequitum was replaced outright
-with Tungsten-Rhenium, a real alloy, closing out the mod's one remaining "unobtainium." Ore world
-generation is wired up. See `ROADMAP.md` for the full history and current design notes.
+(Power Drill/Chainsaw/Cultivator/Prospector) with swappable bit/battery sockets, Battery Box,
+Electric Furnace, and Arc Furnace (a higher-yield/faster 5th Forge tier). Nequitum was replaced
+outright with Tungsten-Rhenium, a real alloy, closing out the mod's one remaining "unobtainium."
+Ore world generation is wired up, and every ore block has a real (procedural) texture. See
+`ROADMAP.md` for the full history and current design notes.
 
 **Not yet ported:**
 - **JEI integration** — present on the 1.16.4 branch, not yet reconnected.

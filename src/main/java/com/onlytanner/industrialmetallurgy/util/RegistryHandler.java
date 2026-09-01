@@ -12,6 +12,7 @@ import com.onlytanner.industrialmetallurgy.items.BatteryPackItem;
 import com.onlytanner.industrialmetallurgy.items.ChainsawItem;
 import com.onlytanner.industrialmetallurgy.items.CultivatorItem;
 import com.onlytanner.industrialmetallurgy.items.PowerDrillItem;
+import com.onlytanner.industrialmetallurgy.items.ProspectorItem;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.HoeItem;
@@ -268,6 +269,11 @@ public class RegistryHandler {
     public static final DeferredItem<PowerDrillItem> POWER_DRILL = ITEMS.registerItem("power_drill", props -> new PowerDrillItem(props.stacksTo(1)), UnaryOperator.identity());
     public static final DeferredItem<ChainsawItem> CHAINSAW = ITEMS.registerItem("chainsaw", props -> new ChainsawItem(props.stacksTo(1)), UnaryOperator.identity());
     public static final DeferredItem<CultivatorItem> CULTIVATOR = ITEMS.registerItem("cultivator", props -> new CultivatorItem(props.stacksTo(1)), UnaryOperator.identity());
+
+    // Prospector -- a handheld ore magnetometer, not a mining tool. Socket a crushed-ore item (or
+    // raw lepidolite) to calibrate the scan, right-click to sweep. Real cordless-scanner-style
+    // cooldown between sweeps rather than spammable every tick.
+    public static final DeferredItem<ProspectorItem> PROSPECTOR = ITEMS.registerItem("prospector", props -> new ProspectorItem(props.stacksTo(1).useCooldown(1.5F)), UnaryOperator.identity());
 
     // Blocks
     // Metal Blocks

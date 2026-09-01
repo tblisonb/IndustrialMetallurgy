@@ -513,6 +513,58 @@ per-ore world-gen toggle earlier in this Part: no live saves to preserve compati
 
 ---
 
+## Part 10 — Prospector: a 4th power tool with no vanilla equivalent — **DONE**
+
+Picked over powered armor and multiblocks as the next step because it's small, reuses the Part 7
+socket machinery directly, and it's the one idea of the three that actively serves the mod's
+stated design pillar (ore gating as "an excuse to go explore," Part 9) rather than just adding
+another tier of gear.
+
+### What it does
+A handheld ore magnetometer. Insert a crushed-ore item (or, for Lepidolite specifically — the one
+mod ore with no crushed intermediate, since it drops its raw form via silk touch instead of going
+through the Crusher — the raw `lepidolite` item) into the tool's socket to calibrate what it looks
+for, same idea as calibrating a real geophysical instrument against a reference sample. Right-click
+to sweep a 33×33×33 cube centered on the player (skipping unloaded chunks, so it never forces new
+terrain generation just to scan it) and report the nearest match: distance, an 8-point compass
+bearing, and whether it's above/below/level with you, via an action-bar message. A short built-in
+use-cooldown (`Item.Properties#useCooldown`) stops it being spammed like a repeating radar rather
+than an occasional check-in.
+
+### Reused, not rebuilt
+`ProspectorItem` extends `PowerToolItem` (Part 7) directly — its "implement" socket becomes the
+sample slot, and its battery socket/FE-drain machinery (`tryDrainEnergy`) is used unchanged. The
+one thing that had to change: the base class's tooltip assumes the socketed item has durability
+("X/Y uses left"), which is meaningless for a sample that's never consumed, so `ProspectorItem`
+overrides `appendHoverText` with a `tooltip.industrialmetallurgy.sample_installed` line instead of
+calling `super`. No new `DataComponentType`s were needed at all.
+
+### The sample→target mapping, and why it's intentionally honest
+`ProspectorItem` maps each valid sample item to the actual block(s) it should find — the mod's own
+12 crushed-ore items to their own ore block, `crushed_gold_ore`/`crushed_iron_ore` to vanilla's
+ore *and* its deepslate variant (gold also checks Nether gold ore), `lepidolite` to
+`lepidolite_ore`. There's deliberately no dimension-awareness beyond what's actually loaded and in
+range: scanning for Chromite/Cobaltite/Rheniite (Nether-only) or Lepidolite/Scheelite (End-only)
+from the Overworld just reports nothing found, which is true — it isn't special-cased, it falls
+out naturally from the world-gen work in Part 9.
+
+### Crafting and cost
+Same shared 3×3 power-tool-body pattern as Drill/Chainsaw/Cultivator (`conducting_element`/
+`gear`/`electric_motor`/`steel_plate` frame), with `alnico_ingot` as the specialty center
+ingredient — Alnico (aluminum-nickel-cobalt) is a real magnet alloy, and magnetometers are
+literally built around one, so this is a more direct real-world fit than any of the other three
+tools' specialty ingredients. A scan costs 4000 FE (25 scans per base Battery Pack charge, 75 per
+Advanced), a flat per-action cost rather than the other tools' per-block cost, since a scan is one
+indivisible action regardless of what it finds.
+
+### Placeholder art
+One new item icon: vanilla's spyglass texture (itself a scanning instrument, unlike the other
+three tools' recolored pickaxe/axe/hoe shapes) recolored from warm brass/wood to steel-and-copper
+with a bright cyan "active scan" lens, via the same exact-RGBA-remap technique the ore textures
+(Part 9) used. Not final art.
+
+---
+
 ## Part 4 — Basic in-mod logistics (per your last message)
 
 You described wanting something minimal rather than depending on another mod: a machine-side
