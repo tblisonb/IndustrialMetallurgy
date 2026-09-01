@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X X",
+    "X X"
+  ],
+  "key": {
+    "X": "industrialmetallurgy:titanium_ingot"
+  },
+  "result": {
+    "id": "industrialmetallurgy:titanium_boots"
+  }
+}

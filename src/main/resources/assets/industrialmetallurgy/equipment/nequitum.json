@@ -1,0 +1,10 @@
+{
+  "layers": {
+    "humanoid": [
+      { "texture": "industrialmetallurgy:nequitum" }
+    ],
+    "humanoid_leggings": [
+      { "texture": "industrialmetallurgy:nequitum" }
+    ]
+  }
+}

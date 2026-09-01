@@ -98,7 +98,8 @@ had 60 loot table files total, but one of those was for a block that was never c
 into `26.2`'s registry, so 59/59 current blocks is the complete set.
 
 ### Still open (unchanged, tracked in `README.md`, out of scope for this pass)
-World generation (ores don't spawn), the steel/nequitum tool lines, and JEI integration.
+World generation (ores don't spawn) and JEI integration. The steel/nequitum tool lines (plus a
+titanium/stellite/cobalt-steel/tungsten-steel expansion) shipped later — see Part 6.
 
 ---
 
@@ -162,12 +163,11 @@ Left open at the end of this pass; picked up immediately after as the first item
 ## Part 3 — Ideas for giving real jobs to underutilized items
 
 Organized by theme. Each ties back to a specific item above and to the real-world property that
-justified adding that material in the first place. Three of these (Battery Box and the two
-dead-end recipe edits from Part 2, plus Electric Furnace below) are now done, and are left here
-with a status note rather than removed, since the rest of the section still reads as a single set
-of ideas. What's left below is either a bigger machine (Blast/Arc Furnace, Solar Panel) or depends
-on the steel/nequitum/titanium tool-and-armor lines existing in `26.2` first (Part 1's "still
-open" list), which none of this pass touched.
+justified adding that material in the first place. Four of these (Battery Box and the two
+dead-end recipe edits from Part 2, Electric Furnace, and the tool/armor tier) are now done, and
+are left here with a status note rather than removed, since the rest of the section still reads
+as a single set of ideas. What's left below (Blast/Arc Furnace, Solar Panel, powered tools) is
+its own bigger scope of work, not blocked on anything from this pass.
 
 ### Electric Furnace — **done**
 Built as a direct follow-on to Part 2 (same session, right after): a 7th FE-family machine,
@@ -197,9 +197,9 @@ rod (Part 2) and give titanium a reason to feel like a distinct tier rather than
 renamed."
 
 ### Rechargeable battery-powered tools
-Battery Box (Part 2) already gave FE a place to live outside a machine's internal buffer. A
-handheld tool line that recharges from that same battery chain — rather than needing its own
-fuel — is the natural next step once tools exist at all (see Titanium tools/armor tier below).
+Battery Box (Part 2) already gave FE a place to live outside a machine's internal buffer. Now that
+the hand-tool line exists (Part 6), a powered drill/chainsaw variant that recharges from that same
+battery chain instead of needing its own fuel is the natural next step.
 
 ### Solar panel — uses `silicon_plate`
 Real photovoltaic cells are silicon. You already mine toward silicon (lepidolite → silicon →
@@ -214,13 +214,76 @@ uses (Part 1 §1). An efficiency upgrade/component built the same way would exte
 further.
 
 ### Powered tools — uses `electric_motor`, `gear`, battery items
-An electric drill/chainsaw line, separate from the plain steel/nequitum hand tools, rechargeable
+An electric drill/chainsaw line, separate from the plain hand-tool tiers (Part 6), rechargeable
 from the battery chain above.
 
-### Titanium tools/armor tier
-Titanium now feeds `nitinol_ingot` and the Chemical Centrifuge's specialty component, but real
-titanium's whole reputation is "strong but light" — still a natural slot between steel and
-nequitum tools/armor, using a material you already mine toward instead of adding something new.
+### Titanium/Steel/Cobalt Steel/Stellite/Tungsten Steel tools & armor — **done, see Part 6**
+
+---
+
+## Part 6 — Tool & armor material tier — **DONE**
+
+The 1.16.4 branch only ever had Steel and Nequitum tools (pickaxe/axe/shovel/sword/hoe), and no
+armor at all, ever — so this was new design, not a port, done deliberately narrow: of the mod's
+~28 metals, only 5 got tools and only 4 got armor, each for a specific real-world reason rather
+than mechanically covering every material.
+
+### Tools — 5 tiers
+Steel is the 1.16.4 baseline carried forward unchanged (iron harvest level, 3x iron durability,
+diamond speed/damage/enchantability). The other 4 are new:
+
+- **Cobalt Steel** — real cobalt-alloy tool steel (e.g. M42 high-speed steel) is prized for
+  keeping a sharp edge at high heat, so it's a lateral upgrade from Steel (same iron harvest gate,
+  noticeably faster) rather than a harder-material tier.
+- **Stellite** — a real cobalt-chromium-tungsten superalloy used for hard-facing and extreme-wear
+  cutting edges (valve seats, saw tips). This is where the harvest level actually jumps to
+  diamond-tier — hard enough to mine what iron/steel/cobalt steel can't.
+- **Tungsten Steel** — ultra-hard, ultra-dense tool steel; the pre-capstone tier, matching
+  netherite's speed/damage almost exactly (same diamond-tier harvest gate as Stellite, better raw
+  stats).
+- **Nequitum** — capstone, unchanged from 1.16.4, including its 0-durability quirk: an item with
+  no max damage can't be damaged at all, so nequitum tools simply never break.
+
+Repair-ingredient tags (`data/industrialmetallurgy/tags/item/*_tool_materials.json`) were added
+for all 5, one per metal's ingot.
+
+### Armor — 4 sets, not 28
+Only materials whose real properties suggest actual protective gear, each earning its slot on
+purpose:
+
+- **Steel** — plain baseline, no special effect, solid protection (parallels vanilla iron).
+- **Titanium** — real titanium's whole reputation is strong-but-light and corrosion-resistant →
+  permanent **Resistance I** while the full set is worn.
+- **Stellite** — same real heat/corrosion-resistant superalloy as its tool tier, different
+  application → permanent **Fire Resistance** while the full set is worn.
+- **Nequitum** — capstone, strongest raw defense (matches/beats netherite on every stat), and
+  carries both bonuses at once, echoing how netherite armor stacks fire immunity on top of
+  best-in-slot numbers in vanilla.
+
+Deliberately excluded: everything else audited in Part 2/3 (electrical/heating alloys, precision-
+instrument metals, soft/decorative metals, actuator wire) — see the original selection writeup for
+the specific reasoning per material.
+
+### How the set bonus actually works
+`ArmorSetBonusHandler` subscribes to `PlayerTickEvent.Post` (server-side only), checks all 4
+armor slots against each material's helmet/chestplate/leggings/boots items every tick, and
+re-applies a short-duration `MobEffectInstance` (ambient, no particles, icon visible) whenever a
+full set matches — simplest way to make a passive-while-worn bonus, no NBT tracking needed.
+
+### API note
+This Minecraft version restructured tools/armor entirely from the class-hierarchy system (
+`PickaxeItem`, `SwordItem`, `IItemTier`/`ArmorMaterial` subclassing) into a data-component system:
+`ToolMaterial`/`ArmorMaterial` are now records, pickaxes/swords are plain `Item`s configured via
+`Item.Properties#pickaxe`/`#sword`/`#humanoidArmor`, and only axe/hoe/shovel keep dedicated
+classes (for their unique right-click behavior). Verified against the actual decompiled 26.2
+sources and the real NeoForge sources jar rather than assumed, the same way Electric Furnace's
+vanilla-smelting-recipe reuse was verified in Part 3.
+
+### Placeholder art
+All 41 new items (icons) and 4 new armor materials (worn-armor textures via the new
+`assets/industrialmetallurgy/equipment/*.json` asset system) use vanilla iron tool/armor textures
+recolored per material via ImageMagick, not hand-drawn art. Correctly shaped and immediately
+readable, but not final.
 
 ---
 
@@ -268,5 +331,6 @@ once, since it's a bigger commitment than the pipe system itself.
 
 3. **Placeholder art still owed:** `oily_sand`'s item texture (reused from the `oil_sand` block),
    Battery Box (Thermoelectric Generator's GUI + a refractory-bricks/thermoelectric-generator
-   texture mashup for the block model), and Electric Furnace (Crusher's GUI + a
-   refractory-bricks/coke-oven texture mashup). None of the three have final art.
+   texture mashup for the block model), Electric Furnace (Crusher's GUI + a
+   refractory-bricks/coke-oven texture mashup), and all 41 tool/armor items plus 4 armor materials'
+   worn-armor textures (recolored vanilla iron art — see Part 6). Nothing here has final art yet.

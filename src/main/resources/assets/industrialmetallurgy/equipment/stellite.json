@@ -1,0 +1,10 @@
+{
+  "layers": {
+    "humanoid": [
+      { "texture": "industrialmetallurgy:stellite" }
+    ],
+    "humanoid_leggings": [
+      { "texture": "industrialmetallurgy:stellite" }
+    ]
+  }
+}

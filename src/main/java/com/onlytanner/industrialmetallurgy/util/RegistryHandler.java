@@ -7,8 +7,12 @@ import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier1BlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier2BlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier3BlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier4BlockEntity;
+import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ShovelItem;
+import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -16,6 +20,8 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
+
+import java.util.function.UnaryOperator;
 
 public class RegistryHandler {
 
@@ -168,11 +174,60 @@ public class RegistryHandler {
     public static final DeferredItem<Item> INVAR_PLATE = ITEMS.registerSimpleItem("invar_plate");
     public static final DeferredItem<Item> ALUMINUM_PLATE = ITEMS.registerSimpleItem("aluminum_plate");
     public static final DeferredItem<Item> ALUMINUM_FOIL = ITEMS.registerSimpleItem("aluminum_foil");
-    // NOTE: Tools (steel/nequitum pickaxe/shovel/sword/axe/hoe) are deliberately not ported yet.
-    // Modern NeoForge builds tool items via Item.Properties#pickaxe/axe/sword/shovel/hoe(ToolMaterial, ...)
-    // backed by block tags for "incorrect for this tool" and repair-ingredient tags, replacing the old
-    // ModItemTiers/IItemTier subclassing approach entirely. That needs new tag JSON files and is left
-    // for a follow-up pass rather than guessed at here.
+    // Tools -- 5 tiers (Steel/Cobalt Steel/Stellite/Tungsten Steel/Nequitum), see ModToolMaterials
+    // for the real-world justification behind each. Pickaxe/sword are plain Item + Properties#pickaxe/
+    // sword; axe/hoe/shovel keep their dedicated classes for their unique right-click behavior.
+    public static final DeferredItem<Item> STEEL_PICKAXE = ITEMS.registerSimpleItem("steel_pickaxe", props -> props.pickaxe(ModToolMaterials.STEEL, 1.0F, -2.8F));
+    public static final DeferredItem<Item> STEEL_SWORD = ITEMS.registerSimpleItem("steel_sword", props -> props.sword(ModToolMaterials.STEEL, 3.0F, -2.4F));
+    public static final DeferredItem<AxeItem> STEEL_AXE = ITEMS.registerItem("steel_axe", props -> new AxeItem(ModToolMaterials.STEEL, 5.0F, -3.0F, props), UnaryOperator.identity());
+    public static final DeferredItem<HoeItem> STEEL_HOE = ITEMS.registerItem("steel_hoe", props -> new HoeItem(ModToolMaterials.STEEL, -3.0F, 0.0F, props), UnaryOperator.identity());
+    public static final DeferredItem<ShovelItem> STEEL_SHOVEL = ITEMS.registerItem("steel_shovel", props -> new ShovelItem(ModToolMaterials.STEEL, 1.5F, -3.0F, props), UnaryOperator.identity());
+
+    public static final DeferredItem<Item> COBALT_STEEL_PICKAXE = ITEMS.registerSimpleItem("cobalt_steel_pickaxe", props -> props.pickaxe(ModToolMaterials.COBALT_STEEL, 1.0F, -2.8F));
+    public static final DeferredItem<Item> COBALT_STEEL_SWORD = ITEMS.registerSimpleItem("cobalt_steel_sword", props -> props.sword(ModToolMaterials.COBALT_STEEL, 3.0F, -2.4F));
+    public static final DeferredItem<AxeItem> COBALT_STEEL_AXE = ITEMS.registerItem("cobalt_steel_axe", props -> new AxeItem(ModToolMaterials.COBALT_STEEL, 5.0F, -3.0F, props), UnaryOperator.identity());
+    public static final DeferredItem<HoeItem> COBALT_STEEL_HOE = ITEMS.registerItem("cobalt_steel_hoe", props -> new HoeItem(ModToolMaterials.COBALT_STEEL, -3.0F, 0.0F, props), UnaryOperator.identity());
+    public static final DeferredItem<ShovelItem> COBALT_STEEL_SHOVEL = ITEMS.registerItem("cobalt_steel_shovel", props -> new ShovelItem(ModToolMaterials.COBALT_STEEL, 1.5F, -3.0F, props), UnaryOperator.identity());
+
+    public static final DeferredItem<Item> STELLITE_PICKAXE = ITEMS.registerSimpleItem("stellite_pickaxe", props -> props.pickaxe(ModToolMaterials.STELLITE, 1.0F, -2.8F));
+    public static final DeferredItem<Item> STELLITE_SWORD = ITEMS.registerSimpleItem("stellite_sword", props -> props.sword(ModToolMaterials.STELLITE, 3.0F, -2.4F));
+    public static final DeferredItem<AxeItem> STELLITE_AXE = ITEMS.registerItem("stellite_axe", props -> new AxeItem(ModToolMaterials.STELLITE, 5.0F, -3.0F, props), UnaryOperator.identity());
+    public static final DeferredItem<HoeItem> STELLITE_HOE = ITEMS.registerItem("stellite_hoe", props -> new HoeItem(ModToolMaterials.STELLITE, -3.0F, 0.0F, props), UnaryOperator.identity());
+    public static final DeferredItem<ShovelItem> STELLITE_SHOVEL = ITEMS.registerItem("stellite_shovel", props -> new ShovelItem(ModToolMaterials.STELLITE, 1.5F, -3.0F, props), UnaryOperator.identity());
+
+    public static final DeferredItem<Item> TUNGSTEN_STEEL_PICKAXE = ITEMS.registerSimpleItem("tungsten_steel_pickaxe", props -> props.pickaxe(ModToolMaterials.TUNGSTEN_STEEL, 1.0F, -2.8F));
+    public static final DeferredItem<Item> TUNGSTEN_STEEL_SWORD = ITEMS.registerSimpleItem("tungsten_steel_sword", props -> props.sword(ModToolMaterials.TUNGSTEN_STEEL, 3.0F, -2.4F));
+    public static final DeferredItem<AxeItem> TUNGSTEN_STEEL_AXE = ITEMS.registerItem("tungsten_steel_axe", props -> new AxeItem(ModToolMaterials.TUNGSTEN_STEEL, 5.0F, -3.0F, props), UnaryOperator.identity());
+    public static final DeferredItem<HoeItem> TUNGSTEN_STEEL_HOE = ITEMS.registerItem("tungsten_steel_hoe", props -> new HoeItem(ModToolMaterials.TUNGSTEN_STEEL, -3.0F, 0.0F, props), UnaryOperator.identity());
+    public static final DeferredItem<ShovelItem> TUNGSTEN_STEEL_SHOVEL = ITEMS.registerItem("tungsten_steel_shovel", props -> new ShovelItem(ModToolMaterials.TUNGSTEN_STEEL, 1.5F, -3.0F, props), UnaryOperator.identity());
+
+    public static final DeferredItem<Item> NEQUITUM_PICKAXE = ITEMS.registerSimpleItem("nequitum_pickaxe", props -> props.pickaxe(ModToolMaterials.NEQUITUM, 1.0F, -2.8F));
+    public static final DeferredItem<Item> NEQUITUM_SWORD = ITEMS.registerSimpleItem("nequitum_sword", props -> props.sword(ModToolMaterials.NEQUITUM, 3.0F, -2.4F));
+    public static final DeferredItem<AxeItem> NEQUITUM_AXE = ITEMS.registerItem("nequitum_axe", props -> new AxeItem(ModToolMaterials.NEQUITUM, 5.0F, -3.0F, props), UnaryOperator.identity());
+    public static final DeferredItem<HoeItem> NEQUITUM_HOE = ITEMS.registerItem("nequitum_hoe", props -> new HoeItem(ModToolMaterials.NEQUITUM, -3.0F, 0.0F, props), UnaryOperator.identity());
+    public static final DeferredItem<ShovelItem> NEQUITUM_SHOVEL = ITEMS.registerItem("nequitum_shovel", props -> new ShovelItem(ModToolMaterials.NEQUITUM, 1.5F, -3.0F, props), UnaryOperator.identity());
+
+    // Armor -- only 4 of the mod's ~28 metals, see ModArmorMaterials for why. Full-set bonuses for
+    // Titanium/Stellite/Nequitum are applied in ArmorSetBonusHandler, not here.
+    public static final DeferredItem<Item> STEEL_HELMET = ITEMS.registerSimpleItem("steel_helmet", props -> props.humanoidArmor(ModArmorMaterials.STEEL, ArmorType.HELMET));
+    public static final DeferredItem<Item> STEEL_CHESTPLATE = ITEMS.registerSimpleItem("steel_chestplate", props -> props.humanoidArmor(ModArmorMaterials.STEEL, ArmorType.CHESTPLATE));
+    public static final DeferredItem<Item> STEEL_LEGGINGS = ITEMS.registerSimpleItem("steel_leggings", props -> props.humanoidArmor(ModArmorMaterials.STEEL, ArmorType.LEGGINGS));
+    public static final DeferredItem<Item> STEEL_BOOTS = ITEMS.registerSimpleItem("steel_boots", props -> props.humanoidArmor(ModArmorMaterials.STEEL, ArmorType.BOOTS));
+
+    public static final DeferredItem<Item> TITANIUM_HELMET = ITEMS.registerSimpleItem("titanium_helmet", props -> props.humanoidArmor(ModArmorMaterials.TITANIUM, ArmorType.HELMET));
+    public static final DeferredItem<Item> TITANIUM_CHESTPLATE = ITEMS.registerSimpleItem("titanium_chestplate", props -> props.humanoidArmor(ModArmorMaterials.TITANIUM, ArmorType.CHESTPLATE));
+    public static final DeferredItem<Item> TITANIUM_LEGGINGS = ITEMS.registerSimpleItem("titanium_leggings", props -> props.humanoidArmor(ModArmorMaterials.TITANIUM, ArmorType.LEGGINGS));
+    public static final DeferredItem<Item> TITANIUM_BOOTS = ITEMS.registerSimpleItem("titanium_boots", props -> props.humanoidArmor(ModArmorMaterials.TITANIUM, ArmorType.BOOTS));
+
+    public static final DeferredItem<Item> STELLITE_HELMET = ITEMS.registerSimpleItem("stellite_helmet", props -> props.humanoidArmor(ModArmorMaterials.STELLITE, ArmorType.HELMET));
+    public static final DeferredItem<Item> STELLITE_CHESTPLATE = ITEMS.registerSimpleItem("stellite_chestplate", props -> props.humanoidArmor(ModArmorMaterials.STELLITE, ArmorType.CHESTPLATE));
+    public static final DeferredItem<Item> STELLITE_LEGGINGS = ITEMS.registerSimpleItem("stellite_leggings", props -> props.humanoidArmor(ModArmorMaterials.STELLITE, ArmorType.LEGGINGS));
+    public static final DeferredItem<Item> STELLITE_BOOTS = ITEMS.registerSimpleItem("stellite_boots", props -> props.humanoidArmor(ModArmorMaterials.STELLITE, ArmorType.BOOTS));
+
+    public static final DeferredItem<Item> NEQUITUM_HELMET = ITEMS.registerSimpleItem("nequitum_helmet", props -> props.humanoidArmor(ModArmorMaterials.NEQUITUM, ArmorType.HELMET));
+    public static final DeferredItem<Item> NEQUITUM_CHESTPLATE = ITEMS.registerSimpleItem("nequitum_chestplate", props -> props.humanoidArmor(ModArmorMaterials.NEQUITUM, ArmorType.CHESTPLATE));
+    public static final DeferredItem<Item> NEQUITUM_LEGGINGS = ITEMS.registerSimpleItem("nequitum_leggings", props -> props.humanoidArmor(ModArmorMaterials.NEQUITUM, ArmorType.LEGGINGS));
+    public static final DeferredItem<Item> NEQUITUM_BOOTS = ITEMS.registerSimpleItem("nequitum_boots", props -> props.humanoidArmor(ModArmorMaterials.NEQUITUM, ArmorType.BOOTS));
 
     // Blocks
     // Metal Blocks
