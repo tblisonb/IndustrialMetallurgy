@@ -98,8 +98,8 @@ had 60 loot table files total, but one of those was for a block that was never c
 into `26.2`'s registry, so 59/59 current blocks is the complete set.
 
 ### Still open (unchanged, tracked in `README.md`, out of scope for this pass)
-World generation (ores don't spawn) and JEI integration. The steel/nequitum tool lines (plus a
-titanium/stellite/cobalt-steel/tungsten-steel expansion) shipped later — see Part 6.
+JEI integration. World generation shipped later — see Part 9. The steel/nequitum tool lines
+(plus a titanium/stellite/cobalt-steel/tungsten-steel expansion) shipped later — see Part 6.
 
 ---
 
@@ -416,6 +416,72 @@ doing this pass — **no raw ore block or metal ingot/nugget/block in the entire
 textures or models**. Only the processed/intermediate items and the machines themselves do. This
 is a much bigger, pre-existing gap than "some placeholder textures" (README's current framing)
 suggests; worth its own line in Part 5 if a real art pass ever happens.
+
+---
+
+## Part 9 — World generation, and a first texture pass — **world gen DONE, textures started**
+
+Two threads: getting ores to actually spawn (flagged as an open gap since Part 1), and a first
+real attempt at giving new items/blocks art instead of tinted placeholders.
+
+### World gen: rebuilt, not ported
+The 1.16.4 world-gen system (`OreGenConfig`/`OreGenHandler`/`OreFeatureHandler`) never existed in
+`26.2` at all — not broken, just never carried over. Worse, it couldn't have been ported as-is:
+it worked by reflecting into `BiomeGenerationSettings`'s private field at runtime
+(`ObfuscationReflectionHelper.setPrivateValue`) to inject features after the fact, `Biome.Category`
+(its whole biome-gating mechanism) doesn't exist anymore, and the Overworld height range grew from
+0–256 to -64–320, making every old height number meaningless as a direct port.
+
+What it's rebuilt on instead is real infrastructure that didn't exist in 1.16.4: NeoForge's
+`neoforge:add_features` biome modifier — a plain datapack JSON that adds placed features to
+biomes matching a tag, no reflection, no runtime hackery. Vanilla's own ore generation is fully
+data-driven the same way (`worldgen/configured_feature` + `worldgen/placed_feature`), so this
+mod's ores now use the exact same building blocks vanilla iron/gold/diamond do.
+
+**Biome assignments** come from the 2020 design doc's original single-biome-per-ore pairings, not
+the shipped 1.16.4 code's broadened multi-category version (Bauxite was originally "Jungle only";
+the code that shipped also allowed Extreme Hills and Ocean). The tighter version was picked on
+purpose — it matches "ore gating gives you an excuse to explore" better than the loosened one:
+
+| Biome (tag or ID) | Ores |
+|---|---|
+| `minecraft:plains` | Argentite (silver), Sphalerite (zinc) |
+| `#minecraft:is_jungle` | Bauxite (aluminum), Cassiterite (tin) |
+| `minecraft:desert` | Cuprite (copper), Rutile (titanium) |
+| `#minecraft:is_forest` | Galena (lead), Garnierite (nickel) |
+| `minecraft:swamp` / `mangrove_swamp` | Pyrolusite (manganese) |
+| `#minecraft:is_nether` | Chromite (chromium), Cobaltite (cobalt) |
+| `#minecraft:is_end` | Lepidolite (lithium), Scheelite (tungsten) |
+| `minecraft:basalt_deltas` only | **Rheniite (rhenium)** — deliberately narrower than "all Nether": the real mineral has only ever been found in one volcanic fumarole, so a single specific Nether biome (not the whole `is_nether` tag every other Nether ore uses) is the point. |
+| `#minecraft:is_ocean` | `oil_sand`/bitumen — not a metal, but the same `minecraft:ore`-type feature works fine targeting sand instead of stone, placed near the sea floor (Y 30–60). |
+
+**Heights are new, not scaled from the old numbers**, and deliberately correlate with each ore's
+existing harvest tier rather than being ad hoc the way the 1.16.4 config was: Tier 1 (Bauxite,
+Cassiterite, Cuprite, Garnierite, Sphalerite) gets the widest, shallowest band (Y -16 to 80) and
+the biggest veins; Tier 2 (Argentite, Galena, Pyrolusite, Rutile) sits deeper and rarer (Y -48 to
+48); Tier 3's two Nether ores and Tier 4's three rarest ores get progressively smaller veins.
+Every vein uses vanilla's own `trapezoid` height distribution (weighted toward the middle of its
+band, not flat) — same convention real ore veins use.
+
+**Deliberately dropped**: the old per-ore on/off config toggle. NeoForge's biome modifier system
+is pure datapack — there's no clean way for a `ModConfigSpec` boolean to gate a static JSON file
+without extra plumbing that didn't seem worth building for a toggle nobody had asked to keep.
+Vein size and height are datapack-only now too, matching how most modern NeoForge mods handle ore
+gen (tunable by overriding the JSON in a datapack, not a live in-game config).
+
+**Verification note**: confirmed clean via `compileJava`/`build`/`runServer` (zero errors, and the
+dedicated server's own "Preparing spawn area: 100%" succeeding is itself a real signal — a broken
+`configured_feature`/`placed_feature` reference fails loudly at chunk generation, not silently).
+What I *can't* verify without a client is whether the rarity/vein-size numbers actually feel
+right in play — that's a judgment call that needs eyes on real generated terrain, not log output.
+
+### Texture pass: started, not finished
+First real (non-placeholder) art pass: three procedurally-generated ore block textures
+(Rheniite, Scheelite, Rutile) using the same stone-base-plus-speckled-cluster technique vanilla's
+own ore textures use, with palettes drawn from each mineral's real color rather than picked
+arbitrarily. Published as an artifact for review before committing to generating the rest of the
+set. Explicitly not final art — a reasonable procedural placeholder, meant to be hand-edited in
+Aseprite/Paint.NET rather than shipped as-is long-term.
 
 ---
 

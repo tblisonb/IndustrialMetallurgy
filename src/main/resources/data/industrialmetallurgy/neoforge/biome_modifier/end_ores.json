@@ -1,0 +1,9 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_end",
+  "features": [
+    "industrialmetallurgy:lepidolite_ore_placed",
+    "industrialmetallurgy:scheelite_ore_placed"
+  ],
+  "step": "underground_ores"
+}

@@ -1,0 +1,9 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_forest",
+  "features": [
+    "industrialmetallurgy:galena_ore_placed",
+    "industrialmetallurgy:garnierite_ore_placed"
+  ],
+  "step": "underground_ores"
+}

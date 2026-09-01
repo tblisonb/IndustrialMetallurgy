@@ -43,16 +43,19 @@ tracks the NeoForge rewrite (the pre-rewrite 1.16.4 Forge codebase is preserved 
 - All 9 processing machines above, each with a working block/tile-entity/GUI/recipe stack on
   the modern data-component, transfer-API-energy, `ValueInput`/`ValueOutput` APIs.
 
+Since that initial rewrite: recipe/progression gaps closed, a full tool tier (Steel/Cobalt
+Steel/Stellite/Tungsten Steel/Tungsten-Rhenium) and 4-set armor line, FE-powered hand tools
+(Power Drill/Chainsaw/Cultivator) with swappable bit/battery sockets, Battery Box, Electric
+Furnace, and Arc Furnace (a higher-yield/faster 5th Forge tier). Nequitum was replaced outright
+with Tungsten-Rhenium, a real alloy, closing out the mod's one remaining "unobtainium." Ore world
+generation is wired up. See `ROADMAP.md` for the full history and current design notes.
+
 **Not yet ported:**
-- **World generation** — ore blocks exist but don't currently spawn; nothing generates them into
-  the world yet.
-- **Tools** — the steel and nequitum tool lines (pickaxe/axe/shovel/sword/hoe) are deliberately
-  deferred; NeoForge builds tools very differently now (`Item.Properties#pickaxe(...)` etc. backed
-  by tags) rather than the old `IItemTier` subclassing approach.
 - **JEI integration** — present on the 1.16.4 branch, not yet reconnected.
-- A handful of metal blocks (e.g. manganese, stellite, constantan, electrum) have Java
-  registrations but no textures/models/blockstates yet, so a few machine models borrow the
-  Crusher's casing texture as a placeholder until those get real art.
+- **Real art** — almost every raw ore block and base-metal ingot/nugget/block in the mod has no
+  texture at all yet (not just "a handful"); machines and most processed/intermediate items reuse
+  recolored placeholder art rather than final textures. A first procedural pass on ore-block
+  textures is underway (`ROADMAP.md` Part 9).
 
 ## Building & running
 

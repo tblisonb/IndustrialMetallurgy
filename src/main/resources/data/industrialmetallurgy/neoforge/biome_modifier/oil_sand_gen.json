@@ -1,0 +1,8 @@
+{
+  "type": "neoforge:add_features",
+  "biomes": "#minecraft:is_ocean",
+  "features": [
+    "industrialmetallurgy:oil_sand_placed"
+  ],
+  "step": "underground_ores"
+}
