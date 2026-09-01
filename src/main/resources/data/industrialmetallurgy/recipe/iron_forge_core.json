@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "mmm",
+    "mrm",
+    "mmm"
+  ],
+  "key": {
+    "m": "minecraft:iron_ingot",
+    "r": "industrialmetallurgy:refractory_brick"
+  },
+  "result": { "id": "industrialmetallurgy:iron_forge_core" }
+}

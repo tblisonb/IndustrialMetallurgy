@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sss",
+    "sss",
+    "sss"
+  ],
+  "key": {
+    "s": "industrialmetallurgy:kanthal_ingot"
+  },
+  "result": {
+    "id": "industrialmetallurgy:kanthal_block"
+  }
+}

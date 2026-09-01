@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ara",
+    "asa",
+    "cac"
+  ],
+  "key": {
+    "a": "industrialmetallurgy:aluminum_ingot",
+    "r": "industrialmetallurgy:rotor",
+    "s": "industrialmetallurgy:stator",
+    "c": "industrialmetallurgy:conducting_element"
+  },
+  "result": {
+    "id": "industrialmetallurgy:electric_motor"
+  }
+}

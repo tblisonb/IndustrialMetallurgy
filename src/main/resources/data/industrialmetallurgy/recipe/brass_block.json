@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sss",
+    "sss",
+    "sss"
+  ],
+  "key": {
+    "s": "industrialmetallurgy:brass_ingot"
+  },
+  "result": {
+    "id": "industrialmetallurgy:brass_block"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "type": "industrialmetallurgy:crusher",
+  "ingredient": "minecraft:iron_ore",
+  "result": {
+    "id": "industrialmetallurgy:crushed_iron_ore"
+  }
+}

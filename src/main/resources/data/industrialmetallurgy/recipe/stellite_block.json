@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sss",
+    "sss",
+    "sss"
+  ],
+  "key": {
+    "s": "industrialmetallurgy:stellite_ingot"
+  },
+  "result": {
+    "id": "industrialmetallurgy:stellite_block"
+  }
+}

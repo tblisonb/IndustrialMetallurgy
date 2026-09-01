@@ -1,0 +1,7 @@
+{
+  "type": "industrialmetallurgy:crusher",
+  "ingredient": "minecraft:gold_ore",
+  "result": {
+    "id": "industrialmetallurgy:crushed_gold_ore"
+  }
+}

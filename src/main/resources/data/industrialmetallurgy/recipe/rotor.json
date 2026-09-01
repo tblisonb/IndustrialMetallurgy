@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "afa",
+    "fsf",
+    "afa"
+  ],
+  "key": {
+    "a": "industrialmetallurgy:aluminum_ingot",
+    "f": "industrialmetallurgy:field_coil",
+    "s": "industrialmetallurgy:steel_ingot"
+  },
+  "result": {
+    "id": "industrialmetallurgy:rotor"
+  }
+}

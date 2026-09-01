@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": "industrialmetallurgy:pyrolusite_ore",
+  "result": {
+    "id": "industrialmetallurgy:manganese_ingot"
+  },
+  "experience": 0.7
+}

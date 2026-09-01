@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ipi",
+    "p p",
+    "ipi"
+  ],
+  "key": {
+    "i": "industrialmetallurgy:invar_ingot",
+    "p": "industrialmetallurgy:permanent_magnet"
+  },
+  "result": {
+    "id": "industrialmetallurgy:stator"
+  }
+}

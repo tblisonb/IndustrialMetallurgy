@@ -1,0 +1,7 @@
+{
+  "type": "industrialmetallurgy:crusher",
+  "ingredient": "industrialmetallurgy:cuprite_ore",
+  "result": {
+    "id": "industrialmetallurgy:crushed_cuprite_ore"
+  }
+}

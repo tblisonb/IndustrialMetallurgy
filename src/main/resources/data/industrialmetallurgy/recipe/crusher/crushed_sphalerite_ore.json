@@ -1,0 +1,7 @@
+{
+  "type": "industrialmetallurgy:crusher",
+  "ingredient": "industrialmetallurgy:sphalerite_ore",
+  "result": {
+    "id": "industrialmetallurgy:crushed_sphalerite_ore"
+  }
+}

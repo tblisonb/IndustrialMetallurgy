@@ -1,0 +1,9 @@
+{
+  "type": "industrialmetallurgy:chemical_centrifuge",
+  "input": "industrialmetallurgy:oily_sand",
+  "output": [
+    { "id": "industrialmetallurgy:bitumen" },
+    { "id": "minecraft:sand" },
+    { "id": "minecraft:clay_ball" }
+  ]
+}

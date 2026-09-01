@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "mmm",
+    "mrm",
+    "mmm"
+  ],
+  "key": {
+    "m": "industrialmetallurgy:tungsten_ingot",
+    "r": "industrialmetallurgy:refractory_brick"
+  },
+  "result": { "id": "industrialmetallurgy:tungsten_forge_core" }
+}

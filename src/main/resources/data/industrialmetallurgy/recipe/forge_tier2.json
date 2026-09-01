@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "mem",
+    "ece",
+    "mem"
+  ],
+  "key": {
+    "m": "industrialmetallurgy:steel_ingot",
+    "e": "industrialmetallurgy:refractory_bricks",
+    "c": "industrialmetallurgy:steel_forge_core"
+  },
+  "result": { "id": "industrialmetallurgy:forge_tier2" }
+}

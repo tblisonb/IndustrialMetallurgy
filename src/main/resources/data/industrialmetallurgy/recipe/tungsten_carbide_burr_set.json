@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "bbb",
+    "bib",
+    "bbb"
+  ],
+  "key": {
+    "b": "industrialmetallurgy:tungsten_steel_ingot",
+    "i": "industrialmetallurgy:tungsten_carbide_dust"
+  },
+  "result": {
+    "id": "industrialmetallurgy:tungsten_carbide_burr_set"
+  }
+}

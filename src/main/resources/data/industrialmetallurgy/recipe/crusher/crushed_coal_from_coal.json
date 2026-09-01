@@ -1,0 +1,7 @@
+{
+  "type": "industrialmetallurgy:crusher",
+  "ingredient": "minecraft:coal",
+  "result": {
+    "id": "industrialmetallurgy:crushed_coal"
+  }
+}

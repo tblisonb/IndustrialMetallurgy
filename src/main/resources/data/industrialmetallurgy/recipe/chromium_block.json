@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sss",
+    "sss",
+    "sss"
+  ],
+  "key": {
+    "s": "industrialmetallurgy:chromium_ingot"
+  },
+  "result": {
+    "id": "industrialmetallurgy:chromium_block"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": "industrialmetallurgy:garnierite_ore",
+  "result": {
+    "id": "industrialmetallurgy:nickel_ingot"
+  },
+  "experience": 0.7
+}

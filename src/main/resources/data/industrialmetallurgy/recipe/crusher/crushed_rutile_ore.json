@@ -1,0 +1,7 @@
+{
+  "type": "industrialmetallurgy:crusher",
+  "ingredient": "industrialmetallurgy:rutile_ore",
+  "result": {
+    "id": "industrialmetallurgy:crushed_rutile_ore"
+  }
+}

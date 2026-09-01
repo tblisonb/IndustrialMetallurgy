@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "industrialmetallurgy:nequitum_ingot"
+  ],
+  "result": {
+    "id": "industrialmetallurgy:nequitum_nugget",
+    "count": 9
+  }
+}

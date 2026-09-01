@@ -1,0 +1,7 @@
+{
+  "type": "industrialmetallurgy:crusher",
+  "ingredient": "industrialmetallurgy:galena_ore",
+  "result": {
+    "id": "industrialmetallurgy:crushed_galena_ore"
+  }
+}

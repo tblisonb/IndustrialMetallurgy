@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sds",
+    "gmg",
+    "pbp"
+  ],
+  "key": {
+    "s": "industrialmetallurgy:conducting_element",
+    "d": "industrialmetallurgy:solder_ingot",
+    "p": "industrialmetallurgy:steel_plate",
+    "g": "industrialmetallurgy:gear",
+    "m": "industrialmetallurgy:electric_motor",
+    "b": "industrialmetallurgy:battery_cell"
+  },
+  "result": { "id": "industrialmetallurgy:soldering_station" }
+}

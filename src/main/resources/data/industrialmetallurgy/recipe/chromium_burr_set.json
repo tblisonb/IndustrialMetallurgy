@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "bbb",
+    "bib",
+    "bbb"
+  ],
+  "key": {
+    "b": "industrialmetallurgy:chromium_ingot",
+    "i": "industrialmetallurgy:stellite_ingot"
+  },
+  "result": {
+    "id": "industrialmetallurgy:chromium_burr_set"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "bbb",
+    "bib",
+    "bbb"
+  ],
+  "key": {
+    "b": "industrialmetallurgy:steel_ingot",
+    "i": "industrialmetallurgy:cobalt_ingot"
+  },
+  "result": {
+    "id": "industrialmetallurgy:steel_burr_set"
+  }
+}

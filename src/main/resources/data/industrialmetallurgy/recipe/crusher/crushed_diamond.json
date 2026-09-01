@@ -1,0 +1,7 @@
+{
+  "type": "industrialmetallurgy:crusher",
+  "ingredient": "minecraft:diamond",
+  "result": {
+    "id": "industrialmetallurgy:crushed_diamond"
+  }
+}

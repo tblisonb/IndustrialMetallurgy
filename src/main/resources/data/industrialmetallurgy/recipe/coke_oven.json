@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "rir",
+    "i#i",
+    "rir"
+  ],
+  "key": {
+    "r": "industrialmetallurgy:refractory_bricks",
+    "i": "minecraft:iron_ingot",
+    "#": "minecraft:furnace"
+  },
+  "result": { "id": "industrialmetallurgy:coke_oven" }
+}

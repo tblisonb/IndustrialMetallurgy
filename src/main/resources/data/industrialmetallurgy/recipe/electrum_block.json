@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sss",
+    "sss",
+    "sss"
+  ],
+  "key": {
+    "s": "industrialmetallurgy:electrum_ingot"
+  },
+  "result": {
+    "id": "industrialmetallurgy:electrum_block"
+  }
+}

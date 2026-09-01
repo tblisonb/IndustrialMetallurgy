@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sss",
+    "sss",
+    "sss"
+  ],
+  "key": {
+    "s": "industrialmetallurgy:alnico_ingot"
+  },
+  "result": {
+    "id": "industrialmetallurgy:alnico_block"
+  }
+}

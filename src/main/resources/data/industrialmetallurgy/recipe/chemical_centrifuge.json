@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sts",
+    "gmg",
+    "pbp"
+  ],
+  "key": {
+    "s": "industrialmetallurgy:conducting_element",
+    "t": "industrialmetallurgy:titanium_ingot",
+    "p": "industrialmetallurgy:steel_plate",
+    "g": "industrialmetallurgy:gear",
+    "m": "industrialmetallurgy:electric_motor",
+    "b": "industrialmetallurgy:battery_cell"
+  },
+  "result": { "id": "industrialmetallurgy:chemical_centrifuge" }
+}

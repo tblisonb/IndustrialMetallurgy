@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "rer",
+    "mmm",
+    "rer"
+  ],
+  "key": {
+    "r": "minecraft:redstone",
+    "m": "industrialmetallurgy:magnet_wire",
+    "e": "industrialmetallurgy:electrum_ingot"
+  },
+  "result": {
+    "id": "industrialmetallurgy:conducting_element"
+  }
+}

@@ -120,6 +120,7 @@ public class RegistryHandler {
     public static final DeferredItem<Item> COAL_COKE = ITEMS.registerSimpleItem("coal_coke");
     public static final DeferredItem<Item> SILICON = ITEMS.registerSimpleItem("silicon");
     public static final DeferredItem<Item> BITUMEN = ITEMS.registerSimpleItem("bitumen");
+    public static final DeferredItem<Item> OILY_SAND = ITEMS.registerSimpleItem("oily_sand");
     public static final DeferredItem<Item> PEAT = ITEMS.registerSimpleItem("peat");
     public static final DeferredItem<Item> FERTILIZER = ITEMS.registerSimpleItem("fertilizer");
     public static final DeferredItem<Item> HDPE_SHEET = ITEMS.registerSimpleItem("hdpe_sheet");
@@ -220,6 +221,7 @@ public class RegistryHandler {
     public static final DeferredBlock<Block> SCHEELITE_ORE = BLOCKS.registerBlock("scheelite_ore", Tier4OreBlock::new, Tier4OreBlock::newProperties);
     // Other Resources
     public static final DeferredBlock<Block> OIL_SAND = BLOCKS.registerBlock("oil_sand", OilSandBlock::new, OilSandBlock::newProperties);
+    public static final DeferredBlock<Block> REFRACTORY_BRICKS = BLOCKS.registerBlock("refractory_bricks", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BRICKS));
     // Machines
     public static final DeferredBlock<Block> IRON_FORGE_CORE = BLOCKS.registerBlock("iron_forge_core", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> STEEL_FORGE_CORE = BLOCKS.registerBlock("steel_forge_core", MetalBlock::new, MetalBlock::newProperties);
@@ -292,6 +294,7 @@ public class RegistryHandler {
     public static final DeferredItem<BlockItem> SCHEELITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("scheelite_ore", SCHEELITE_ORE);
     // Other Resources
     public static final DeferredItem<BlockItem> OIL_SAND_ITEM = ITEMS.registerSimpleBlockItem("oil_sand", OIL_SAND);
+    public static final DeferredItem<BlockItem> REFRACTORY_BRICKS_ITEM = ITEMS.registerSimpleBlockItem("refractory_bricks", REFRACTORY_BRICKS);
     // Machines
     public static final DeferredItem<BlockItem> IRON_FORGE_CORE_ITEM = ITEMS.registerSimpleBlockItem("iron_forge_core", IRON_FORGE_CORE);
     public static final DeferredItem<BlockItem> STEEL_FORGE_CORE_ITEM = ITEMS.registerSimpleBlockItem("steel_forge_core", STEEL_FORGE_CORE);

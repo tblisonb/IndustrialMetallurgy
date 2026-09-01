@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": "industrialmetallurgy:scheelite_ore",
+  "result": {
+    "id": "industrialmetallurgy:tungsten_ingot"
+  },
+  "experience": 0.7
+}

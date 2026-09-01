@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "mem",
+    "ece",
+    "mem"
+  ],
+  "key": {
+    "m": "industrialmetallurgy:cobalt_ingot",
+    "e": "industrialmetallurgy:conducting_element",
+    "c": "industrialmetallurgy:cobalt_forge_core"
+  },
+  "result": { "id": "industrialmetallurgy:forge_tier3" }
+}

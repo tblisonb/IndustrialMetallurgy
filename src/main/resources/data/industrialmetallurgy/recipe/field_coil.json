@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "bbb",
+    "bib",
+    "bbb"
+  ],
+  "key": {
+    "b": "industrialmetallurgy:magnet_wire",
+    "i": "minecraft:iron_ingot"
+  },
+  "result": {
+    "id": "industrialmetallurgy:field_coil",
+    "count": 2
+  }
+}

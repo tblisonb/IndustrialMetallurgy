@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:clay",
+    "minecraft:sand",
+    "minecraft:gravel"
+  ],
+  "result": {
+    "id": "industrialmetallurgy:refractory_composite",
+    "count": 2
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "cnc",
+    "w#w",
+    "cnc"
+  ],
+  "key": {
+    "c": "industrialmetallurgy:copper_ingot",
+    "n": "industrialmetallurgy:constantan_ingot",
+    "w": "industrialmetallurgy:conducting_element",
+    "#": "minecraft:furnace"
+  },
+  "result": { "id": "industrialmetallurgy:thermoelectric_generator" }
+}
