@@ -1,0 +1,8 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+      "top": "industrialmetallurgy:block/soldering_station_top",
+      "front": "industrialmetallurgy:block/soldering_station",
+      "side": "industrialmetallurgy:block/crusher_side"
+    }
+}

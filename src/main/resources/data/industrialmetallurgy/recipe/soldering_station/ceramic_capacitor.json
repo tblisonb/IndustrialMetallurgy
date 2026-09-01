@@ -1,0 +1,9 @@
+{
+  "type": "industrialmetallurgy:soldering_station",
+  "input": [
+    "industrialmetallurgy:aluminum_foil",
+    "industrialmetallurgy:ceramic_fiber",
+    "industrialmetallurgy:magnet_wire"
+  ],
+  "output": { "id": "industrialmetallurgy:ceramic_capacitor" }
+}

@@ -1,0 +1,5 @@
+{
+  "type": "industrialmetallurgy:extruder",
+  "input": { "ingredient": "industrialmetallurgy:invar_ingot" },
+  "output": { "id": "industrialmetallurgy:invar_plate" }
+}

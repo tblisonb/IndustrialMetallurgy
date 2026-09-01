@@ -1,0 +1,5 @@
+{
+  "type": "industrialmetallurgy:extruder",
+  "input": { "ingredient": "industrialmetallurgy:silicon" },
+  "output": { "id": "industrialmetallurgy:silicon_plate" }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "industrialmetallurgy:soldering_station",
+  "input": [
+    "industrialmetallurgy:manganese_ingot",
+    "industrialmetallurgy:lithium_iron_phosphate",
+    "industrialmetallurgy:manganese_ingot",
+    "industrialmetallurgy:conducting_element",
+    "industrialmetallurgy:lithium_iron_phosphate",
+    "industrialmetallurgy:conducting_element",
+    "industrialmetallurgy:invar_plate",
+    "industrialmetallurgy:lithium_iron_phosphate",
+    "industrialmetallurgy:invar_plate",
+    "industrialmetallurgy:solder_wire"
+  ],
+  "output": { "id": "industrialmetallurgy:lithium_battery_cell" }
+}

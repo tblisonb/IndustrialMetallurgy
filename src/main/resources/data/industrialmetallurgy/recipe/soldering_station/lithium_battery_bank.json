@@ -1,0 +1,16 @@
+{
+  "type": "industrialmetallurgy:soldering_station",
+  "input": [
+    "industrialmetallurgy:conducting_element",
+    "industrialmetallurgy:lithium_battery_cell",
+    "industrialmetallurgy:conducting_element",
+    "industrialmetallurgy:lithium_battery_cell",
+    "industrialmetallurgy:lithium_battery_cell",
+    "industrialmetallurgy:lithium_battery_cell",
+    "industrialmetallurgy:controller_board",
+    "industrialmetallurgy:lithium_battery_cell",
+    "industrialmetallurgy:controller_board",
+    "industrialmetallurgy:solder_wire"
+  ],
+  "output": { "id": "industrialmetallurgy:lithium_battery_bank" }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "industrialmetallurgy:chemical_reactor",
+  "input": [
+    "industrialmetallurgy:sulfur",
+    "minecraft:potion",
+    "industrialmetallurgy:lead_ingot"
+  ],
+  "output": [
+    { "id": "industrialmetallurgy:sulfuric_acid_bottle" }
+  ]
+}

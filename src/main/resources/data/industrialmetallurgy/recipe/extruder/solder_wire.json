@@ -1,0 +1,5 @@
+{
+  "type": "industrialmetallurgy:extruder",
+  "input": { "ingredient": "industrialmetallurgy:solder_ingot" },
+  "output": { "id": "industrialmetallurgy:solder_wire", "count": 2 }
+}

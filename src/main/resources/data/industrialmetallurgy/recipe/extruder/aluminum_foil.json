@@ -1,0 +1,5 @@
+{
+  "type": "industrialmetallurgy:extruder",
+  "input": { "ingredient": "industrialmetallurgy:aluminum_plate" },
+  "output": { "id": "industrialmetallurgy:aluminum_foil", "count": 2 }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "industrialmetallurgy:chemical_centrifuge",
+  "input": "industrialmetallurgy:bitumen",
+  "bottle": { "ingredient": "minecraft:glass_bottle", "count": 2 },
+  "output": [
+    { "id": "industrialmetallurgy:ethylene_bottle" },
+    { "id": "industrialmetallurgy:petroleum_bottle" },
+    { "id": "minecraft:gravel" }
+  ]
+}

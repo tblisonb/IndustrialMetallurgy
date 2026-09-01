@@ -1,0 +1,11 @@
+{
+  "type": "industrialmetallurgy:chemical_reactor",
+  "input": [
+    "industrialmetallurgy:lithium_dust",
+    "industrialmetallurgy:phosphorus",
+    "minecraft:iron_ingot"
+  ],
+  "output": [
+    { "id": "industrialmetallurgy:lithium_iron_phosphate" }
+  ]
+}

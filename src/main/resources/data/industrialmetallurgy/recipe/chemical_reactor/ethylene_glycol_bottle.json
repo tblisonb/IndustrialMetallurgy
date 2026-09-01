@@ -1,0 +1,12 @@
+{
+  "type": "industrialmetallurgy:chemical_reactor",
+  "input": [
+    "industrialmetallurgy:ethylene_bottle",
+    "minecraft:potion",
+    "industrialmetallurgy:sulfuric_acid_bottle"
+  ],
+  "output": [
+    { "id": "industrialmetallurgy:ethylene_glycol_bottle" },
+    { "id": "minecraft:glass_bottle", "count": 2 }
+  ]
+}

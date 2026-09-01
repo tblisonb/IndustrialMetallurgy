@@ -1,0 +1,5 @@
+{
+  "type": "industrialmetallurgy:extruder",
+  "input": { "ingredient": "industrialmetallurgy:lead_sulfate" },
+  "output": { "id": "industrialmetallurgy:lead_sulfate_plate" }
+}

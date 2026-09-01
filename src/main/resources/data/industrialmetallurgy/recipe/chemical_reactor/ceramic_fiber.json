@@ -1,0 +1,12 @@
+{
+  "type": "industrialmetallurgy:chemical_reactor",
+  "input": [
+    "minecraft:magma_block",
+    "industrialmetallurgy:petroleum_bottle",
+    "minecraft:potion"
+  ],
+  "output": [
+    { "id": "industrialmetallurgy:ceramic_fiber" },
+    { "id": "minecraft:glass_bottle", "count": 2 }
+  ]
+}

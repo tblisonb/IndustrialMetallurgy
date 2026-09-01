@@ -1,0 +1,10 @@
+{
+  "type": "industrialmetallurgy:chemical_centrifuge",
+  "input": "minecraft:packed_ice",
+  "bottle": { "ingredient": "minecraft:glass_bottle", "count": 2 },
+  "output": [
+    { "id": "industrialmetallurgy:methane_bottle" },
+    { "id": "minecraft:potion" },
+    { "id": "industrialmetallurgy:peat" }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "type": "industrialmetallurgy:chemical_reactor",
+  "input": [
+    "industrialmetallurgy:tungsten_ingot",
+    "industrialmetallurgy:crushed_coal",
+    "industrialmetallurgy:methane_bottle"
+  ],
+  "output": [
+    { "id": "industrialmetallurgy:tungsten_carbide_dust" },
+    { "id": "minecraft:glass_bottle" }
+  ]
+}

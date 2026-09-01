@@ -1,0 +1,9 @@
+{
+  "type": "industrialmetallurgy:chemical_centrifuge",
+  "input": "industrialmetallurgy:crushed_scheelite_ore",
+  "output": [
+    { "id": "industrialmetallurgy:calcium_oxide" },
+    { "id": "industrialmetallurgy:tungsten_nugget" },
+    { "id": "industrialmetallurgy:tin_nugget" }
+  ]
+}

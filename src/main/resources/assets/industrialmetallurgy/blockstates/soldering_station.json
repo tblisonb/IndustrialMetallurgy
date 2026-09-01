@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": {"model": "industrialmetallurgy:block/soldering_station"},
+        "facing=east":  {"model": "industrialmetallurgy:block/soldering_station", "y": 90 },
+        "facing=south": {"model": "industrialmetallurgy:block/soldering_station", "y": 180 },
+        "facing=west":  {"model": "industrialmetallurgy:block/soldering_station", "y": 270 }
+    }
+}

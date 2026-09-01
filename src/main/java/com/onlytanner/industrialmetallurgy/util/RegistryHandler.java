@@ -240,6 +240,10 @@ public class RegistryHandler {
     public static final DeferredBlock<Block> FORGE_TIER4 = BLOCKS.registerBlock("forge_tier4",
             props -> new ForgeBlock(props, () -> ModTileEntityTypes.FORGE_TIER4.get(), ForgeTier4BlockEntity::new),
             () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
+    public static final DeferredBlock<Block> EXTRUDER = BLOCKS.registerBlock("extruder", ExtruderBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
+    public static final DeferredBlock<Block> SOLDERING_STATION = BLOCKS.registerBlock("soldering_station", SolderingStationBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
+    public static final DeferredBlock<Block> CHEMICAL_CENTRIFUGE = BLOCKS.registerBlock("chemical_centrifuge", ChemicalCentrifugeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
+    public static final DeferredBlock<Block> CHEMICAL_REACTOR = BLOCKS.registerBlock("chemical_reactor", ChemicalReactorBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
 
     // Block Items
     // Metal Blocks
@@ -300,6 +304,10 @@ public class RegistryHandler {
     public static final DeferredItem<BlockItem> FORGE_TIER2_ITEM = ITEMS.registerSimpleBlockItem("forge_tier2", FORGE_TIER2);
     public static final DeferredItem<BlockItem> FORGE_TIER3_ITEM = ITEMS.registerSimpleBlockItem("forge_tier3", FORGE_TIER3);
     public static final DeferredItem<BlockItem> FORGE_TIER4_ITEM = ITEMS.registerSimpleBlockItem("forge_tier4", FORGE_TIER4);
+    public static final DeferredItem<BlockItem> EXTRUDER_ITEM = ITEMS.registerSimpleBlockItem("extruder", EXTRUDER);
+    public static final DeferredItem<BlockItem> SOLDERING_STATION_ITEM = ITEMS.registerSimpleBlockItem("soldering_station", SOLDERING_STATION);
+    public static final DeferredItem<BlockItem> CHEMICAL_CENTRIFUGE_ITEM = ITEMS.registerSimpleBlockItem("chemical_centrifuge", CHEMICAL_CENTRIFUGE);
+    public static final DeferredItem<BlockItem> CHEMICAL_REACTOR_ITEM = ITEMS.registerSimpleBlockItem("chemical_reactor", CHEMICAL_REACTOR);
 
     public static void init(IEventBus modEventBus) {
         ITEMS.register(modEventBus);

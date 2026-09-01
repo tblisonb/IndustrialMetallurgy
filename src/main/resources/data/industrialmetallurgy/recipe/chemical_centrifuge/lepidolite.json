@@ -1,0 +1,9 @@
+{
+  "type": "industrialmetallurgy:chemical_centrifuge",
+  "input": "industrialmetallurgy:lepidolite",
+  "output": [
+    { "id": "industrialmetallurgy:lithium_dust" },
+    { "id": "industrialmetallurgy:aluminum_nugget" },
+    { "id": "industrialmetallurgy:silicon" }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "type": "industrialmetallurgy:chemical_reactor",
+  "input": [
+    "industrialmetallurgy:petroleum_bottle",
+    "industrialmetallurgy:crushed_coal",
+    "industrialmetallurgy:ethylene_bottle"
+  ],
+  "output": [
+    { "id": "industrialmetallurgy:hdpe_sheet" },
+    { "id": "minecraft:glass_bottle", "count": 2 }
+  ]
+}

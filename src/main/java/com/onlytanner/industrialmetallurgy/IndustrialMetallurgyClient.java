@@ -4,6 +4,10 @@ import com.onlytanner.industrialmetallurgy.client.gui.AdvancedForgeScreen;
 import com.onlytanner.industrialmetallurgy.client.gui.BasicForgeScreen;
 import com.onlytanner.industrialmetallurgy.client.gui.CokeOvenScreen;
 import com.onlytanner.industrialmetallurgy.client.gui.CrusherScreen;
+import com.onlytanner.industrialmetallurgy.client.gui.ChemicalCentrifugeScreen;
+import com.onlytanner.industrialmetallurgy.client.gui.ChemicalReactorScreen;
+import com.onlytanner.industrialmetallurgy.client.gui.ExtruderScreen;
+import com.onlytanner.industrialmetallurgy.client.gui.SolderingStationScreen;
 import com.onlytanner.industrialmetallurgy.client.gui.ThermoelectricGeneratorScreen;
 import com.onlytanner.industrialmetallurgy.init.ModContainerTypes;
 import net.neoforged.api.distmarker.Dist;
@@ -27,6 +31,10 @@ public class IndustrialMetallurgyClient {
         event.register(ModContainerTypes.FORGE_TIER2.get(), BasicForgeScreen::new);
         event.register(ModContainerTypes.FORGE_TIER3.get(), AdvancedForgeScreen::new);
         event.register(ModContainerTypes.FORGE_TIER4.get(), AdvancedForgeScreen::new);
+        event.register(ModContainerTypes.EXTRUDER.get(), ExtruderScreen::new);
+        event.register(ModContainerTypes.SOLDERING_STATION.get(), SolderingStationScreen::new);
+        event.register(ModContainerTypes.CHEMICAL_CENTRIFUGE.get(), ChemicalCentrifugeScreen::new);
+        event.register(ModContainerTypes.CHEMICAL_REACTOR.get(), ChemicalReactorScreen::new);
     }
 
 }

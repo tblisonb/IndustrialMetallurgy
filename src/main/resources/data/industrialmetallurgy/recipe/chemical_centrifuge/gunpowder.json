@@ -1,0 +1,9 @@
+{
+  "type": "industrialmetallurgy:chemical_centrifuge",
+  "input": "minecraft:gunpowder",
+  "output": [
+    { "id": "industrialmetallurgy:potassium_nitrate" },
+    { "id": "industrialmetallurgy:sulfur" },
+    { "id": "industrialmetallurgy:crushed_coal" }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "type": "industrialmetallurgy:chemical_reactor",
+  "input": [
+    "industrialmetallurgy:arsenic",
+    "industrialmetallurgy:phosphorus",
+    "industrialmetallurgy:calcium_oxide"
+  ],
+  "output": [
+    { "id": "industrialmetallurgy:welding_flux" }
+  ]
+}

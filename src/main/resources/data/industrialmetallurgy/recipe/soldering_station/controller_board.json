@@ -1,0 +1,16 @@
+{
+  "type": "industrialmetallurgy:soldering_station",
+  "input": [
+    "industrialmetallurgy:ceramic_capacitor",
+    "industrialmetallurgy:heat_sink",
+    "industrialmetallurgy:ceramic_capacitor",
+    "industrialmetallurgy:magnet_wire",
+    "industrialmetallurgy:integrated_circuit",
+    "industrialmetallurgy:resistance_wire",
+    "industrialmetallurgy:electrolytic_capacitor",
+    "industrialmetallurgy:printed_circuit_board",
+    "industrialmetallurgy:electrolytic_capacitor",
+    "industrialmetallurgy:solder_wire"
+  ],
+  "output": { "id": "industrialmetallurgy:controller_board" }
+}

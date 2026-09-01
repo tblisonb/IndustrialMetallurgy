@@ -1,0 +1,5 @@
+{
+  "type": "industrialmetallurgy:extruder",
+  "input": { "ingredient": "industrialmetallurgy:copper_ingot" },
+  "output": { "id": "industrialmetallurgy:copper_plate" }
+}

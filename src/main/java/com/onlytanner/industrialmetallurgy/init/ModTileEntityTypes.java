@@ -3,10 +3,14 @@ package com.onlytanner.industrialmetallurgy.init;
 import com.onlytanner.industrialmetallurgy.IndustrialMetallurgy;
 import com.onlytanner.industrialmetallurgy.tileentity.CokeOvenBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.CrusherBlockEntity;
+import com.onlytanner.industrialmetallurgy.tileentity.ExtruderBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier1BlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier2BlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier3BlockEntity;
+import com.onlytanner.industrialmetallurgy.tileentity.ChemicalCentrifugeBlockEntity;
+import com.onlytanner.industrialmetallurgy.tileentity.ChemicalReactorBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier4BlockEntity;
+import com.onlytanner.industrialmetallurgy.tileentity.SolderingStationBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ThermoelectricGeneratorBlockEntity;
 import com.onlytanner.industrialmetallurgy.util.RegistryHandler;
 import net.minecraft.core.registries.Registries;
@@ -39,6 +43,18 @@ public class ModTileEntityTypes {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ForgeTier4BlockEntity>> FORGE_TIER4 =
             BLOCK_ENTITY_TYPES.register("forge_tier4", () -> new BlockEntityType<>(ForgeTier4BlockEntity::new, RegistryHandler.FORGE_TIER4.get()));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ExtruderBlockEntity>> EXTRUDER =
+            BLOCK_ENTITY_TYPES.register("extruder", () -> new BlockEntityType<>(ExtruderBlockEntity::new, RegistryHandler.EXTRUDER.get()));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SolderingStationBlockEntity>> SOLDERING_STATION =
+            BLOCK_ENTITY_TYPES.register("soldering_station", () -> new BlockEntityType<>(SolderingStationBlockEntity::new, RegistryHandler.SOLDERING_STATION.get()));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ChemicalCentrifugeBlockEntity>> CHEMICAL_CENTRIFUGE =
+            BLOCK_ENTITY_TYPES.register("chemical_centrifuge", () -> new BlockEntityType<>(ChemicalCentrifugeBlockEntity::new, RegistryHandler.CHEMICAL_CENTRIFUGE.get()));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ChemicalReactorBlockEntity>> CHEMICAL_REACTOR =
+            BLOCK_ENTITY_TYPES.register("chemical_reactor", () -> new BlockEntityType<>(ChemicalReactorBlockEntity::new, RegistryHandler.CHEMICAL_REACTOR.get()));
 
     public static void init(IEventBus modEventBus) {
         BLOCK_ENTITY_TYPES.register(modEventBus);

@@ -1,0 +1,5 @@
+{
+  "type": "industrialmetallurgy:extruder",
+  "input": { "ingredient": "industrialmetallurgy:brass_ingot", "count": 3 },
+  "output": { "id": "industrialmetallurgy:gear" }
+}

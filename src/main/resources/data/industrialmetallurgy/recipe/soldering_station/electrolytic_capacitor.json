@@ -1,0 +1,15 @@
+{
+  "type": "industrialmetallurgy:soldering_station",
+  "input": [
+    "industrialmetallurgy:aluminum_foil",
+    "industrialmetallurgy:hdpe_sheet",
+    "industrialmetallurgy:aluminum_foil",
+    "industrialmetallurgy:ethylene_glycol_bottle",
+    "industrialmetallurgy:ethylene_glycol_bottle",
+    "industrialmetallurgy:ethylene_glycol_bottle",
+    "industrialmetallurgy:conducting_element",
+    "industrialmetallurgy:hdpe_sheet",
+    "industrialmetallurgy:conducting_element"
+  ],
+  "output": { "id": "industrialmetallurgy:electrolytic_capacitor" }
+}

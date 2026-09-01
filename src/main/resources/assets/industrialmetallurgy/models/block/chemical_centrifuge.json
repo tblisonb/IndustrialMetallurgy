@@ -1,0 +1,8 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+      "top": "industrialmetallurgy:block/crusher_top_off",
+      "front": "industrialmetallurgy:block/chemical_centrifuge",
+      "side": "industrialmetallurgy:block/crusher_side"
+    }
+}

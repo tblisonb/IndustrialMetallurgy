@@ -1,0 +1,16 @@
+{
+  "type": "industrialmetallurgy:soldering_station",
+  "input": [
+    "industrialmetallurgy:magnet_wire",
+    "industrialmetallurgy:sulfuric_acid_bottle",
+    "industrialmetallurgy:magnet_wire",
+    "industrialmetallurgy:copper_plate",
+    "industrialmetallurgy:copper_plate",
+    "industrialmetallurgy:copper_plate",
+    "industrialmetallurgy:conducting_element",
+    "industrialmetallurgy:hdpe_sheet",
+    "industrialmetallurgy:conducting_element",
+    "industrialmetallurgy:solder_wire"
+  ],
+  "output": { "id": "industrialmetallurgy:printed_circuit_board" }
+}

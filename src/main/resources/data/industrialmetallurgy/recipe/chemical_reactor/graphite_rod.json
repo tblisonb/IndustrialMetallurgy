@@ -1,0 +1,12 @@
+{
+  "type": "industrialmetallurgy:chemical_reactor",
+  "input": [
+    "industrialmetallurgy:crushed_coal",
+    "industrialmetallurgy:sulfuric_acid_bottle",
+    "industrialmetallurgy:coal_coke"
+  ],
+  "output": [
+    { "id": "industrialmetallurgy:graphite_rod" },
+    { "id": "minecraft:glass_bottle" }
+  ]
+}

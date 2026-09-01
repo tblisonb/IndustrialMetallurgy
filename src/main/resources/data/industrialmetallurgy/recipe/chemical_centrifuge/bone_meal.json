@@ -1,0 +1,9 @@
+{
+  "type": "industrialmetallurgy:chemical_centrifuge",
+  "input": "minecraft:bone_meal",
+  "output": [
+    { "id": "industrialmetallurgy:phosphorus" },
+    { "id": "industrialmetallurgy:calcium_oxide" },
+    { "id": "minecraft:iron_nugget" }
+  ]
+}

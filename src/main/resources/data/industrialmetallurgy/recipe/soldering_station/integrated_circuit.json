@@ -1,0 +1,16 @@
+{
+  "type": "industrialmetallurgy:soldering_station",
+  "input": [
+    "industrialmetallurgy:conducting_element",
+    "industrialmetallurgy:aluminum_ingot",
+    "industrialmetallurgy:conducting_element",
+    "industrialmetallurgy:silicon_plate",
+    "industrialmetallurgy:silicon_plate",
+    "industrialmetallurgy:silicon_plate",
+    "industrialmetallurgy:conducting_element",
+    "industrialmetallurgy:copper_ingot",
+    "industrialmetallurgy:conducting_element",
+    "industrialmetallurgy:solder_wire"
+  ],
+  "output": { "id": "industrialmetallurgy:integrated_circuit" }
+}

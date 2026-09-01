@@ -1,0 +1,9 @@
+{
+  "type": "industrialmetallurgy:chemical_centrifuge",
+  "input": "industrialmetallurgy:crushed_sphalerite_ore",
+  "output": [
+    { "id": "industrialmetallurgy:lead_sulfate" },
+    { "id": "industrialmetallurgy:zinc_nugget" },
+    { "id": "minecraft:iron_nugget" }
+  ]
+}
