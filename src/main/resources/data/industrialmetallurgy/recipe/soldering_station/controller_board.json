@@ -9,7 +9,7 @@
     "industrialmetallurgy:resistance_wire",
     "industrialmetallurgy:electrolytic_capacitor",
     "industrialmetallurgy:printed_circuit_board",
-    "industrialmetallurgy:electrolytic_capacitor",
+    "industrialmetallurgy:memory_wire",
     "industrialmetallurgy:solder_wire"
   ],
   "output": { "id": "industrialmetallurgy:controller_board" }

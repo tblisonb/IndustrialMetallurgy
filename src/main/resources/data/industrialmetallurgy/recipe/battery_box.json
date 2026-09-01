@@ -1,18 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "sfx",
+    "sxs",
     "gmg",
     "pbp"
   ],
   "key": {
     "s": "industrialmetallurgy:conducting_element",
-    "f": "industrialmetallurgy:refractory_brick",
-    "x": "industrialmetallurgy:graphite_rod",
+    "x": "industrialmetallurgy:induction_core",
     "p": "industrialmetallurgy:steel_plate",
     "g": "industrialmetallurgy:gear",
     "m": "industrialmetallurgy:electric_motor",
     "b": "industrialmetallurgy:battery_cell"
   },
-  "result": { "id": "industrialmetallurgy:chemical_reactor" }
+  "result": { "id": "industrialmetallurgy:battery_box" }
 }

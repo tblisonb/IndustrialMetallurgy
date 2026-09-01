@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "industrialmetallurgy:battery_cell",
+    "industrialmetallurgy:battery_cell",
+    "industrialmetallurgy:battery_cell",
+    "industrialmetallurgy:battery_cell",
+    "industrialmetallurgy:conducting_element"
+  ],
+  "result": {
+    "id": "industrialmetallurgy:battery_bank"
+  }
+}

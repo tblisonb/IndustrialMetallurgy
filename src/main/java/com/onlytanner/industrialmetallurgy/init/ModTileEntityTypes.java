@@ -1,6 +1,7 @@
 package com.onlytanner.industrialmetallurgy.init;
 
 import com.onlytanner.industrialmetallurgy.IndustrialMetallurgy;
+import com.onlytanner.industrialmetallurgy.tileentity.BatteryBoxBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.CokeOvenBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.CrusherBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ExtruderBlockEntity;
@@ -55,6 +56,9 @@ public class ModTileEntityTypes {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ChemicalReactorBlockEntity>> CHEMICAL_REACTOR =
             BLOCK_ENTITY_TYPES.register("chemical_reactor", () -> new BlockEntityType<>(ChemicalReactorBlockEntity::new, RegistryHandler.CHEMICAL_REACTOR.get()));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BatteryBoxBlockEntity>> BATTERY_BOX =
+            BLOCK_ENTITY_TYPES.register("battery_box", () -> new BlockEntityType<>(BatteryBoxBlockEntity::new, RegistryHandler.BATTERY_BOX.get()));
 
     public static void init(IEventBus modEventBus) {
         BLOCK_ENTITY_TYPES.register(modEventBus);

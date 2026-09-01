@@ -3,6 +3,7 @@ package com.onlytanner.industrialmetallurgy.init;
 import com.onlytanner.industrialmetallurgy.IndustrialMetallurgy;
 import com.onlytanner.industrialmetallurgy.containers.AdvancedForgeContainer;
 import com.onlytanner.industrialmetallurgy.containers.BasicForgeContainer;
+import com.onlytanner.industrialmetallurgy.containers.BatteryBoxContainer;
 import com.onlytanner.industrialmetallurgy.containers.CokeOvenContainer;
 import com.onlytanner.industrialmetallurgy.containers.CrusherContainer;
 import com.onlytanner.industrialmetallurgy.containers.ChemicalCentrifugeContainer;
@@ -53,6 +54,9 @@ public class ModContainerTypes {
 
     public static final DeferredHolder<MenuType<?>, MenuType<ChemicalReactorContainer>> CHEMICAL_REACTOR =
             CONTAINER_TYPES.register("chemical_reactor", () -> IMenuTypeExtension.create(ChemicalReactorContainer::new));
+
+    public static final DeferredHolder<MenuType<?>, MenuType<BatteryBoxContainer>> BATTERY_BOX =
+            CONTAINER_TYPES.register("battery_box", () -> IMenuTypeExtension.create(BatteryBoxContainer::new));
 
     public static void init(IEventBus modEventBus) {
         CONTAINER_TYPES.register(modEventBus);

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "industrialmetallurgy:dry_cell",
+    "industrialmetallurgy:dry_cell",
+    "industrialmetallurgy:dry_cell",
+    "industrialmetallurgy:dry_cell",
+    "minecraft:iron_ingot"
+  ],
+  "result": {
+    "id": "industrialmetallurgy:dry_cell_bank"
+  }
+}

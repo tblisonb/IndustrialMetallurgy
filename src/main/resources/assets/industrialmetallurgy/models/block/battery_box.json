@@ -1,0 +1,9 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "industrialmetallurgy:block/refractory_bricks",
+        "bottom": "industrialmetallurgy:block/refractory_bricks",
+        "side": "industrialmetallurgy:block/thermoelectric_generator_side_off",
+        "front": "industrialmetallurgy:block/thermoelectric_generator_front_off"
+    }
+}

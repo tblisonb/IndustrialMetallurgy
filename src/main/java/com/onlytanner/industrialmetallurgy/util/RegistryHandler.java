@@ -246,6 +246,7 @@ public class RegistryHandler {
     public static final DeferredBlock<Block> SOLDERING_STATION = BLOCKS.registerBlock("soldering_station", SolderingStationBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
     public static final DeferredBlock<Block> CHEMICAL_CENTRIFUGE = BLOCKS.registerBlock("chemical_centrifuge", ChemicalCentrifugeBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
     public static final DeferredBlock<Block> CHEMICAL_REACTOR = BLOCKS.registerBlock("chemical_reactor", ChemicalReactorBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
+    public static final DeferredBlock<Block> BATTERY_BOX = BLOCKS.registerBlock("battery_box", BatteryBoxBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
 
     // Block Items
     // Metal Blocks
@@ -311,6 +312,7 @@ public class RegistryHandler {
     public static final DeferredItem<BlockItem> SOLDERING_STATION_ITEM = ITEMS.registerSimpleBlockItem("soldering_station", SOLDERING_STATION);
     public static final DeferredItem<BlockItem> CHEMICAL_CENTRIFUGE_ITEM = ITEMS.registerSimpleBlockItem("chemical_centrifuge", CHEMICAL_CENTRIFUGE);
     public static final DeferredItem<BlockItem> CHEMICAL_REACTOR_ITEM = ITEMS.registerSimpleBlockItem("chemical_reactor", CHEMICAL_REACTOR);
+    public static final DeferredItem<BlockItem> BATTERY_BOX_ITEM = ITEMS.registerSimpleBlockItem("battery_box", BATTERY_BOX);
 
     public static void init(IEventBus modEventBus) {
         ITEMS.register(modEventBus);

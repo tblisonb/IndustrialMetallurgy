@@ -102,60 +102,103 @@ World generation (ores don't spawn), the steel/nequitum tool lines, and JEI inte
 
 ---
 
-## Part 2 — Item/block usage audit
+## Part 2 — Item/block usage audit — **DONE** (except `heating_element`, deferred on purpose)
 
-**Genuinely unused — zero appearances in any recipe, on either branch, ever:**
+The audit turned up something bigger than "underutilized items": **`battery_cell` had zero
+recipe producing it, on either branch, ever** — and every one of the 5 machines shipped in Part 1
+requires one in its own crafting recipe (the `b` corners in the shared housing pattern). That
+meant nothing in the mod was actually craftable in survival. This wasn't a Part 1 oversight, it
+predates this rewrite entirely; the 1.16.4 branch has the exact same gap. Fixing it was the
+priority for this pass, and it drove the rest of the design below.
 
-| Item | Notes |
-|---|---|
-| `dry_cell` | No recipe produces *or* consumes it. The "starter tier" of the battery progression was apparently never finished even conceptually. |
-| `dry_cell_bank` | Same — never produced, never consumed. |
-| `battery_bank` | `battery_cell` is now used (the Crusher recipe, ported in Part 1 §1); `battery_bank` still never appears anywhere. |
-| `heating_element` | Never produced or consumed. Nichrome/kanthal/nikrothal exist specifically to feed this item and nothing currently does. |
-| `induction_core` | Never produced or consumed. |
+### The battery chain — bootstrap-safe, real chemistry
+`battery_cell`'s fix couldn't depend on any Industrial Metallurgy machine (that's circular — you'd
+need a machine to make the item that unlocks building your first machine), so the whole chain
+below only uses raw ore, vanilla-furnace ingots, and vanilla items:
 
-**Produced, but never consumed by anything** (a recipe outputs them, nothing eats them):
+- **`dry_cell`** (vanilla craft): `zinc_ingot` + `manganese_ingot` + `minecraft:coal`. This is a
+  real zinc-carbon dry cell — zinc can (anode), manganese dioxide cathode (pyrolusite ore *is*
+  MnO₂ in real life, which is why it smelts into the same manganese this needs), carbon for the
+  current collector. Gives `dry_cell` its first real job — it was never produced *or* consumed
+  before this pass.
+- **`battery_cell`** (vanilla craft): `dry_cell` + `lead_ingot` + `copper_ingot` → the lead-acid
+  cell every machine's recipe already expects (its lang key already said "Lead-Acid Battery Cell"
+  — this recipe just makes that true). This is the fix: all 5 Part-1 machines are now actually
+  buildable from nothing but ore, a furnace, and a crafting table.
+- **`dry_cell_bank`** / **`battery_bank`** (vanilla craft, 4x cell + a casing/wiring item): bulk
+  packs of the tier below. Not on the critical path, so they didn't need to stay machine-free, but
+  there was no reason to gate them either — "bank" is just bundling cells together.
+- `lithium_battery_cell`/`lithium_battery_bank` are unchanged (Soldering Station, already worked).
 
-| Item | Produced by | Notes |
-|---|---|---|
-| `graphite_rod` | Chemical Reactor (`crushed_coal` + `sulfuric_acid_bottle` + `coal_coke`) | Real graphite rods/electrodes are used in high-temperature metallurgy (aluminum smelting, arc furnaces) and as nuclear moderator/control rods. Currently a dead end. |
-| `memory_wire` | Extruder (from `nitinol_ingot`) | Real nitinol wire is used for actuators and thermostats. Currently a dead end. |
+### Battery Box — new machine, gives 4 more items a job
+A 6th FE-family machine, same shared-housing pattern as Part 1 (`conducting_element`/`gear`/
+`electric_motor`/`steel_plate`/`battery_cell`) with `induction_core` as its specialty ingredient
+(the charging-coil framing Part 3 already suggested). Mechanically it's
+`ThermoelectricGeneratorBlockEntity`'s exact burn-and-push-to-neighbors loop, but instead of
+burning a vanilla fuel item it discharges a battery item for a fixed FE value (dry cell < lead-acid
+< lithium, banks worth 4x their cell) — insert a battery, it drains into the box's buffer over
+time and pushes out to adjacent machines exactly like the Thermoelectric Generator already does.
+This is what actually *consumes* `dry_cell`, `dry_cell_bank`, and `battery_bank` (their crafting
+recipes above only *produce* them), and its own crafting recipe consumes `induction_core`
+(`minecraft:iron_ingot` + 2x `magnet_wire`, vanilla craft). No new recipe type needed — it's a
+pure item-and-energy machine, not a recipe-processing one. Reuses the Thermoelectric Generator's
+GUI texture and its `bronze_block`→`refractory_bricks` top/bottom swap for a placeholder look;
+no dedicated art yet.
 
-These 7 items are the real remaining design gap — everything else the original audit flagged as
-"blocked only by porting gaps" (every metal's nugget/block forms, all 5 burr sets,
-`electric_motor` + `rotor`/`stator`/`field_coil`/`gear`, `refractory_brick`/`refractory_composite`,
-`titanium_ingot`/`titanium_block`, `tungsten_carbide_dust`, all 4 forge-core items) is now wired
-up per Part 1 and can be removed from the gap list.
+### The two leftover dead-ends — folded into existing recipes
+- **`graphite_rod`**: `chemical_reactor.json`'s pattern lost one of its two `conducting_element`
+  corners in favor of a `graphite_rod` — real reactor vessels use graphite control/moderator rods,
+  and this was a one-ingredient swap on a recipe this same pass already owns.
+- **`memory_wire`**: `controller_board.json` (Soldering Station) swapped one of its two
+  `electrolytic_capacitor`s for `memory_wire` — a shape-memory-alloy element is a real way to build
+  a self-resetting thermal-protection trip on a circuit board.
+
+### Still open: `heating_element`
+The one item this pass deliberately didn't resolve. Its real job is the Electric Furnace idea in
+Part 3 (nichrome/kanthal/nikrothal → `heating_element` as a wearing component, FE instead of solid
+fuel) — that's a full new recipe-processing machine (reuses vanilla `minecraft:smelting` recipes
+directly, so it's not starting from zero), and was out of scope for this pass. Tracked in Part 3
+below, not silently dropped.
 
 ---
 
 ## Part 3 — Ideas for giving real jobs to underutilized items
 
 Organized by theme. Each ties back to a specific item above and to the real-world property that
-justified adding that material in the first place.
+justified adding that material in the first place. Two of these (Battery Box, and the two dead-end
+recipe edits) are now done — see Part 2 — and are left here with a status note rather than removed,
+since the rest of the section still reads as a single set of ideas.
 
-### Electric Furnace / Induction Kiln — uses `heating_element`
+### Electric Furnace / Induction Kiln — uses `heating_element` — **next up**
 Nichrome, kanthal, and nikrothal are real resistance-heating alloys — that's specifically why
 they exist as three separate alloys rather than one generic "wire." An FE-powered furnace/kiln
 that replaces the Coke Oven's solid fuel with a nichrome (or higher-tier kanthal/nikrothal)
 heating element as a wearing component would finally give those three alloys — and
 `heating_element` itself — their reason to exist, and it's a natural "upgrade path" alongside the
-Coke Oven rather than a replacement for it.
+Coke Oven rather than a replacement for it. Mechanically the cheapest of the remaining ideas to
+build: it can process vanilla `minecraft:smelting` recipes directly (same JSON already ported in
+Part 1 for every ore), so the only new logic is FE-per-tick consumption and a wearing
+`heating_element` slot instead of a fuel slot — no new recipe type needed, same as Battery Box.
+This is the one item Part 2 left unresolved.
+
+### Battery Box — **done, see Part 2**
+Built as part of Part 2's audit cleanup: a 6th FE-family machine that discharges a battery item
+(`dry_cell` through `lithium_battery_bank`) into a bulk FE buffer it then pushes to neighbors.
+Uses `induction_core` as its own crafting specialty.
 
 ### Blast/Arc Furnace tier — uses `refractory_brick`, `refractory_composite`, `graphite_rod`
 Real aluminum smelting uses graphite anodes; real high-temperature furnace linings use
 refractory brick. Titanium and tungsten realistically need hotter processing than iron/steel do.
 A 5th Forge tier (or a distinct "Blast Furnace" machine) that requires refractory brick as
 casing and consumes graphite rods as a wearing electrode — gating titanium/tungsten-heavy alloys
-behind it — uses the one currently-dead item (`graphite_rod`) and gives titanium a reason to feel
-like a distinct tier rather than "steel but renamed."
+behind it — would give `graphite_rod` a second, larger use beyond the Chemical Reactor's control
+rod (Part 2) and give titanium a reason to feel like a distinct tier rather than "steel but
+renamed."
 
-### Battery Box + rechargeable tools — uses `dry_cell`, `dry_cell_bank`, `battery_bank`, `induction_core`
-Right now FE can't be stored or moved anywhere except inside a machine's internal buffer. A
-Battery Box (dry cell → dry cell bank → battery bank, mirroring the lithium chain that already
-exists and works) fixes that, and gives the entire unused low-tier battery progression a job.
-`induction_core` fits naturally as the charging-coil component inside the box (real wireless/
-contact charging uses induction coils) — pick whichever framing fits the block's model.
+### Rechargeable battery-powered tools
+Battery Box (Part 2) already gave FE a place to live outside a machine's internal buffer. A
+handheld tool line that recharges from that same battery chain — rather than needing its own
+fuel — is the natural next step once tools exist at all (see Titanium tools/armor tier below).
 
 ### Solar panel — uses `silicon_plate`
 Real photovoltaic cells are silicon. You already mine toward silicon (lepidolite → silicon →
@@ -169,11 +212,9 @@ something else, and it's now literally what the Thermoelectric Generator's own c
 uses (Part 1 §1). An efficiency upgrade/component built the same way would extend that loop
 further.
 
-### Powered tools — uses `electric_motor`, `gear`, battery items, `memory_wire`
+### Powered tools — uses `electric_motor`, `gear`, battery items
 An electric drill/chainsaw line, separate from the plain steel/nequitum hand tools, rechargeable
-from the battery chain above. `memory_wire`'s real-world actuator use fits naturally as a
-self-resetting trigger/latch component — e.g. an auto-return mechanism, or (tying into Part 4)
-a shutter/valve actuator for pipes.
+from the battery chain above.
 
 ### Titanium tools/armor tier
 Titanium now feeds `nitinol_ingot` and the Chemical Centrifuge's specialty component, but real
@@ -224,5 +265,7 @@ once, since it's a bigger commitment than the pipe system itself.
    it grows filters/sorting/multiple conduit types later is worth leaving open rather than
    deciding now.
 
-3. **`oily_sand`'s texture** is a placeholder (reused from the `oil_sand` block). Needs real art
-   whenever that's convenient.
+3. **Placeholder art still owed:** `oily_sand`'s item texture (reused from the `oil_sand` block),
+   and Battery Box's whole look (reuses the Thermoelectric Generator's GUI texture and a
+   refractory-bricks/thermoelectric-generator texture mashup for its block model). Neither is
+   final art.

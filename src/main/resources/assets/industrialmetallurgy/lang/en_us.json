@@ -7,6 +7,7 @@
   "container.industrialmetallurgy.chemical_centrifuge": "Chemical Centrifuge",
   "container.industrialmetallurgy.chemical_reactor": "Chemical Reactor",
   "container.industrialmetallurgy.thermoelectric_generator": "Thermoelectric Generator",
+  "container.industrialmetallurgy.battery_box": "Battery Box",
   "item.industrialmetallurgy.alnico_ingot": "Alnico Ingot",
   "item.industrialmetallurgy.aluminum_ingot": "Aluminum Ingot",
   "item.industrialmetallurgy.brass_ingot": "Brass Ingot",
@@ -218,6 +219,7 @@
   "block.industrialmetallurgy.chemical_reactor": "Chemical Reactor",
   "block.industrialmetallurgy.soldering_station": "Soldering Station",
   "block.industrialmetallurgy.thermoelectric_generator": "Thermoelectric Generator",
+  "block.industrialmetallurgy.battery_box": "Battery Box",
 
   "itemGroup.industrialMetallurgy": "Industrial Metallurgy"
 }

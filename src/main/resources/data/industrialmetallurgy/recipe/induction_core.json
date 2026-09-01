@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:iron_ingot",
+    "industrialmetallurgy:magnet_wire",
+    "industrialmetallurgy:magnet_wire"
+  ],
+  "result": {
+    "id": "industrialmetallurgy:induction_core"
+  }
+}

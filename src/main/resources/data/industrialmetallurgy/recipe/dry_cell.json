@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "industrialmetallurgy:zinc_ingot",
+    "industrialmetallurgy:manganese_ingot",
+    "minecraft:coal"
+  ],
+  "result": {
+    "id": "industrialmetallurgy:dry_cell"
+  }
+}
