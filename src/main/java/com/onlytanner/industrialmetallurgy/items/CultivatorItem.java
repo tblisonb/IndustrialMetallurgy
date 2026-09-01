@@ -33,7 +33,7 @@ public class CultivatorItem extends PowerToolItem {
     private static final Set<Item> VALID_BLADES = Set.of(
             RegistryHandler.STEEL_CULTIVATOR_BLADE.get(), RegistryHandler.COBALT_STEEL_CULTIVATOR_BLADE.get(),
             RegistryHandler.STELLITE_CULTIVATOR_BLADE.get(), RegistryHandler.TUNGSTEN_STEEL_CULTIVATOR_BLADE.get(),
-            RegistryHandler.NEQUITUM_CULTIVATOR_BLADE.get()
+            RegistryHandler.TUNGSTEN_RHENIUM_CULTIVATOR_BLADE.get()
     );
 
     public CultivatorItem(Properties properties) {

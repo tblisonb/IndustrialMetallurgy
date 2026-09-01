@@ -64,6 +64,8 @@ public class IndustrialMetallurgy {
                 (blockEntity, side) -> blockEntity.getEnergyHandler());
         event.registerBlockEntity(Capabilities.Energy.BLOCK, ModTileEntityTypes.FORGE_TIER4.get(),
                 (blockEntity, side) -> blockEntity.getEnergyHandler());
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, ModTileEntityTypes.ARC_FURNACE.get(),
+                (blockEntity, side) -> blockEntity.getEnergyHandler());
         event.registerBlockEntity(Capabilities.Energy.BLOCK, ModTileEntityTypes.EXTRUDER.get(),
                 (blockEntity, side) -> blockEntity.getEnergyHandler());
         event.registerBlockEntity(Capabilities.Energy.BLOCK, ModTileEntityTypes.SOLDERING_STATION.get(),

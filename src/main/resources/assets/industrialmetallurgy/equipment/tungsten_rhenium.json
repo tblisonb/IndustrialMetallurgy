@@ -1,0 +1,10 @@
+{
+  "layers": {
+    "humanoid": [
+      { "texture": "industrialmetallurgy:tungsten_rhenium" }
+    ],
+    "humanoid_leggings": [
+      { "texture": "industrialmetallurgy:tungsten_rhenium" }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "mem",
+    "ece",
+    "mem"
+  ],
+  "key": {
+    "m": "industrialmetallurgy:tungsten_steel_ingot",
+    "e": "industrialmetallurgy:conducting_element",
+    "c": "industrialmetallurgy:arc_furnace_core"
+  },
+  "result": { "id": "industrialmetallurgy:arc_furnace" }
+}

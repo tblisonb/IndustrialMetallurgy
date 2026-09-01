@@ -85,9 +85,9 @@ public abstract class PowerToolItem extends Item {
     }
 
     // Damages the socketed implement by `amount`, consuming it entirely (same shrink-to-nothing
-    // pattern the Crusher's burr sets already use) once its durability runs out. Nequitum
+    // pattern the Crusher's burr sets already use) once its durability runs out. Tungsten-Rhenium
     // implements have no durability set (isDamageableItem() is false), so they never wear down --
-    // same capstone behavior as the Nequitum hand tools. Returns false if the implement broke or
+    // same capstone behavior as the Tungsten-Rhenium hand tools. Returns false if the implement broke or
     // there wasn't one installed.
     protected final boolean damageImplement(ItemStack tool, int amount) {
         ItemStack implement = getImplement(tool);

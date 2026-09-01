@@ -1,0 +1,10 @@
+{
+  "type": "industrialmetallurgy:forge",
+  "input": [
+    "industrialmetallurgy:tungsten_steel_ingot",
+    "industrialmetallurgy:rhenium_ingot",
+    "industrialmetallurgy:graphite_rod"
+  ],
+  "output": { "id": "industrialmetallurgy:tungsten_rhenium_ingot" },
+  "tier": "arc"
+}

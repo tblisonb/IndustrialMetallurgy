@@ -1,0 +1,12 @@
+{
+  "type": "industrialmetallurgy:forge",
+  "input": [
+    "industrialmetallurgy:crushed_scheelite_ore",
+    "industrialmetallurgy:crushed_scheelite_ore"
+  ],
+  "output": {
+    "id": "industrialmetallurgy:tungsten_ingot",
+    "count": 3
+  },
+  "tier": "arc"
+}

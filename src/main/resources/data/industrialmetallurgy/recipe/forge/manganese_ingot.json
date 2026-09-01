@@ -1,0 +1,12 @@
+{
+  "type": "industrialmetallurgy:forge",
+  "input": [
+    "industrialmetallurgy:crushed_pyrolusite_ore",
+    "industrialmetallurgy:crushed_pyrolusite_ore"
+  ],
+  "output": {
+    "id": "industrialmetallurgy:manganese_ingot",
+    "count": 3
+  },
+  "tier": "arc"
+}

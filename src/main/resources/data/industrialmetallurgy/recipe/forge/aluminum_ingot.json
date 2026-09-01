@@ -1,0 +1,12 @@
+{
+  "type": "industrialmetallurgy:forge",
+  "input": [
+    "industrialmetallurgy:crushed_bauxite_ore",
+    "industrialmetallurgy:crushed_bauxite_ore"
+  ],
+  "output": {
+    "id": "industrialmetallurgy:aluminum_ingot",
+    "count": 3
+  },
+  "tier": "arc"
+}

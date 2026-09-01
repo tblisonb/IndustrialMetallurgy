@@ -7,6 +7,7 @@ import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier1BlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier2BlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier3BlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier4BlockEntity;
+import com.onlytanner.industrialmetallurgy.tileentity.ArcFurnaceBlockEntity;
 import com.onlytanner.industrialmetallurgy.items.BatteryPackItem;
 import com.onlytanner.industrialmetallurgy.items.ChainsawItem;
 import com.onlytanner.industrialmetallurgy.items.CultivatorItem;
@@ -49,7 +50,10 @@ public class RegistryHandler {
     public static final DeferredItem<Item> KANTHAL_INGOT = ITEMS.registerSimpleItem("kanthal_ingot");
     public static final DeferredItem<Item> LEAD_INGOT = ITEMS.registerSimpleItem("lead_ingot");
     public static final DeferredItem<Item> MANGANESE_INGOT = ITEMS.registerSimpleItem("manganese_ingot");
-    public static final DeferredItem<Item> NEQUITUM_INGOT = ITEMS.registerSimpleItem("nequitum_ingot");
+    // Rhenium is only smeltable in the Arc Furnace (real rhenium has the 2nd-highest melting
+    // point of any element) -- see forge/rhenium_ingot.json.
+    public static final DeferredItem<Item> RHENIUM_INGOT = ITEMS.registerSimpleItem("rhenium_ingot");
+    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_INGOT = ITEMS.registerSimpleItem("tungsten_rhenium_ingot");
     public static final DeferredItem<Item> NICKEL_INGOT = ITEMS.registerSimpleItem("nickel_ingot");
     public static final DeferredItem<Item> NICHROME_INGOT = ITEMS.registerSimpleItem("nichrome_ingot");
     public static final DeferredItem<Item> NIKROTHAL_INGOT = ITEMS.registerSimpleItem("nikrothal_ingot");
@@ -79,7 +83,8 @@ public class RegistryHandler {
     public static final DeferredItem<Item> KANTHAL_NUGGET = ITEMS.registerSimpleItem("kanthal_nugget");
     public static final DeferredItem<Item> LEAD_NUGGET = ITEMS.registerSimpleItem("lead_nugget");
     public static final DeferredItem<Item> MANGANESE_NUGGET = ITEMS.registerSimpleItem("manganese_nugget");
-    public static final DeferredItem<Item> NEQUITUM_NUGGET = ITEMS.registerSimpleItem("nequitum_nugget");
+    public static final DeferredItem<Item> RHENIUM_NUGGET = ITEMS.registerSimpleItem("rhenium_nugget");
+    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_NUGGET = ITEMS.registerSimpleItem("tungsten_rhenium_nugget");
     public static final DeferredItem<Item> NICHROME_NUGGET = ITEMS.registerSimpleItem("nichrome_nugget");
     public static final DeferredItem<Item> NICKEL_NUGGET = ITEMS.registerSimpleItem("nickel_nugget");
     public static final DeferredItem<Item> NIKROTHAL_NUGGET = ITEMS.registerSimpleItem("nikrothal_nugget");
@@ -105,6 +110,7 @@ public class RegistryHandler {
     public static final DeferredItem<Item> CRUSHED_GOLD_ORE = ITEMS.registerSimpleItem("crushed_gold_ore");
     public static final DeferredItem<Item> CRUSHED_IRON_ORE = ITEMS.registerSimpleItem("crushed_iron_ore");
     public static final DeferredItem<Item> CRUSHED_PYROLUSITE_ORE = ITEMS.registerSimpleItem("crushed_pyrolusite_ore");
+    public static final DeferredItem<Item> CRUSHED_RHENIITE_ORE = ITEMS.registerSimpleItem("crushed_rheniite_ore");
     public static final DeferredItem<Item> CRUSHED_RUTILE_ORE = ITEMS.registerSimpleItem("crushed_rutile_ore");
     public static final DeferredItem<Item> CRUSHED_SPHALERITE_ORE = ITEMS.registerSimpleItem("crushed_sphalerite_ore");
     public static final DeferredItem<Item> CRUSHED_SCHEELITE_ORE = ITEMS.registerSimpleItem("crushed_scheelite_ore");
@@ -169,8 +175,8 @@ public class RegistryHandler {
     public static final DeferredItem<Item> STEEL_BURR_SET = ITEMS.registerSimpleItem("steel_burr_set", props -> props.durability(480));
     public static final DeferredItem<Item> CHROMIUM_BURR_SET = ITEMS.registerSimpleItem("chromium_burr_set", props -> props.durability(480));
     public static final DeferredItem<Item> TUNGSTEN_CARBIDE_BURR_SET = ITEMS.registerSimpleItem("tungsten_carbide_burr_set", props -> props.durability(480));
-    // Preserved from the original mod: the nequitum burr set has no durability set (never wears out).
-    public static final DeferredItem<Item> NEQUITUM_BURR_SET = ITEMS.registerSimpleItem("nequitum_burr_set");
+    // Preserved from the original mod: the tungsten_rhenium burr set has no durability set (never wears out).
+    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_BURR_SET = ITEMS.registerSimpleItem("tungsten_rhenium_burr_set");
     public static final DeferredItem<Item> LEAD_SULFATE_PLATE = ITEMS.registerSimpleItem("lead_sulfate_plate");
     public static final DeferredItem<Item> SILICON_PLATE = ITEMS.registerSimpleItem("silicon_plate");
     public static final DeferredItem<Item> STEEL_PLATE = ITEMS.registerSimpleItem("steel_plate");
@@ -178,7 +184,7 @@ public class RegistryHandler {
     public static final DeferredItem<Item> INVAR_PLATE = ITEMS.registerSimpleItem("invar_plate");
     public static final DeferredItem<Item> ALUMINUM_PLATE = ITEMS.registerSimpleItem("aluminum_plate");
     public static final DeferredItem<Item> ALUMINUM_FOIL = ITEMS.registerSimpleItem("aluminum_foil");
-    // Tools -- 5 tiers (Steel/Cobalt Steel/Stellite/Tungsten Steel/Nequitum), see ModToolMaterials
+    // Tools -- 5 tiers (Steel/Cobalt Steel/Stellite/Tungsten Steel/Tungsten-Rhenium), see ModToolMaterials
     // for the real-world justification behind each. Pickaxe/sword are plain Item + Properties#pickaxe/
     // sword; axe/hoe/shovel keep their dedicated classes for their unique right-click behavior.
     public static final DeferredItem<Item> STEEL_PICKAXE = ITEMS.registerSimpleItem("steel_pickaxe", props -> props.pickaxe(ModToolMaterials.STEEL, 1.0F, -2.8F));
@@ -205,14 +211,14 @@ public class RegistryHandler {
     public static final DeferredItem<HoeItem> TUNGSTEN_STEEL_HOE = ITEMS.registerItem("tungsten_steel_hoe", props -> new HoeItem(ModToolMaterials.TUNGSTEN_STEEL, -3.0F, 0.0F, props), UnaryOperator.identity());
     public static final DeferredItem<ShovelItem> TUNGSTEN_STEEL_SHOVEL = ITEMS.registerItem("tungsten_steel_shovel", props -> new ShovelItem(ModToolMaterials.TUNGSTEN_STEEL, 1.5F, -3.0F, props), UnaryOperator.identity());
 
-    public static final DeferredItem<Item> NEQUITUM_PICKAXE = ITEMS.registerSimpleItem("nequitum_pickaxe", props -> props.pickaxe(ModToolMaterials.NEQUITUM, 1.0F, -2.8F));
-    public static final DeferredItem<Item> NEQUITUM_SWORD = ITEMS.registerSimpleItem("nequitum_sword", props -> props.sword(ModToolMaterials.NEQUITUM, 3.0F, -2.4F));
-    public static final DeferredItem<AxeItem> NEQUITUM_AXE = ITEMS.registerItem("nequitum_axe", props -> new AxeItem(ModToolMaterials.NEQUITUM, 5.0F, -3.0F, props), UnaryOperator.identity());
-    public static final DeferredItem<HoeItem> NEQUITUM_HOE = ITEMS.registerItem("nequitum_hoe", props -> new HoeItem(ModToolMaterials.NEQUITUM, -3.0F, 0.0F, props), UnaryOperator.identity());
-    public static final DeferredItem<ShovelItem> NEQUITUM_SHOVEL = ITEMS.registerItem("nequitum_shovel", props -> new ShovelItem(ModToolMaterials.NEQUITUM, 1.5F, -3.0F, props), UnaryOperator.identity());
+    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_PICKAXE = ITEMS.registerSimpleItem("tungsten_rhenium_pickaxe", props -> props.pickaxe(ModToolMaterials.TUNGSTEN_RHENIUM, 1.0F, -2.8F));
+    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_SWORD = ITEMS.registerSimpleItem("tungsten_rhenium_sword", props -> props.sword(ModToolMaterials.TUNGSTEN_RHENIUM, 3.0F, -2.4F));
+    public static final DeferredItem<AxeItem> TUNGSTEN_RHENIUM_AXE = ITEMS.registerItem("tungsten_rhenium_axe", props -> new AxeItem(ModToolMaterials.TUNGSTEN_RHENIUM, 5.0F, -3.0F, props), UnaryOperator.identity());
+    public static final DeferredItem<HoeItem> TUNGSTEN_RHENIUM_HOE = ITEMS.registerItem("tungsten_rhenium_hoe", props -> new HoeItem(ModToolMaterials.TUNGSTEN_RHENIUM, -3.0F, 0.0F, props), UnaryOperator.identity());
+    public static final DeferredItem<ShovelItem> TUNGSTEN_RHENIUM_SHOVEL = ITEMS.registerItem("tungsten_rhenium_shovel", props -> new ShovelItem(ModToolMaterials.TUNGSTEN_RHENIUM, 1.5F, -3.0F, props), UnaryOperator.identity());
 
     // Armor -- only 4 of the mod's ~28 metals, see ModArmorMaterials for why. Full-set bonuses for
-    // Titanium/Stellite/Nequitum are applied in ArmorSetBonusHandler, not here.
+    // Titanium/Stellite/Tungsten-Rhenium are applied in ArmorSetBonusHandler, not here.
     public static final DeferredItem<Item> STEEL_HELMET = ITEMS.registerSimpleItem("steel_helmet", props -> props.humanoidArmor(ModArmorMaterials.STEEL, ArmorType.HELMET));
     public static final DeferredItem<Item> STEEL_CHESTPLATE = ITEMS.registerSimpleItem("steel_chestplate", props -> props.humanoidArmor(ModArmorMaterials.STEEL, ArmorType.CHESTPLATE));
     public static final DeferredItem<Item> STEEL_LEGGINGS = ITEMS.registerSimpleItem("steel_leggings", props -> props.humanoidArmor(ModArmorMaterials.STEEL, ArmorType.LEGGINGS));
@@ -228,10 +234,10 @@ public class RegistryHandler {
     public static final DeferredItem<Item> STELLITE_LEGGINGS = ITEMS.registerSimpleItem("stellite_leggings", props -> props.humanoidArmor(ModArmorMaterials.STELLITE, ArmorType.LEGGINGS));
     public static final DeferredItem<Item> STELLITE_BOOTS = ITEMS.registerSimpleItem("stellite_boots", props -> props.humanoidArmor(ModArmorMaterials.STELLITE, ArmorType.BOOTS));
 
-    public static final DeferredItem<Item> NEQUITUM_HELMET = ITEMS.registerSimpleItem("nequitum_helmet", props -> props.humanoidArmor(ModArmorMaterials.NEQUITUM, ArmorType.HELMET));
-    public static final DeferredItem<Item> NEQUITUM_CHESTPLATE = ITEMS.registerSimpleItem("nequitum_chestplate", props -> props.humanoidArmor(ModArmorMaterials.NEQUITUM, ArmorType.CHESTPLATE));
-    public static final DeferredItem<Item> NEQUITUM_LEGGINGS = ITEMS.registerSimpleItem("nequitum_leggings", props -> props.humanoidArmor(ModArmorMaterials.NEQUITUM, ArmorType.LEGGINGS));
-    public static final DeferredItem<Item> NEQUITUM_BOOTS = ITEMS.registerSimpleItem("nequitum_boots", props -> props.humanoidArmor(ModArmorMaterials.NEQUITUM, ArmorType.BOOTS));
+    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_HELMET = ITEMS.registerSimpleItem("tungsten_rhenium_helmet", props -> props.humanoidArmor(ModArmorMaterials.TUNGSTEN_RHENIUM, ArmorType.HELMET));
+    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_CHESTPLATE = ITEMS.registerSimpleItem("tungsten_rhenium_chestplate", props -> props.humanoidArmor(ModArmorMaterials.TUNGSTEN_RHENIUM, ArmorType.CHESTPLATE));
+    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_LEGGINGS = ITEMS.registerSimpleItem("tungsten_rhenium_leggings", props -> props.humanoidArmor(ModArmorMaterials.TUNGSTEN_RHENIUM, ArmorType.LEGGINGS));
+    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_BOOTS = ITEMS.registerSimpleItem("tungsten_rhenium_boots", props -> props.humanoidArmor(ModArmorMaterials.TUNGSTEN_RHENIUM, ArmorType.BOOTS));
 
     // Power tool implements -- worn/replaced independently of the tool body they're socketed
     // into. Same 5-tier durability ladder as the hand tools (ModToolMaterials), but each gets the
@@ -242,19 +248,19 @@ public class RegistryHandler {
     public static final DeferredItem<Item> COBALT_STEEL_DRILL_BIT = ITEMS.registerSimpleItem("cobalt_steel_drill_bit", props -> props.pickaxe(ModToolMaterials.COBALT_STEEL, 1.0F, -2.8F));
     public static final DeferredItem<Item> STELLITE_DRILL_BIT = ITEMS.registerSimpleItem("stellite_drill_bit", props -> props.pickaxe(ModToolMaterials.STELLITE, 1.0F, -2.8F));
     public static final DeferredItem<Item> TUNGSTEN_STEEL_DRILL_BIT = ITEMS.registerSimpleItem("tungsten_steel_drill_bit", props -> props.pickaxe(ModToolMaterials.TUNGSTEN_STEEL, 1.0F, -2.8F));
-    public static final DeferredItem<Item> NEQUITUM_DRILL_BIT = ITEMS.registerSimpleItem("nequitum_drill_bit", props -> props.pickaxe(ModToolMaterials.NEQUITUM, 1.0F, -2.8F));
+    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_DRILL_BIT = ITEMS.registerSimpleItem("tungsten_rhenium_drill_bit", props -> props.pickaxe(ModToolMaterials.TUNGSTEN_RHENIUM, 1.0F, -2.8F));
 
     public static final DeferredItem<Item> STEEL_CHAIN = ITEMS.registerSimpleItem("steel_chain", props -> props.axe(ModToolMaterials.STEEL, 5.0F, -3.0F));
     public static final DeferredItem<Item> COBALT_STEEL_CHAIN = ITEMS.registerSimpleItem("cobalt_steel_chain", props -> props.axe(ModToolMaterials.COBALT_STEEL, 5.0F, -3.0F));
     public static final DeferredItem<Item> STELLITE_CHAIN = ITEMS.registerSimpleItem("stellite_chain", props -> props.axe(ModToolMaterials.STELLITE, 5.0F, -3.0F));
     public static final DeferredItem<Item> TUNGSTEN_STEEL_CHAIN = ITEMS.registerSimpleItem("tungsten_steel_chain", props -> props.axe(ModToolMaterials.TUNGSTEN_STEEL, 5.0F, -3.0F));
-    public static final DeferredItem<Item> NEQUITUM_CHAIN = ITEMS.registerSimpleItem("nequitum_chain", props -> props.axe(ModToolMaterials.NEQUITUM, 5.0F, -3.0F));
+    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_CHAIN = ITEMS.registerSimpleItem("tungsten_rhenium_chain", props -> props.axe(ModToolMaterials.TUNGSTEN_RHENIUM, 5.0F, -3.0F));
 
     public static final DeferredItem<Item> STEEL_CULTIVATOR_BLADE = ITEMS.registerSimpleItem("steel_cultivator_blade", props -> props.hoe(ModToolMaterials.STEEL, -3.0F, 0.0F));
     public static final DeferredItem<Item> COBALT_STEEL_CULTIVATOR_BLADE = ITEMS.registerSimpleItem("cobalt_steel_cultivator_blade", props -> props.hoe(ModToolMaterials.COBALT_STEEL, -3.0F, 0.0F));
     public static final DeferredItem<Item> STELLITE_CULTIVATOR_BLADE = ITEMS.registerSimpleItem("stellite_cultivator_blade", props -> props.hoe(ModToolMaterials.STELLITE, -3.0F, 0.0F));
     public static final DeferredItem<Item> TUNGSTEN_STEEL_CULTIVATOR_BLADE = ITEMS.registerSimpleItem("tungsten_steel_cultivator_blade", props -> props.hoe(ModToolMaterials.TUNGSTEN_STEEL, -3.0F, 0.0F));
-    public static final DeferredItem<Item> NEQUITUM_CULTIVATOR_BLADE = ITEMS.registerSimpleItem("nequitum_cultivator_blade", props -> props.hoe(ModToolMaterials.NEQUITUM, -3.0F, 0.0F));
+    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_CULTIVATOR_BLADE = ITEMS.registerSimpleItem("tungsten_rhenium_cultivator_blade", props -> props.hoe(ModToolMaterials.TUNGSTEN_RHENIUM, -3.0F, 0.0F));
 
     // Battery packs -- rechargeable FE storage for the power tools, crafted from the lithium
     // battery chain (the only chemistry in the mod that's actually right for a cordless tool).
@@ -284,7 +290,8 @@ public class RegistryHandler {
     public static final DeferredBlock<Block> KANTHAL_BLOCK = BLOCKS.registerBlock("kanthal_block", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> LEAD_BLOCK = BLOCKS.registerBlock("lead_block", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> MANGANESE_BLOCK = BLOCKS.registerBlock("manganese_block", MetalBlock::new, MetalBlock::newProperties);
-    public static final DeferredBlock<Block> NEQUITUM_BLOCK = BLOCKS.registerBlock("nequitum_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> RHENIUM_BLOCK = BLOCKS.registerBlock("rhenium_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> TUNGSTEN_RHENIUM_BLOCK = BLOCKS.registerBlock("tungsten_rhenium_block", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> NICHROME_BLOCK = BLOCKS.registerBlock("nichrome_block", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> NICKEL_BLOCK = BLOCKS.registerBlock("nickel_block", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> NIKROTHAL_BLOCK = BLOCKS.registerBlock("nikrothal_block", MetalBlock::new, MetalBlock::newProperties);
@@ -312,6 +319,9 @@ public class RegistryHandler {
     public static final DeferredBlock<Block> RUTILE_ORE = BLOCKS.registerBlock("rutile_ore", Tier2OreBlock::new, Tier2OreBlock::newProperties);
     public static final DeferredBlock<Block> SPHALERITE_ORE = BLOCKS.registerBlock("sphalerite_ore", Tier1OreBlock::new, Tier1OreBlock::newProperties);
     public static final DeferredBlock<Block> SCHEELITE_ORE = BLOCKS.registerBlock("scheelite_ore", Tier4OreBlock::new, Tier4OreBlock::newProperties);
+    // Rheniite is a real, and genuinely extremely rare, rhenium mineral -- discovered in 1994 in
+    // a single volcanic fumarole. Restricted rarity is the point, not a placeholder.
+    public static final DeferredBlock<Block> RHENIITE_ORE = BLOCKS.registerBlock("rheniite_ore", Tier4OreBlock::new, Tier4OreBlock::newProperties);
     // Other Resources
     public static final DeferredBlock<Block> OIL_SAND = BLOCKS.registerBlock("oil_sand", OilSandBlock::new, OilSandBlock::newProperties);
     public static final DeferredBlock<Block> REFRACTORY_BRICKS = BLOCKS.registerBlock("refractory_bricks", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BRICKS));
@@ -320,6 +330,7 @@ public class RegistryHandler {
     public static final DeferredBlock<Block> STEEL_FORGE_CORE = BLOCKS.registerBlock("steel_forge_core", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> COBALT_FORGE_CORE = BLOCKS.registerBlock("cobalt_forge_core", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> TUNGSTEN_FORGE_CORE = BLOCKS.registerBlock("tungsten_forge_core", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> ARC_FURNACE_CORE = BLOCKS.registerBlock("arc_furnace_core", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> CRUSHER = BLOCKS.registerBlock("crusher", CrusherBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
     public static final DeferredBlock<Block> COKE_OVEN = BLOCKS.registerBlock("coke_oven", CokeOvenBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
     public static final DeferredBlock<Block> THERMOELECTRIC_GENERATOR = BLOCKS.registerBlock("thermoelectric_generator", ThermoelectricGeneratorBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
@@ -334,6 +345,11 @@ public class RegistryHandler {
             () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
     public static final DeferredBlock<Block> FORGE_TIER4 = BLOCKS.registerBlock("forge_tier4",
             props -> new ForgeBlock(props, () -> ModTileEntityTypes.FORGE_TIER4.get(), ForgeTier4BlockEntity::new),
+            () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
+    // Arc Furnace -- a 5th forge tier under its own name/identity (see ArcFurnaceBlockEntity):
+    // reuses the exact same ForgeBlock/AdvancedForgeBlockEntity/ForgeRecipe machinery as Tiers 3-4.
+    public static final DeferredBlock<Block> ARC_FURNACE = BLOCKS.registerBlock("arc_furnace",
+            props -> new ForgeBlock(props, () -> ModTileEntityTypes.ARC_FURNACE.get(), ArcFurnaceBlockEntity::new),
             () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
     public static final DeferredBlock<Block> EXTRUDER = BLOCKS.registerBlock("extruder", ExtruderBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
     public static final DeferredBlock<Block> SOLDERING_STATION = BLOCKS.registerBlock("soldering_station", SolderingStationBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
@@ -359,7 +375,8 @@ public class RegistryHandler {
     public static final DeferredItem<BlockItem> KANTHAL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("kanthal_block", KANTHAL_BLOCK);
     public static final DeferredItem<BlockItem> LEAD_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("lead_block", LEAD_BLOCK);
     public static final DeferredItem<BlockItem> MANGANESE_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("manganese_block", MANGANESE_BLOCK);
-    public static final DeferredItem<BlockItem> NEQUITUM_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("nequitum_block", NEQUITUM_BLOCK);
+    public static final DeferredItem<BlockItem> RHENIUM_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("rhenium_block", RHENIUM_BLOCK);
+    public static final DeferredItem<BlockItem> TUNGSTEN_RHENIUM_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("tungsten_rhenium_block", TUNGSTEN_RHENIUM_BLOCK);
     public static final DeferredItem<BlockItem> NICHROME_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("nichrome_block", NICHROME_BLOCK);
     public static final DeferredItem<BlockItem> NICKEL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("nickel_block", NICKEL_BLOCK);
     public static final DeferredItem<BlockItem> NIKROTHAL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("nikrothal_block", NIKROTHAL_BLOCK);
@@ -387,6 +404,7 @@ public class RegistryHandler {
     public static final DeferredItem<BlockItem> RUTILE_ORE_ITEM = ITEMS.registerSimpleBlockItem("rutile_ore", RUTILE_ORE);
     public static final DeferredItem<BlockItem> SPHALERITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("sphalerite_ore", SPHALERITE_ORE);
     public static final DeferredItem<BlockItem> SCHEELITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("scheelite_ore", SCHEELITE_ORE);
+    public static final DeferredItem<BlockItem> RHENIITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("rheniite_ore", RHENIITE_ORE);
     // Other Resources
     public static final DeferredItem<BlockItem> OIL_SAND_ITEM = ITEMS.registerSimpleBlockItem("oil_sand", OIL_SAND);
     public static final DeferredItem<BlockItem> REFRACTORY_BRICKS_ITEM = ITEMS.registerSimpleBlockItem("refractory_bricks", REFRACTORY_BRICKS);
@@ -395,6 +413,7 @@ public class RegistryHandler {
     public static final DeferredItem<BlockItem> STEEL_FORGE_CORE_ITEM = ITEMS.registerSimpleBlockItem("steel_forge_core", STEEL_FORGE_CORE);
     public static final DeferredItem<BlockItem> COBALT_FORGE_CORE_ITEM = ITEMS.registerSimpleBlockItem("cobalt_forge_core", COBALT_FORGE_CORE);
     public static final DeferredItem<BlockItem> TUNGSTEN_FORGE_CORE_ITEM = ITEMS.registerSimpleBlockItem("tungsten_forge_core", TUNGSTEN_FORGE_CORE);
+    public static final DeferredItem<BlockItem> ARC_FURNACE_CORE_ITEM = ITEMS.registerSimpleBlockItem("arc_furnace_core", ARC_FURNACE_CORE);
     public static final DeferredItem<BlockItem> CRUSHER_ITEM = ITEMS.registerSimpleBlockItem("crusher", CRUSHER);
     public static final DeferredItem<BlockItem> COKE_OVEN_ITEM = ITEMS.registerSimpleBlockItem("coke_oven", COKE_OVEN);
     public static final DeferredItem<BlockItem> THERMOELECTRIC_GENERATOR_ITEM = ITEMS.registerSimpleBlockItem("thermoelectric_generator", THERMOELECTRIC_GENERATOR);
@@ -402,6 +421,7 @@ public class RegistryHandler {
     public static final DeferredItem<BlockItem> FORGE_TIER2_ITEM = ITEMS.registerSimpleBlockItem("forge_tier2", FORGE_TIER2);
     public static final DeferredItem<BlockItem> FORGE_TIER3_ITEM = ITEMS.registerSimpleBlockItem("forge_tier3", FORGE_TIER3);
     public static final DeferredItem<BlockItem> FORGE_TIER4_ITEM = ITEMS.registerSimpleBlockItem("forge_tier4", FORGE_TIER4);
+    public static final DeferredItem<BlockItem> ARC_FURNACE_ITEM = ITEMS.registerSimpleBlockItem("arc_furnace", ARC_FURNACE);
     public static final DeferredItem<BlockItem> EXTRUDER_ITEM = ITEMS.registerSimpleBlockItem("extruder", EXTRUDER);
     public static final DeferredItem<BlockItem> SOLDERING_STATION_ITEM = ITEMS.registerSimpleBlockItem("soldering_station", SOLDERING_STATION);
     public static final DeferredItem<BlockItem> CHEMICAL_CENTRIFUGE_ITEM = ITEMS.registerSimpleBlockItem("chemical_centrifuge", CHEMICAL_CENTRIFUGE);

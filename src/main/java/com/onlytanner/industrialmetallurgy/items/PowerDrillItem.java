@@ -25,7 +25,7 @@ public class PowerDrillItem extends PowerToolItem {
     private static final Set<Item> VALID_BITS = Set.of(
             RegistryHandler.STEEL_DRILL_BIT.get(), RegistryHandler.COBALT_STEEL_DRILL_BIT.get(),
             RegistryHandler.STELLITE_DRILL_BIT.get(), RegistryHandler.TUNGSTEN_STEEL_DRILL_BIT.get(),
-            RegistryHandler.NEQUITUM_DRILL_BIT.get()
+            RegistryHandler.TUNGSTEN_RHENIUM_DRILL_BIT.get()
     );
 
     public PowerDrillItem(Properties properties) {

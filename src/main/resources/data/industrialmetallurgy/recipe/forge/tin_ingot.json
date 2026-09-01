@@ -1,0 +1,12 @@
+{
+  "type": "industrialmetallurgy:forge",
+  "input": [
+    "industrialmetallurgy:crushed_cassiterite_ore",
+    "industrialmetallurgy:crushed_cassiterite_ore"
+  ],
+  "output": {
+    "id": "industrialmetallurgy:tin_ingot",
+    "count": 3
+  },
+  "tier": "arc"
+}

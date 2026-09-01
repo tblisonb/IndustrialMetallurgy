@@ -1,0 +1,12 @@
+{
+  "type": "industrialmetallurgy:forge",
+  "input": [
+    "industrialmetallurgy:crushed_rutile_ore",
+    "industrialmetallurgy:crushed_rutile_ore"
+  ],
+  "output": {
+    "id": "industrialmetallurgy:titanium_ingot",
+    "count": 3
+  },
+  "tier": "arc"
+}

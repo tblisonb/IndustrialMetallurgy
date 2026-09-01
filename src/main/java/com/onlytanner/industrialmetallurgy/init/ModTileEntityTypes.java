@@ -1,6 +1,7 @@
 package com.onlytanner.industrialmetallurgy.init;
 
 import com.onlytanner.industrialmetallurgy.IndustrialMetallurgy;
+import com.onlytanner.industrialmetallurgy.tileentity.ArcFurnaceBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.BatteryBoxBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.CokeOvenBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.CrusherBlockEntity;
@@ -45,6 +46,9 @@ public class ModTileEntityTypes {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ForgeTier4BlockEntity>> FORGE_TIER4 =
             BLOCK_ENTITY_TYPES.register("forge_tier4", () -> new BlockEntityType<>(ForgeTier4BlockEntity::new, RegistryHandler.FORGE_TIER4.get()));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ArcFurnaceBlockEntity>> ARC_FURNACE =
+            BLOCK_ENTITY_TYPES.register("arc_furnace", () -> new BlockEntityType<>(ArcFurnaceBlockEntity::new, RegistryHandler.ARC_FURNACE.get()));
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ExtruderBlockEntity>> EXTRUDER =
             BLOCK_ENTITY_TYPES.register("extruder", () -> new BlockEntityType<>(ExtruderBlockEntity::new, RegistryHandler.EXTRUDER.get()));

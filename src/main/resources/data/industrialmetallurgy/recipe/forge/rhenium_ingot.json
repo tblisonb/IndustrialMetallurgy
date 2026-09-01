@@ -1,0 +1,8 @@
+{
+  "type": "industrialmetallurgy:forge",
+  "input": [
+    "industrialmetallurgy:crushed_rheniite_ore"
+  ],
+  "output": { "id": "industrialmetallurgy:rhenium_ingot" },
+  "tier": "arc"
+}

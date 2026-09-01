@@ -28,14 +28,14 @@ public class ChainsawItem extends PowerToolItem {
     private static final Set<Item> VALID_CHAINS = Set.of(
             RegistryHandler.STEEL_CHAIN.get(), RegistryHandler.COBALT_STEEL_CHAIN.get(),
             RegistryHandler.STELLITE_CHAIN.get(), RegistryHandler.TUNGSTEN_STEEL_CHAIN.get(),
-            RegistryHandler.NEQUITUM_CHAIN.get()
+            RegistryHandler.TUNGSTEN_RHENIUM_CHAIN.get()
     );
     private static final Map<Item, Integer> FELLING_CAP = Map.of(
             RegistryHandler.STEEL_CHAIN.get(), 16,
             RegistryHandler.COBALT_STEEL_CHAIN.get(), 16,
             RegistryHandler.STELLITE_CHAIN.get(), 32,
             RegistryHandler.TUNGSTEN_STEEL_CHAIN.get(), 32,
-            RegistryHandler.NEQUITUM_CHAIN.get(), 64
+            RegistryHandler.TUNGSTEN_RHENIUM_CHAIN.get(), 64
     );
 
     public ChainsawItem(Properties properties) {

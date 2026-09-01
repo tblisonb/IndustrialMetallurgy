@@ -1,0 +1,12 @@
+{
+  "type": "industrialmetallurgy:forge",
+  "input": [
+    "industrialmetallurgy:crushed_garnierite_ore",
+    "industrialmetallurgy:crushed_garnierite_ore"
+  ],
+  "output": {
+    "id": "industrialmetallurgy:nickel_ingot",
+    "count": 3
+  },
+  "tier": "arc"
+}

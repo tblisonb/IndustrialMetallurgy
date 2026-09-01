@@ -38,7 +38,7 @@ public class CrusherContainer extends AbstractContainerMenu {
                         stack.getItem().equals(RegistryHandler.STEEL_BURR_SET.get()) ||
                         stack.getItem().equals(RegistryHandler.CHROMIUM_BURR_SET.get()) ||
                         stack.getItem().equals(RegistryHandler.TUNGSTEN_CARBIDE_BURR_SET.get()) ||
-                        stack.getItem().equals(RegistryHandler.NEQUITUM_BURR_SET.get());
+                        stack.getItem().equals(RegistryHandler.TUNGSTEN_RHENIUM_BURR_SET.get());
             }
         });
         this.addSlot(new SlotItemHandler(inventory, CrusherBlockEntity.OUTPUT_ID, 116, 35) {

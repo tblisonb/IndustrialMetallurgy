@@ -44,6 +44,9 @@ public class ModContainerTypes {
     public static final DeferredHolder<MenuType<?>, MenuType<AdvancedForgeContainer>> FORGE_TIER4 =
             CONTAINER_TYPES.register("forge_tier4", () -> IMenuTypeExtension.create(AdvancedForgeContainer::new));
 
+    public static final DeferredHolder<MenuType<?>, MenuType<AdvancedForgeContainer>> ARC_FURNACE =
+            CONTAINER_TYPES.register("arc_furnace", () -> IMenuTypeExtension.create(AdvancedForgeContainer::new));
+
     public static final DeferredHolder<MenuType<?>, MenuType<ExtruderContainer>> EXTRUDER =
             CONTAINER_TYPES.register("extruder", () -> IMenuTypeExtension.create(ExtruderContainer::new));
 

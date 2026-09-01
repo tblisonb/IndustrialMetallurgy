@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X X",
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": "industrialmetallurgy:tungsten_rhenium_ingot"
+  },
+  "result": {
+    "id": "industrialmetallurgy:tungsten_rhenium_chestplate"
+  }
+}

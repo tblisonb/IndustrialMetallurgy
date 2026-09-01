@@ -1,0 +1,12 @@
+{
+  "type": "industrialmetallurgy:forge",
+  "input": [
+    "industrialmetallurgy:crushed_gold_ore",
+    "industrialmetallurgy:crushed_gold_ore"
+  ],
+  "output": {
+    "id": "minecraft:gold_ingot",
+    "count": 3
+  },
+  "tier": "arc"
+}

@@ -13,7 +13,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 // Titanium (light, strong, corrosion-resistant) -> permanent Resistance I. Stellite (real
-// heat/corrosion-resistant superalloy) -> permanent Fire Resistance. Nequitum gets both, echoing
+// heat/corrosion-resistant superalloy) -> permanent Fire Resistance. Tungsten-Rhenium gets both, echoing
 // how netherite armor stacks its own passive on top of best-in-slot stats. Steel is a plain
 // baseline and gets no entry here. Re-applied every server tick with a duration just longer than
 // one tick's worth of margin, rather than granted once, so it silently tracks whether the full
@@ -36,14 +36,14 @@ public class ArmorSetBonusHandler {
         boolean stellite = isWearingFullSet(player,
                 RegistryHandler.STELLITE_HELMET.get(), RegistryHandler.STELLITE_CHESTPLATE.get(),
                 RegistryHandler.STELLITE_LEGGINGS.get(), RegistryHandler.STELLITE_BOOTS.get());
-        boolean nequitum = isWearingFullSet(player,
-                RegistryHandler.NEQUITUM_HELMET.get(), RegistryHandler.NEQUITUM_CHESTPLATE.get(),
-                RegistryHandler.NEQUITUM_LEGGINGS.get(), RegistryHandler.NEQUITUM_BOOTS.get());
+        boolean tungsten_rhenium = isWearingFullSet(player,
+                RegistryHandler.TUNGSTEN_RHENIUM_HELMET.get(), RegistryHandler.TUNGSTEN_RHENIUM_CHESTPLATE.get(),
+                RegistryHandler.TUNGSTEN_RHENIUM_LEGGINGS.get(), RegistryHandler.TUNGSTEN_RHENIUM_BOOTS.get());
 
-        if (titanium || nequitum) {
+        if (titanium || tungsten_rhenium) {
             applyPassive(player, MobEffects.RESISTANCE);
         }
-        if (stellite || nequitum) {
+        if (stellite || tungsten_rhenium) {
             applyPassive(player, MobEffects.FIRE_RESISTANCE);
         }
     }

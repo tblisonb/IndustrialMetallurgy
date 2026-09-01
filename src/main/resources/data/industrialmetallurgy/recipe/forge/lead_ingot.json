@@ -1,0 +1,12 @@
+{
+  "type": "industrialmetallurgy:forge",
+  "input": [
+    "industrialmetallurgy:crushed_galena_ore",
+    "industrialmetallurgy:crushed_galena_ore"
+  ],
+  "output": {
+    "id": "industrialmetallurgy:lead_ingot",
+    "count": 3
+  },
+  "tier": "arc"
+}

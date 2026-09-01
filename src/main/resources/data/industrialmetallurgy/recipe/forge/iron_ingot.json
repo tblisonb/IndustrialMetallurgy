@@ -1,0 +1,12 @@
+{
+  "type": "industrialmetallurgy:forge",
+  "input": [
+    "industrialmetallurgy:crushed_iron_ore",
+    "industrialmetallurgy:crushed_iron_ore"
+  ],
+  "output": {
+    "id": "minecraft:iron_ingot",
+    "count": 3
+  },
+  "tier": "arc"
+}

@@ -33,6 +33,7 @@ public class IndustrialMetallurgyClient {
         event.register(ModContainerTypes.FORGE_TIER2.get(), BasicForgeScreen::new);
         event.register(ModContainerTypes.FORGE_TIER3.get(), AdvancedForgeScreen::new);
         event.register(ModContainerTypes.FORGE_TIER4.get(), AdvancedForgeScreen::new);
+        event.register(ModContainerTypes.ARC_FURNACE.get(), AdvancedForgeScreen::new);
         event.register(ModContainerTypes.EXTRUDER.get(), ExtruderScreen::new);
         event.register(ModContainerTypes.SOLDERING_STATION.get(), SolderingStationScreen::new);
         event.register(ModContainerTypes.CHEMICAL_CENTRIFUGE.get(), ChemicalCentrifugeScreen::new);

@@ -128,7 +128,7 @@ public class CrusherBlockEntity extends BlockEntity implements MenuProvider {
             if (this.acidLevel > 0)
                 return 3;
             return 2 + ((Math.random() >= 0.5) ? 1 : 0);
-        } else if (burrSet.getItem().equals(RegistryHandler.NEQUITUM_BURR_SET.get())) {
+        } else if (burrSet.getItem().equals(RegistryHandler.TUNGSTEN_RHENIUM_BURR_SET.get())) {
             if (this.acidLevel > 0)
                 return 3;
             return 2 + ((Math.random() >= 0.5) ? 1 : 0);

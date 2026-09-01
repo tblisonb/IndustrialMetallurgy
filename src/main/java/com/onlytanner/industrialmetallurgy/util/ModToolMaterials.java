@@ -12,9 +12,9 @@ import net.minecraft.world.item.ToolMaterial;
 // existing 1.16.4 baseline (iron harvest level, 3x iron durability, diamond speed/damage/enchant).
 // Cobalt Steel and Stellite are real cutting-tool alloys prized for edge retention and wear
 // resistance respectively, so they're lateral/lightly-ahead of Steel rather than a harvest-level
-// jump. Tungsten Steel and Nequitum cross into the diamond/netherite mining tier. Nequitum keeps
-// its 1.16.4 durability of 0 -- an item with no max damage can't be damaged at all, matching the
-// "endgame material that never breaks" precedent from the original mod.
+// jump. Tungsten Steel and Tungsten-Rhenium (real: used for rocket nozzles and high-temperature
+// thermocouples) cross into the diamond/netherite mining tier. Tungsten-Rhenium keeps the old
+// Nequitum capstone's durability of 0 -- an item with no max damage can't be damaged at all.
 public class ModToolMaterials {
 
     public static final ToolMaterial STEEL = new ToolMaterial(
@@ -29,8 +29,8 @@ public class ModToolMaterials {
     public static final ToolMaterial TUNGSTEN_STEEL = new ToolMaterial(
             BlockTags.INCORRECT_FOR_DIAMOND_TOOL, 2000, 9.0F, 4.0F, 13, itemTag("tungsten_steel_tool_materials"));
 
-    public static final ToolMaterial NEQUITUM = new ToolMaterial(
-            BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 0, 10.0F, 7.0F, 25, itemTag("nequitum_tool_materials"));
+    public static final ToolMaterial TUNGSTEN_RHENIUM = new ToolMaterial(
+            BlockTags.INCORRECT_FOR_NETHERITE_TOOL, 0, 10.0F, 7.0F, 25, itemTag("tungsten_rhenium_tool_materials"));
 
     private static TagKey<Item> itemTag(String name) {
         return ItemTags.create(Identifier.fromNamespaceAndPath(IndustrialMetallurgy.MODID, name));

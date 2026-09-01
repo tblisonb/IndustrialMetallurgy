@@ -1,0 +1,12 @@
+{
+  "type": "industrialmetallurgy:forge",
+  "input": [
+    "industrialmetallurgy:crushed_chromite_ore",
+    "industrialmetallurgy:crushed_chromite_ore"
+  ],
+  "output": {
+    "id": "industrialmetallurgy:chromium_ingot",
+    "count": 3
+  },
+  "tier": "arc"
+}

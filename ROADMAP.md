@@ -163,11 +163,11 @@ Left open at the end of this pass; picked up immediately after as the first item
 ## Part 3 — Ideas for giving real jobs to underutilized items
 
 Organized by theme. Each ties back to a specific item above and to the real-world property that
-justified adding that material in the first place. Six of these (Battery Box and the two dead-end
-recipe edits from Part 2, Electric Furnace, the tool/armor tier, and powered tools) are now done,
-and are left here with a status note rather than removed, since the rest of the section still
-reads as a single set of ideas. What's left below (Blast/Arc Furnace, Solar Panel, powered armor)
-is its own bigger scope of work, not blocked on anything from this pass.
+justified adding that material in the first place. Seven of these (Battery Box and the two
+dead-end recipe edits from Part 2, Electric Furnace, the tool/armor tier, powered tools, and the
+Arc Furnace tier) are now done, and are left here with a status note rather than removed, since
+the rest of the section still reads as a single set of ideas. What's left below (Solar Panel,
+powered armor) is its own bigger scope of work, not blocked on anything from this pass.
 
 ### Electric Furnace — **done**
 Built as a direct follow-on to Part 2 (same session, right after): a 7th FE-family machine,
@@ -187,14 +187,11 @@ Built as part of Part 2's audit cleanup: a 6th FE-family machine that discharges
 (`dry_cell` through `lithium_battery_bank`) into a bulk FE buffer it then pushes to neighbors.
 Uses `induction_core` as its own crafting specialty.
 
-### Blast/Arc Furnace tier — uses `refractory_brick`, `refractory_composite`, `graphite_rod`
-Real aluminum smelting uses graphite anodes; real high-temperature furnace linings use
-refractory brick. Titanium and tungsten realistically need hotter processing than iron/steel do.
-A 5th Forge tier (or a distinct "Blast Furnace" machine) that requires refractory brick as
-casing and consumes graphite rods as a wearing electrode — gating titanium/tungsten-heavy alloys
-behind it — would give `graphite_rod` a second, larger use beyond the Chemical Reactor's control
-rod (Part 2) and give titanium a reason to feel like a distinct tier rather than "steel but
-renamed."
+### Arc Furnace tier — **done, see Part 8**
+Landed as a higher-yield-refining machine (5th Forge tier) that also gates the new Rhenium/
+Tungsten-Rhenium chain — ended up giving `graphite_rod` its second use as planned here, just as
+a superalloy electrode in the endgame alloy recipe rather than in a titanium/tungsten gate
+specifically.
 
 ### Rechargeable battery-powered tools — **done, see Part 7**
 
@@ -361,6 +358,67 @@ whenever real art happens.
 
 ---
 
+## Part 8 — Arc Furnace, and replacing Nequitum with Tungsten-Rhenium — **DONE**
+
+This came out of finding an old (10/5/2020) design document for the mod and cross-checking it
+against what's actually built (see that conversation for the full diff) — it independently named
+"Arc Furnace" as a planned machine, matching the "Blast/Arc Furnace" idea already sitting in Part
+3. Building it surfaced the mod's one remaining "unobtainium": Nequitum, the only material in the
+mod that was never grounded in something real. Both got resolved together, since the endgame
+alloy is what actually justifies the Arc Furnace's existence.
+
+### Arc Furnace — a 5th Forge tier, reusing the existing machinery entirely
+Mechanically this is `AdvancedForgeBlockEntity`/`ForgeRecipe` (the same system Forge Tiers 3-4
+already run on) under a new name and identity, not a new recipe type or a parallel system:
+`ArcFurnaceBlockEntity` just accepts one more tier string (`"arc"`, cumulative with
+iron/steel/cobalt/tungsten like every tier before it) and runs hotter and faster than every other
+tier (35-tick process time vs. the uniform 50 everywhere else; 4200° max temperature). Its own
+crafting recipe follows the established forge-family template exactly (shared housing +
+`arc_furnace_core`, itself built the same way every other tier's core is).
+
+Its actual job, per your steer, is **higher-yield refining first, endgame alloy second**:
+- **Higher-yield refining**: 14 new `tier: "arc"` recipes — one per existing base metal — that
+  turn 2 crushed ore into 3 ingots, a real 50% yield improvement over the Electric Furnace's 1:1.
+  This is useful the moment you build an Arc Furnace, independent of anything else below, and
+  keeps the Crusher relevant at the endgame (the bonus applies to *crushed* ore specifically, not
+  raw ore — real arc furnaces process refined/prepared feedstock, not raw rock).
+- **Endgame gate**: Rhenium can only be smelted here at all (see below) — real rhenium has the
+  2nd-highest melting point of any element, so "needs the hottest furnace" isn't a arbitrary gate.
+
+### Nequitum → Tungsten-Rhenium: a full replacement, not a relabel
+Real tungsten-rhenium alloy is used for rocket nozzles and high-temperature thermocouples, which
+makes it a natural, *accurate* successor to Tungsten Steel rather than an arbitrary "endgame
+metal" swap. The chain:
+
+- **Rheniite** — the ore. A real (and genuinely, extremely rare — discovered in 1994 in a single
+  volcanic fumarole) rhenium mineral. Tier-4 rarity, matching Scheelite/Lepidolite.
+  `crushed_rheniite_ore` via the Crusher, same as every other ore.
+- **Rhenium** — smelted from crushed Rheniite, Arc Furnace only, no vanilla-furnace or
+  Electric-Furnace path at all (unlike every other base metal) — its melting point is the reason
+  this material needed a reason for the Arc Furnace to exist beyond yield bonuses.
+- **Tungsten-Rhenium** — `tungsten_steel_ingot` + `rhenium_ingot` + `graphite_rod` (a second real
+  use for graphite as a superalloy-processing electrode, beyond its Part 2 control-rod job),
+  Arc Furnace only (`tier: "arc"`). This is the new capstone: same tool/armor role Nequitum had
+  (5th tool tier, 4th armor set, the burr set, the power-tool implements), same 0-durability
+  "never breaks" quirk, but every step of getting there is now a real material and a real
+  metallurgical reason to need the hottest furnace in the mod.
+
+Full replacement, not a reskin: `nequitum_*` registrations, recipes, tags, lang entries, and
+textures were removed outright and replaced with `tungsten_rhenium_*` equivalents (58 files
+renamed, contents updated, not just relabeled) — reasonable for a solo project with no live saves
+to preserve compatibility for.
+
+### Placeholder art, and a gap this surfaced
+Arc Furnace reuses the Tungsten Forge's existing (real, complete) texture set, recolored — same
+approach as every machine this session. Rheniite ore, Rhenium/Tungsten-Rhenium's ingot/nugget/
+block forms, and the Arc Furnace Core needed *no* new placeholder art, because — discovered while
+doing this pass — **no raw ore block or metal ingot/nugget/block in the entire mod has real
+textures or models**. Only the processed/intermediate items and the machines themselves do. This
+is a much bigger, pre-existing gap than "some placeholder textures" (README's current framing)
+suggests; worth its own line in Part 5 if a real art pass ever happens.
+
+---
+
 ## Part 4 — Basic in-mod logistics (per your last message)
 
 You described wanting something minimal rather than depending on another mod: a machine-side
@@ -386,9 +444,10 @@ once, since it's a bigger commitment than the pipe system itself.
 
 ## Part 5 — Open questions
 
-1. **Nequitum's fate.** Every other material in the mod is real; nequitum is the one deliberate
-   "unobtainium." If it should be replaced with something grounded, a few real candidates that
-   would keep the "endgame capstone metal" flavor without duplicating IC2's iridium:
+1. **Nequitum's fate — resolved, see Part 8.** Replaced outright with Tungsten-Rhenium (Rhenium
+   ore/ingot via a new Arc Furnace, alloyed with Tungsten Steel). Every material in the mod is now
+   real; nequitum is gone, not just relabeled. Original notes on the options considered, kept for
+   history:
    - **Rhenium** — one of the rarest elements in Earth's crust, and specifically the metal used
      in real jet-turbine superalloys for extreme-heat tolerance. Ties in cleanly with the Blast
      Furnace idea above (Part 3) as the *reason* you'd ever need one.

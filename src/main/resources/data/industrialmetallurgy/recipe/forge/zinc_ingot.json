@@ -1,0 +1,12 @@
+{
+  "type": "industrialmetallurgy:forge",
+  "input": [
+    "industrialmetallurgy:crushed_sphalerite_ore",
+    "industrialmetallurgy:crushed_sphalerite_ore"
+  ],
+  "output": {
+    "id": "industrialmetallurgy:zinc_ingot",
+    "count": 3
+  },
+  "tier": "arc"
+}

@@ -1,0 +1,12 @@
+{
+  "type": "industrialmetallurgy:forge",
+  "input": [
+    "industrialmetallurgy:crushed_argentite_ore",
+    "industrialmetallurgy:crushed_argentite_ore"
+  ],
+  "output": {
+    "id": "industrialmetallurgy:silver_ingot",
+    "count": 3
+  },
+  "tier": "arc"
+}
