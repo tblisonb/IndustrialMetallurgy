@@ -419,10 +419,11 @@ suggests; worth its own line in Part 5 if a real art pass ever happens.
 
 ---
 
-## Part 9 — World generation, and a first texture pass — **world gen DONE, textures started**
+## Part 9 — World generation, a full texture pass, and retiring Cuprite/Sulfur — **DONE**
 
-Two threads: getting ores to actually spawn (flagged as an open gap since Part 1), and a first
-real attempt at giving new items/blocks art instead of tinted placeholders.
+Three threads: getting ores to actually spawn (flagged as an open gap since Part 1), a first
+real attempt at giving new items/blocks art instead of tinted placeholders, and removing two
+materials that vanilla itself has since made redundant.
 
 ### World gen: rebuilt, not ported
 The 1.16.4 world-gen system (`OreGenConfig`/`OreGenHandler`/`OreFeatureHandler`) never existed in
@@ -447,7 +448,7 @@ purpose — it matches "ore gating gives you an excuse to explore" better than t
 |---|---|
 | `minecraft:plains` | Argentite (silver), Sphalerite (zinc) |
 | `#minecraft:is_jungle` | Bauxite (aluminum), Cassiterite (tin) |
-| `minecraft:desert` | Cuprite (copper), Rutile (titanium) |
+| `minecraft:desert` | Rutile (titanium) |
 | `#minecraft:is_forest` | Galena (lead), Garnierite (nickel) |
 | `minecraft:swamp` / `mangrove_swamp` | Pyrolusite (manganese) |
 | `#minecraft:is_nether` | Chromite (chromium), Cobaltite (cobalt) |
@@ -457,7 +458,7 @@ purpose — it matches "ore gating gives you an excuse to explore" better than t
 
 **Heights are new, not scaled from the old numbers**, and deliberately correlate with each ore's
 existing harvest tier rather than being ad hoc the way the 1.16.4 config was: Tier 1 (Bauxite,
-Cassiterite, Cuprite, Garnierite, Sphalerite) gets the widest, shallowest band (Y -16 to 80) and
+Cassiterite, Garnierite, Sphalerite) gets the widest, shallowest band (Y -16 to 80) and
 the biggest veins; Tier 2 (Argentite, Galena, Pyrolusite, Rutile) sits deeper and rarer (Y -48 to
 48); Tier 3's two Nether ores and Tier 4's three rarest ores get progressively smaller veins.
 Every vein uses vanilla's own `trapezoid` height distribution (weighted toward the middle of its
@@ -475,13 +476,40 @@ dedicated server's own "Preparing spawn area: 100%" succeeding is itself a real 
 What I *can't* verify without a client is whether the rarity/vein-size numbers actually feel
 right in play — that's a judgment call that needs eyes on real generated terrain, not log output.
 
-### Texture pass: started, not finished
-First real (non-placeholder) art pass: three procedurally-generated ore block textures
-(Rheniite, Scheelite, Rutile) using the same stone-base-plus-speckled-cluster technique vanilla's
-own ore textures use, with palettes drawn from each mineral's real color rather than picked
-arbitrarily. Published as an artifact for review before committing to generating the rest of the
-set. Explicitly not final art — a reasonable procedural placeholder, meant to be hand-edited in
-Aseprite/Paint.NET rather than shipped as-is long-term.
+### Texture pass: all 13 ore blocks done
+First real (non-placeholder) art pass: procedurally-generated ore block textures for every
+remaining ore, using the same stone-base-plus-speckled-cluster technique vanilla's own ore
+textures use, with palettes drawn from each mineral's real color rather than picked arbitrarily.
+Started as a 3-ore demo (Rheniite, Scheelite, Rutile), published as an artifact for review, then
+extended to the other 10 (Argentite, Bauxite, Cassiterite, Chromite, Cobaltite, Galena,
+Garnierite, Lepidolite, Pyrolusite, Sphalerite) the same way once approved. `argentite_ore` had a
+pre-existing blockstate/model set from before this pass and was left untouched; the other 12
+ores got a matching blockstate + block model + item model (`cube_all` template, same convention
+`refractory_bricks` already used). Explicitly not final art — a reasonable procedural
+placeholder, meant to be hand-edited in Aseprite/Paint.NET rather than shipped as-is long-term.
+
+### Retiring Cuprite/copper and raw Sulfur — vanilla caught up
+Vanilla 26.2 now ships its own full copper tier (ingot/nugget/block, plus tools and armor) and a
+"Sulfur Caves" biome/block family, making two of this mod's original materials pure duplicates of
+things the base game now provides. Both were removed outright rather than kept as redundant
+alternate paths:
+
+- **Cuprite ore / `crushed_cuprite_ore` / `industrialmetallurgy:copper_ingot` / `copper_nugget` /
+  `copper_block`** — deleted from the registry, along with their crafting/smelting/loot-table/
+  world-gen JSON. Every recipe across the mod that consumed or produced the mod's own copper items
+  (the Thermoelectric Generator, Battery Cell, Copper Plate, Brass/Bronze/Constantan/
+  Copper-Tungsten/Solder ingots, the Integrated Circuit, Magnet Wire) was repointed to
+  `minecraft:copper_ingot`/`minecraft:copper_nugget` instead — the recipes themselves are
+  unchanged, just sourced from vanilla now. Desert world gen (previously Cuprite + Rutile) now
+  only places Rutile.
+- **`industrialmetallurgy:sulfur`** — deleted the same way; every recipe that consumed it
+  (Gunpowder, Sulfuric Acid Bottle, and both Argentite/Cobaltite chemical-centrifuge byproduct
+  recipes) now consumes `minecraft:sulfur` instead. Per your explicit note, the recipes themselves
+  stayed — only the item source changed, since sulfur is still a real byproduct of those ores and
+  still a real gunpowder/sulfuric-acid ingredient in this mod's chemistry chain.
+
+No config toggle or migration path was needed for either removal — same reasoning as the dropped
+per-ore world-gen toggle earlier in this Part: no live saves to preserve compatibility for.
 
 ---
 
