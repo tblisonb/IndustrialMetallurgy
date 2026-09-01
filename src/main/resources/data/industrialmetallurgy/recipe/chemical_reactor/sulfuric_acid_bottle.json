@@ -1,7 +1,7 @@
 {
   "type": "industrialmetallurgy:chemical_reactor",
   "input": [
-    "industrialmetallurgy:sulfur",
+    "minecraft:sulfur",
     "minecraft:potion",
     "industrialmetallurgy:lead_ingot"
   ],

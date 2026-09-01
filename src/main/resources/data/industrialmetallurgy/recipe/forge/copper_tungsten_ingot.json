@@ -1,7 +1,7 @@
 {
   "type": "industrialmetallurgy:forge",
   "input": [
-    "industrialmetallurgy:copper_ingot",
+    "minecraft:copper_ingot",
     "industrialmetallurgy:tungsten_ingot"
   ],
   "output": { "id": "industrialmetallurgy:copper_tungsten_ingot" },

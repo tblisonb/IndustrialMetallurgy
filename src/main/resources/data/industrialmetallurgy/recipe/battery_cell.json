@@ -3,7 +3,7 @@
   "ingredients": [
     "industrialmetallurgy:dry_cell",
     "industrialmetallurgy:lead_ingot",
-    "industrialmetallurgy:copper_ingot"
+    "minecraft:copper_ingot"
   ],
   "result": {
     "id": "industrialmetallurgy:battery_cell"

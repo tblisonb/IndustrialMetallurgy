@@ -3,7 +3,7 @@
   "input": [
     "industrialmetallurgy:lead_ingot",
     "industrialmetallurgy:tin_ingot",
-    "industrialmetallurgy:copper_nugget"
+    "minecraft:copper_nugget"
   ],
   "output": { "id": "industrialmetallurgy:solder_ingot" },
   "tier": "steel"

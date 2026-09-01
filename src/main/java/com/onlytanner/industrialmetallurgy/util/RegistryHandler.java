@@ -43,7 +43,6 @@ public class RegistryHandler {
     public static final DeferredItem<Item> COBALT_INGOT = ITEMS.registerSimpleItem("cobalt_ingot");
     public static final DeferredItem<Item> COBALT_STEEL_INGOT = ITEMS.registerSimpleItem("cobalt_steel_ingot");
     public static final DeferredItem<Item> CONSTANTAN_INGOT = ITEMS.registerSimpleItem("constantan_ingot");
-    public static final DeferredItem<Item> COPPER_INGOT = ITEMS.registerSimpleItem("copper_ingot");
     public static final DeferredItem<Item> COPPER_TUNGSTEN_INGOT = ITEMS.registerSimpleItem("copper_tungsten_ingot");
     public static final DeferredItem<Item> ELECTRUM_INGOT = ITEMS.registerSimpleItem("electrum_ingot");
     public static final DeferredItem<Item> INVAR_INGOT = ITEMS.registerSimpleItem("invar_ingot");
@@ -76,7 +75,6 @@ public class RegistryHandler {
     public static final DeferredItem<Item> COBALT_NUGGET = ITEMS.registerSimpleItem("cobalt_nugget");
     public static final DeferredItem<Item> COBALT_STEEL_NUGGET = ITEMS.registerSimpleItem("cobalt_steel_nugget");
     public static final DeferredItem<Item> CONSTANTAN_NUGGET = ITEMS.registerSimpleItem("constantan_nugget");
-    public static final DeferredItem<Item> COPPER_NUGGET = ITEMS.registerSimpleItem("copper_nugget");
     public static final DeferredItem<Item> COPPER_TUNGSTEN_NUGGET = ITEMS.registerSimpleItem("copper_tungsten_nugget");
     public static final DeferredItem<Item> ELECTRUM_NUGGET = ITEMS.registerSimpleItem("electrum_nugget");
     public static final DeferredItem<Item> INVAR_NUGGET = ITEMS.registerSimpleItem("invar_nugget");
@@ -104,7 +102,6 @@ public class RegistryHandler {
     public static final DeferredItem<Item> CRUSHED_CASSITERITE_ORE = ITEMS.registerSimpleItem("crushed_cassiterite_ore");
     public static final DeferredItem<Item> CRUSHED_CHROMITE_ORE = ITEMS.registerSimpleItem("crushed_chromite_ore");
     public static final DeferredItem<Item> CRUSHED_COBALTITE_ORE = ITEMS.registerSimpleItem("crushed_cobaltite_ore");
-    public static final DeferredItem<Item> CRUSHED_CUPRITE_ORE = ITEMS.registerSimpleItem("crushed_cuprite_ore");
     public static final DeferredItem<Item> CRUSHED_GALENA_ORE = ITEMS.registerSimpleItem("crushed_galena_ore");
     public static final DeferredItem<Item> CRUSHED_GARNIERITE_ORE = ITEMS.registerSimpleItem("crushed_garnierite_ore");
     public static final DeferredItem<Item> CRUSHED_GOLD_ORE = ITEMS.registerSimpleItem("crushed_gold_ore");
@@ -120,7 +117,6 @@ public class RegistryHandler {
     public static final DeferredItem<Item> CRUSHED_COAL = ITEMS.registerSimpleItem("crushed_coal");
     public static final DeferredItem<Item> CRUSHED_DIAMOND = ITEMS.registerSimpleItem("crushed_diamond");
     public static final DeferredItem<Item> TUNGSTEN_CARBIDE_DUST = ITEMS.registerSimpleItem("tungsten_carbide_dust");
-    public static final DeferredItem<Item> SULFUR = ITEMS.registerSimpleItem("sulfur");
     public static final DeferredItem<Item> PHOSPHORUS = ITEMS.registerSimpleItem("phosphorus");
     public static final DeferredItem<Item> ARSENIC = ITEMS.registerSimpleItem("arsenic");
     public static final DeferredItem<Item> LEAD_SULFATE = ITEMS.registerSimpleItem("lead_sulfate");
@@ -283,7 +279,6 @@ public class RegistryHandler {
     public static final DeferredBlock<Block> COBALT_BLOCK = BLOCKS.registerBlock("cobalt_block", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> COBALT_STEEL_BLOCK = BLOCKS.registerBlock("cobalt_steel_block", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> CONSTANTAN_BLOCK = BLOCKS.registerBlock("constantan_block", MetalBlock::new, MetalBlock::newProperties);
-    public static final DeferredBlock<Block> COPPER_BLOCK = BLOCKS.registerBlock("copper_block", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> COPPER_TUNSTEN_BLOCK = BLOCKS.registerBlock("copper_tungsten_block", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> ELECTRUM_BLOCK = BLOCKS.registerBlock("electrum_block", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> INVAR_BLOCK = BLOCKS.registerBlock("invar_block", MetalBlock::new, MetalBlock::newProperties);
@@ -311,7 +306,6 @@ public class RegistryHandler {
     public static final DeferredBlock<Block> CASSITERITE_ORE = BLOCKS.registerBlock("cassiterite_ore", Tier1OreBlock::new, Tier1OreBlock::newProperties);
     public static final DeferredBlock<Block> CHROMITE_ORE = BLOCKS.registerBlock("chromite_ore", Tier3OreBlock::new, Tier3OreBlock::newProperties);
     public static final DeferredBlock<Block> COBALTITE_ORE = BLOCKS.registerBlock("cobaltite_ore", Tier3OreBlock::new, Tier3OreBlock::newProperties);
-    public static final DeferredBlock<Block> CUPRITE_ORE = BLOCKS.registerBlock("cuprite_ore", Tier1OreBlock::new, Tier1OreBlock::newProperties);
     public static final DeferredBlock<Block> GALENA_ORE = BLOCKS.registerBlock("galena_ore", Tier2OreBlock::new, Tier2OreBlock::newProperties);
     public static final DeferredBlock<Block> GARNIERITE_ORE = BLOCKS.registerBlock("garnierite_ore", Tier1OreBlock::new, Tier1OreBlock::newProperties);
     public static final DeferredBlock<Block> LEPIDOLITE_ORE = BLOCKS.registerBlock("lepidolite_ore", Tier4OreBlock::new, Tier4OreBlock::newProperties);
@@ -368,7 +362,6 @@ public class RegistryHandler {
     public static final DeferredItem<BlockItem> COBALT_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("cobalt_block", COBALT_BLOCK);
     public static final DeferredItem<BlockItem> COBALT_STEEL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("cobalt_steel_block", COBALT_STEEL_BLOCK);
     public static final DeferredItem<BlockItem> CONSTANTAN_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("constantan_block", CONSTANTAN_BLOCK);
-    public static final DeferredItem<BlockItem> COPPER_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("copper_block", COPPER_BLOCK);
     public static final DeferredItem<BlockItem> COPPER_TUNGSTEN_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("copper_tungsten_block", COPPER_TUNSTEN_BLOCK);
     public static final DeferredItem<BlockItem> ELECTRUM_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("electrum_block", ELECTRUM_BLOCK);
     public static final DeferredItem<BlockItem> INVAR_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("invar_block", INVAR_BLOCK);
@@ -396,7 +389,6 @@ public class RegistryHandler {
     public static final DeferredItem<BlockItem> CASSITERITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("cassiterite_ore", CASSITERITE_ORE);
     public static final DeferredItem<BlockItem> CHROMITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("chromite_ore", CHROMITE_ORE);
     public static final DeferredItem<BlockItem> COBALTITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("cobaltite_ore", COBALTITE_ORE);
-    public static final DeferredItem<BlockItem> CUPRITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("cuprite_ore", CUPRITE_ORE);
     public static final DeferredItem<BlockItem> GALENA_ORE_ITEM = ITEMS.registerSimpleBlockItem("galena_ore", GALENA_ORE);
     public static final DeferredItem<BlockItem> GARNIERITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("garnierite_ore", GARNIERITE_ORE);
     public static final DeferredItem<BlockItem> LEPIDOLITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("lepidolite_ore", LEPIDOLITE_ORE);

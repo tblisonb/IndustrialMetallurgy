@@ -2,7 +2,7 @@
   "type": "industrialmetallurgy:chemical_centrifuge",
   "input": "industrialmetallurgy:crushed_cobaltite_ore",
   "output": [
-    { "id": "industrialmetallurgy:sulfur" },
+    { "id": "minecraft:sulfur" },
     { "id": "industrialmetallurgy:cobalt_nugget" },
     { "id": "industrialmetallurgy:arsenic" }
   ]

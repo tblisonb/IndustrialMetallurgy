@@ -3,7 +3,7 @@
   "input": "minecraft:gunpowder",
   "output": [
     { "id": "industrialmetallurgy:potassium_nitrate" },
-    { "id": "industrialmetallurgy:sulfur" },
+    { "id": "minecraft:sulfur" },
     { "id": "industrialmetallurgy:crushed_coal" }
   ]
 }

@@ -1,5 +1,5 @@
 {
   "type": "industrialmetallurgy:extruder",
-  "input": { "ingredient": "industrialmetallurgy:copper_ingot" },
+  "input": { "ingredient": "minecraft:copper_ingot" },
   "output": { "id": "industrialmetallurgy:magnet_wire", "count": 2 }
 }

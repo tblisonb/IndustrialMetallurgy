@@ -1,7 +1,7 @@
 {
   "type": "industrialmetallurgy:forge",
   "input": [
-    "industrialmetallurgy:copper_ingot",
+    "minecraft:copper_ingot",
     "industrialmetallurgy:tin_nugget",
     "industrialmetallurgy:aluminum_nugget"
   ],

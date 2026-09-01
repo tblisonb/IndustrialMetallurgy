@@ -6,7 +6,7 @@
     "cnc"
   ],
   "key": {
-    "c": "industrialmetallurgy:copper_ingot",
+    "c": "minecraft:copper_ingot",
     "n": "industrialmetallurgy:constantan_ingot",
     "w": "industrialmetallurgy:conducting_element",
     "#": "minecraft:furnace"
