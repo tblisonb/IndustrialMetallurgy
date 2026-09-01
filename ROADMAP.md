@@ -153,33 +153,34 @@ no dedicated art yet.
   `electrolytic_capacitor`s for `memory_wire` — a shape-memory-alloy element is a real way to build
   a self-resetting thermal-protection trip on a circuit board.
 
-### Still open: `heating_element`
-The one item this pass deliberately didn't resolve. Its real job is the Electric Furnace idea in
-Part 3 (nichrome/kanthal/nikrothal → `heating_element` as a wearing component, FE instead of solid
-fuel) — that's a full new recipe-processing machine (reuses vanilla `minecraft:smelting` recipes
-directly, so it's not starting from zero), and was out of scope for this pass. Tracked in Part 3
-below, not silently dropped.
+### `heating_element` — resolved in the Part 3 pass that followed
+Left open at the end of this pass; picked up immediately after as the first item in Part 3 below
+(Electric Furnace). See that section for the writeup.
 
 ---
 
 ## Part 3 — Ideas for giving real jobs to underutilized items
 
 Organized by theme. Each ties back to a specific item above and to the real-world property that
-justified adding that material in the first place. Two of these (Battery Box, and the two dead-end
-recipe edits) are now done — see Part 2 — and are left here with a status note rather than removed,
-since the rest of the section still reads as a single set of ideas.
+justified adding that material in the first place. Three of these (Battery Box and the two
+dead-end recipe edits from Part 2, plus Electric Furnace below) are now done, and are left here
+with a status note rather than removed, since the rest of the section still reads as a single set
+of ideas. What's left below is either a bigger machine (Blast/Arc Furnace, Solar Panel) or depends
+on the steel/nequitum/titanium tool-and-armor lines existing in `26.2` first (Part 1's "still
+open" list), which none of this pass touched.
 
-### Electric Furnace / Induction Kiln — uses `heating_element` — **next up**
-Nichrome, kanthal, and nikrothal are real resistance-heating alloys — that's specifically why
-they exist as three separate alloys rather than one generic "wire." An FE-powered furnace/kiln
-that replaces the Coke Oven's solid fuel with a nichrome (or higher-tier kanthal/nikrothal)
-heating element as a wearing component would finally give those three alloys — and
-`heating_element` itself — their reason to exist, and it's a natural "upgrade path" alongside the
-Coke Oven rather than a replacement for it. Mechanically the cheapest of the remaining ideas to
-build: it can process vanilla `minecraft:smelting` recipes directly (same JSON already ported in
-Part 1 for every ore), so the only new logic is FE-per-tick consumption and a wearing
-`heating_element` slot instead of a fuel slot — no new recipe type needed, same as Battery Box.
-This is the one item Part 2 left unresolved.
+### Electric Furnace — **done**
+Built as a direct follow-on to Part 2 (same session, right after): a 7th FE-family machine,
+same shared-housing crafting pattern as the rest with `heating_element` as its specialty
+ingredient. Mechanically it's the cheapest of these ideas to build, exactly because it processes
+vanilla `minecraft:smelting` recipes directly — `RecipeType.SMELTING` / `SmeltingRecipe.assemble()`
+— rather than a custom recipe type, so every ore's smelting recipe from Part 1 works in it with
+zero new recipe JSON. Real heating elements wear out, so `heating_element` is a slot item that
+depletes over 200 smelts and then consumes itself, rather than a permanent tool like the Crusher's
+burr sets. `heating_element` itself finally got a producing recipe too: `resistance_wire` (already
+made from `nikrothal_ingot`, a nichrome/kanthal alloy) + `refractory_composite` — real heating
+elements are resistance wire wound on an insulating former. Reuses the Coke Oven's front-lit
+texture pair and the Crusher's GUI layout as placeholder art.
 
 ### Battery Box — **done, see Part 2**
 Built as part of Part 2's audit cleanup: a 6th FE-family machine that discharges a battery item
@@ -266,6 +267,6 @@ once, since it's a bigger commitment than the pipe system itself.
    deciding now.
 
 3. **Placeholder art still owed:** `oily_sand`'s item texture (reused from the `oil_sand` block),
-   and Battery Box's whole look (reuses the Thermoelectric Generator's GUI texture and a
-   refractory-bricks/thermoelectric-generator texture mashup for its block model). Neither is
-   final art.
+   Battery Box (Thermoelectric Generator's GUI + a refractory-bricks/thermoelectric-generator
+   texture mashup for the block model), and Electric Furnace (Crusher's GUI + a
+   refractory-bricks/coke-oven texture mashup). None of the three have final art.

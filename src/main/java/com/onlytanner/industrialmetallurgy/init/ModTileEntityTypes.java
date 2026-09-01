@@ -10,6 +10,7 @@ import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier2BlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier3BlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ChemicalCentrifugeBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ChemicalReactorBlockEntity;
+import com.onlytanner.industrialmetallurgy.tileentity.ElectricFurnaceBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier4BlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.SolderingStationBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ThermoelectricGeneratorBlockEntity;
@@ -59,6 +60,9 @@ public class ModTileEntityTypes {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BatteryBoxBlockEntity>> BATTERY_BOX =
             BLOCK_ENTITY_TYPES.register("battery_box", () -> new BlockEntityType<>(BatteryBoxBlockEntity::new, RegistryHandler.BATTERY_BOX.get()));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ElectricFurnaceBlockEntity>> ELECTRIC_FURNACE =
+            BLOCK_ENTITY_TYPES.register("electric_furnace", () -> new BlockEntityType<>(ElectricFurnaceBlockEntity::new, RegistryHandler.ELECTRIC_FURNACE.get()));
 
     public static void init(IEventBus modEventBus) {
         BLOCK_ENTITY_TYPES.register(modEventBus);

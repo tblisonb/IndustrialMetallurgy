@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sxs",
+    "gmg",
+    "pbp"
+  ],
+  "key": {
+    "s": "industrialmetallurgy:conducting_element",
+    "x": "industrialmetallurgy:heating_element",
+    "p": "industrialmetallurgy:steel_plate",
+    "g": "industrialmetallurgy:gear",
+    "m": "industrialmetallurgy:electric_motor",
+    "b": "industrialmetallurgy:battery_cell"
+  },
+  "result": { "id": "industrialmetallurgy:electric_furnace" }
+}

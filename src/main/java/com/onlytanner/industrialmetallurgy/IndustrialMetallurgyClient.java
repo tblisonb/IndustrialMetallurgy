@@ -3,6 +3,7 @@ package com.onlytanner.industrialmetallurgy;
 import com.onlytanner.industrialmetallurgy.client.gui.AdvancedForgeScreen;
 import com.onlytanner.industrialmetallurgy.client.gui.BasicForgeScreen;
 import com.onlytanner.industrialmetallurgy.client.gui.BatteryBoxScreen;
+import com.onlytanner.industrialmetallurgy.client.gui.ElectricFurnaceScreen;
 import com.onlytanner.industrialmetallurgy.client.gui.CokeOvenScreen;
 import com.onlytanner.industrialmetallurgy.client.gui.CrusherScreen;
 import com.onlytanner.industrialmetallurgy.client.gui.ChemicalCentrifugeScreen;
@@ -37,6 +38,7 @@ public class IndustrialMetallurgyClient {
         event.register(ModContainerTypes.CHEMICAL_CENTRIFUGE.get(), ChemicalCentrifugeScreen::new);
         event.register(ModContainerTypes.CHEMICAL_REACTOR.get(), ChemicalReactorScreen::new);
         event.register(ModContainerTypes.BATTERY_BOX.get(), BatteryBoxScreen::new);
+        event.register(ModContainerTypes.ELECTRIC_FURNACE.get(), ElectricFurnaceScreen::new);
     }
 
 }
