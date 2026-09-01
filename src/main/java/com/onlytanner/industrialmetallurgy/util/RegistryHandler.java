@@ -11,6 +11,7 @@ import com.onlytanner.industrialmetallurgy.tileentity.ArcFurnaceBlockEntity;
 import com.onlytanner.industrialmetallurgy.items.BatteryPackItem;
 import com.onlytanner.industrialmetallurgy.items.ChainsawItem;
 import com.onlytanner.industrialmetallurgy.items.CultivatorItem;
+import com.onlytanner.industrialmetallurgy.items.GuideBookItem;
 import com.onlytanner.industrialmetallurgy.items.PowerDrillItem;
 import com.onlytanner.industrialmetallurgy.items.ProspectorItem;
 import net.minecraft.world.item.AxeItem;
@@ -274,6 +275,11 @@ public class RegistryHandler {
     // raw lepidolite) to calibrate the scan, right-click to sweep. Real cordless-scanner-style
     // cooldown between sweeps rather than spammable every tick.
     public static final DeferredItem<ProspectorItem> PROSPECTOR = ITEMS.registerItem("prospector", props -> new ProspectorItem(props.stacksTo(1).useCooldown(1.5F)), UnaryOperator.identity());
+
+    // Guide book -- opens a static, vanilla-styled book UI (GuideBookContent, client package)
+    // explaining the mod. Content is authored in GUIDE.md and generated into GuideBookData.java;
+    // see tools/guide_book/gen_guide_data.py.
+    public static final DeferredItem<GuideBookItem> GUIDE_BOOK = ITEMS.registerItem("guide_book", props -> new GuideBookItem(props.stacksTo(1)), UnaryOperator.identity());
 
     // Blocks
     // Metal Blocks

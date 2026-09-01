@@ -565,6 +565,52 @@ with a bright cyan "active scan" lens, via the same exact-RGBA-remap technique t
 
 ---
 
+## Part 11 — In-game guide book, and `GUIDE.md` as its source of truth — **DONE**
+
+You asked for a companion guide to the mod, open on whether there was a standard way to do this.
+The real standard is Patchouli — checked its actual release feed rather than assuming, and its
+most recent build (2026-07-10) only ships NeoForge support through MC 26.1.x, not 26.2, so it's
+not usable here yet. Built a custom guide book instead, on your explicit go-ahead.
+
+### One virtual book, built entirely from vanilla parts
+`BookViewScreen` — the same screen a written book opens — turns out to take its content as a
+plain `List<Component>` via `BookViewScreen.BookAccess`, completely decoupled from any actual
+`ItemStack`'s book data. That meant the whole guide could be one large virtual book (57 pages:
+1 cover, 7 category index pages, 49 entry pages) built straight from static content, reusing
+vanilla's book texture, page-turn buttons, and click-to-jump page links
+(`ClickEvent.ChangePage`) for free — no new art, no new screen-rendering code at all.
+`GuideBookItem` (craft: `minecraft:book` + `minecraft:iron_nugget`, so it needs nothing from
+this mod to obtain) opens it the same way vanilla's own `WrittenBookItem` opens a book, but
+skips the sign/edit machinery entirely since the content is static Java data, not per-item NBT.
+
+### `GUIDE.md` is the source; the Java is generated from it
+Per your ask, the full writeup is also a standalone, human-readable Markdown document
+(`GUIDE.md`) rather than existing only as in-game text. It's the actual source of truth, not a
+duplicate: `##`/`###` headings become the book's categories/entries, and a hand-placed
+`<!-- page -->` marker is where you want an in-book page break. `tools/guide_book/
+gen_guide_data.py` parses that structure and generates `GuideBookData.java` (the raw
+category/entry/page-text data) — the page-layout logic (table of contents, page-link wiring)
+lives separately in `GuideBookContent.java`, hand-written once since it doesn't change when the
+content does. Editing the guide going forward means editing `GUIDE.md` and re-running the
+script, not hand-touching generated Java.
+
+### The real constraint: vanilla's own per-page limit
+`BookViewScreen` renders at most 14 lines per page and silently drops anything past that — no
+error, just truncated text — which lines up with the real vanilla written-book page cap of
+roughly 256 characters. Every page in `GUIDE.md` was written and then verified (via a scratch
+simulation of the actual page-assembly logic, including the title header on an entry's first
+page and the "back to contents" link on its last) to stay under that, with real margin rather
+than right up against it, since this can't be visually confirmed without a client.
+
+### What's still unverified
+Compiling, building, and a dedicated-server run all confirm the recipe/data load cleanly (1857
+recipes, zero errors). What none of that confirms is how the book actually *looks* — real font
+wrapping, whether the bold/italic/code inline styling (`MarkdownText`, a small hand-written
+`**bold**`/`*italic*`/`` `code` `` parser, not a general Markdown engine) reads well, and whether
+57 pages feels like a good length to page through. That needs real client eyes.
+
+---
+
 ## Part 4 — Basic in-mod logistics (per your last message)
 
 You described wanting something minimal rather than depending on another mod: a machine-side
