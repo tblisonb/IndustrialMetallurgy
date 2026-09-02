@@ -20,7 +20,11 @@ public class AdvancedForgeScreen extends AbstractContainerScreen<AdvancedForgeCo
     @Override
     protected void init() {
         super.init();
+        // Default label positions collide with the energy bar along the top-left of this layout
+        // (same class of issue as CrusherScreen); center the title and nudge the inventory label
+        // clear of it.
         this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
+        this.inventoryLabelX += 20;
     }
 
     @Override
