@@ -745,6 +745,69 @@ looking at the screen.
 
 ---
 
+## Part 14 — Live playtesting fixes — **DONE**
+
+Findings from actually playing the game, in the order they came in.
+
+**Magnet Wire duplicated Copper Plate's recipe.** Both used `minecraft:copper_ingot` directly.
+Magnet Wire now takes `copper_plate` instead, giving the plate an actual downstream use rather
+than two parallel dead-end recipes off the same ingot.
+
+**Ore blocks (and every other custom block using `requiresCorrectToolForDrops()`) had no pickaxe
+tags at all -- so no pickaxe, of any tier, could break them for drops.** This is why diamond and
+Tungsten-Rhenium picks "didn't work": with zero `minecraft:mineable/pickaxe` tag membership, no
+tool ever counted as "correct," full stop, regardless of tier. This was silently true for every
+ore, every metal storage block, every forge core, and every machine block in the mod -- none of it
+could ever be broken for real drops, "you can't even get your Crusher back" territory. The
+1.16.4 branch's `harvestLevel(1..4)` calls on the four ore tier classes gave the exact intended
+mapping, ported to this version's tag-based equivalent: `needs_stone_tool` (Tier 1: bauxite,
+cassiterite, garnierite, sphalerite), `needs_iron_tool` (Tier 2: argentite, galena, pyrolusite,
+rutile), `needs_diamond_tool` (Tier 3: chromite, cobaltite), `needs_netherite_tool` (Tier 4:
+lepidolite, scheelite, rheniite) -- matching this mod's own tool tiers (Steel/Cobalt Steel =
+iron-equivalent, Stellite/Tungsten Steel = diamond-equivalent, Tungsten-Rhenium =
+netherite-equivalent), so a diamond pickaxe correctly still can't touch Tier 4 ores, same as
+ancient debris. Every other affected block (metal blocks, forge cores, refractory bricks, all 15
+machine blocks) got `mineable/pickaxe` with no tier restriction -- any pickaxe -- since assigning
+individual minimum tiers to 29+ different metal storage blocks is a real design pass of its own,
+not a one-line bug fix; flagged as a follow-up below if finer per-metal gating is ever wanted.
+
+**Lepidolite already does this correctly** -- checked the loot table, it drops "Lepidolite
+Crystal" (silk touch gives the block, fortune applies to the crystal) rather than the block
+itself. No change needed; this turned out to be the reference case for the next item, not a gap.
+
+**JEI's machine categories now use the real GUI as their background**, cropped to just the
+slot/progress area (not the full 176x166 player-inventory-sized panel) rather than a generic slot
+grid, with every input/output positioned at its exact real in-game coordinate (pulled straight
+from each machine's own Container class). Confirmed feasible and worth doing -- this was a real
+gap from the plain-grid layouts shipped in Part 13, not a JEI limitation.
+
+**Just Enough Resources (JER)** -- confirmed available for NeoForge 26.2 via Modrinth. This is a
+separate, standalone, client-only mod (not something this mod depends on or needs code changes
+for) that reads world-gen registries directly to show ore Y-level/dimension distribution in JEI.
+Install it alongside JEI and it should work without any changes here, assuming this mod's custom
+`Feature`/placement setup (`OreFeatureHandler`) is structured closely enough to vanilla's for JER
+to introspect -- untested, since that's exactly the kind of thing that needs a real client.
+
+**Ores dropping a "Raw X" intermediate (matching vanilla's raw_iron/raw_gold/raw_copper) --
+confirmed as the direction to go, not yet implemented.** You picked the version that replaces the
+ore block drop with a new Raw X item (silk touch still gets the block), rewiring the Crusher's
+recipes to take Raw X instead of the ore block -- keeping the whole Crusher-\>Forge chain and its
+byproducts intact, just reskinning the first step. This is a real content addition, not yet
+started: 12 new "Raw X" items (every ore except Lepidolite, which already skips the Crusher
+entirely and doesn't need one), item registration + textures/models (probably one more
+procedural-recolor pass, matching Part 12's technique), 12 updated ore loot tables, and rewiring
+the 12 Crusher recipes that currently key off an ore block
+(`crushed_argentite_ore`/`crushed_bauxite_ore`/etc.) to key off the new Raw X item instead. Next
+up.
+
+### What's still unverified
+Same standing caveat: the magnet wire and tool-tag fixes are confirmed correct at the data level
+(recipe JSON, tag JSON, matching the 1.16.4 harvest-level source of truth) and the server loads
+everything with zero errors, but none of this has been confirmed with real client eyes yet --
+that's exactly what prompted this whole Part, so the next playtest pass is the real verification.
+
+---
+
 ## Part 4 — Basic in-mod logistics (per your last message)
 
 You described wanting something minimal rather than depending on another mod: a machine-side
