@@ -355,7 +355,8 @@ All 20 new items (15 implements + 2 battery packs + 3 tool bodies) reuse vanilla
 ingot shapes recolored per material, same approach as Parts 3 and 6. The 15 implements in
 particular all reuse the same nugget silhouette regardless of type (bit vs. chain vs. blade look
 identical within a material tier) — the roughest placeholder in the mod right now, flagged for
-whenever real art happens.
+whenever real art happens. **Resolved, see Part 16** — all 3 tool bodies and all 15 implements
+got real, type-specific shapes.
 
 ---
 
@@ -877,6 +878,62 @@ Solar Panel, Conduit, and I/O Port each added one new craft). None of the actual
 (does the Coupling slot visually sit right in the GUI, does the Solar Panel's status message read
 correctly, does energy actually flow through a real multi-block Conduit run in practice) has been
 confirmed with a real client yet.
+
+---
+
+## Part 16 — Power tool art pass, and dual charge/wear bars — **DONE**
+
+Two follow-ups from live playtesting: the power tools didn't show battery charge or implement
+wear on the item icon at all, and their art was still the roughest placeholder left in the mod
+(see Part 7 -- all 3 tool bodies and all 15 implements reused a single recolored vanilla
+silhouette, with the 15 implements literally pixel-identical to each other within a material
+tier regardless of type).
+
+**Dual durability bars.** Vanilla only gives an item one built-in bar, but a power tool has two
+independent things worth showing: the socketed battery's charge and the socketed implement's
+wear. Battery charge now renders through that one built-in bar (`PowerToolItem#isBarVisible` /
+`getBarWidth` / `getBarColor`), reusing `BatteryPackItem`'s own fraction/color formula so a tool
+and a loose battery pack read as the same blue "charge" indicator. Implement wear gets a second
+bar 3px above it, via a new `IItemDecorator` (`PowerToolWearDecorator`, registered through
+`RegisterItemDecorationsEvent` in `IndustrialMetallurgyClient`) -- the only way to draw a second
+bar, since vanilla has no second slot. Its background/foreground geometry and red-to-green damage
+color formula were reverse-engineered from vanilla's own bar rendering (bytecode disassembly of
+`GuiGraphicsExtractor.itemBar`) so the two bars read as a matched pair rather than two different
+styles stacked together. Applies to all 4 power tools automatically through the shared
+`PowerToolItem` base class; implements with no durability (Prospector samples, Tungsten-Rhenium
+bits) simply show no second bar, same as vanilla hides its own bar for non-damageable items.
+
+**Power tool bodies redrawn from scratch.** Power Drill, Chainsaw, and Cultivator previously all
+reused the exact same pickaxe-derived silhouette (dark handle, grey head) with almost nothing
+distinguishing one tool from another at a glance. Replaced with three purpose-built 16x16 icons,
+hand-drawn pixel-by-pixel (not recolors -- there's no real-world texture to derive a power drill
+or chainsaw from the way the ores/metals were done) but keeping the same diagonal
+handle-to-business-end convention vanilla tools use, with exact geometry cross-checked against
+vanilla's own `iron_pickaxe`/`iron_axe`/`iron_hoe`/`spyglass` textures (pulled from the client
+jar) for proportion and outline weight:
+- **Power Drill** -- a chunky motor housing with a twisted auger bit and chuck at the tip, a blue
+  accent window on the body (ties into the same blue used for charge/battery elsewhere), and a
+  black pistol-grip handle with a trigger notch.
+- **Chainsaw** -- a long guide bar with alternating tooth notches along its edge, a distinct boxy
+  engine housing (not a smooth taper, so it doesn't read as a sword hilt) with an orange accent
+  panel, and a black grip.
+- **Cultivator** -- breaks from the single-diagonal-point silhouette the other tools share: three
+  splayed claw tines fanning from a collar at the top, on a wood-toned shaft (tying it visually to
+  a garden tool rather than a power tool), consistent with its job as a hoe replacement.
+
+**All 15 implements (drill bits, chains, cultivator blades) redrawn.** These were the literal
+worst offender -- same blob shape regardless of type, only the per-material tint differed. Each
+of the 3 implement types now has its own real silhouette (twist-bit-with-shank for drill bits, a
+toothed chain segment for chains, a wide wedge blade with a tang for cultivator blades), and all
+15 still use the exact same per-material 4-shade palettes already sampled from each tier's own
+ingot texture (Steel/Cobalt Steel/Stellite/Tungsten Steel/Tungsten-Rhenium), so material identity
+across the mod stays consistent -- only the shape changed, not the color language.
+
+### What's still unverified
+Same standing caveat as every other Part this session: compiles clean, builds clean. This Part is
+pure client-side rendering (item textures, the wear-bar decorator) with no server-side logic
+changes, so there's nothing for the dedicated server to meaningfully verify beyond "still loads
+clean" -- the actual visuals haven't been confirmed with a real client yet.
 
 ---
 
