@@ -713,19 +713,35 @@ exactly what JEI's own `VanillaPlugin` does internally: filter that map by `Reci
 the results to `IRecipeRegistration.addRecipes`. Confirmed via decompiling `VanillaPlugin` itself
 that this is genuinely how JEI, including its own bundled categories, gets recipe data now.
 
+### Follow-up: the categories existed but every one was empty
+You confirmed this directly: vanilla recipes (crafting, furnace) showed up in JEI fine, but none
+of this mod's own machine recipes did -- e.g. no Crusher recipe for crushed ores at all. Tracked
+down by adding a temporary diagnostic (dumping `Internal.getClientSyncedRecipes()`'s contents and
+size) and a temporary `--quickPlaySingleplayer` launch arg so a headless run could actually reach
+a loaded world, not just the main menu (`registerRecipes` doesn't run until then, since it needs
+that synced map). The finding: the synced `RecipeMap` had 1768 entries where the server had 1857
+-- a 89-recipe gap that lined up exactly with this mod's total custom-recipe count, and a
+class-name scan of the synced map's contents confirmed **zero** of our recipes were in it at all.
+
+The cause: this MC version's client recipe sync isn't automatic for custom recipe types anymore --
+`OnDatapackSyncEvent#sendRecipes(RecipeType<?>...)` is an explicit per-mod opt-in NeoForge added to
+restore what vanilla's own stripped-down sync no longer carries. Nothing in this mod ever called
+it, so all 7 custom recipe types were fully functional in-game but simply never reached the client
+at all -- not a JEI-specific problem, and it would have equally broken a future in-mod recipe book.
+Fixed with one new class, `util/RecipeSyncHandler`, subscribing to that event and listing all 7
+types. Confirmed via the same diagnostic re-run: synced recipe count went from 1768 to the full
+1857, Crusher and Forge (previously 0 each) came back at 17 and 31.
+
 ### What's actually been verified vs. still unverified
 This is the first point in the whole 26.2 rewrite where a real client was ever launched (headless,
-via `xvfb-run`, since this environment still has no display) -- `runClient` ran for 2 minutes with
-zero errors or warnings referencing this mod or JEI, loaded every texture atlas (including JEI's
-own GUI atlas) with zero missing-texture warnings, and reached the main menu cleanly. That's real
-signal, not just a guess: any block/item model referencing a texture that couldn't resolve, or any
-exception thrown during our `IModPlugin`'s `registerCategories`/`registerRecipeCatalysts` calls
-(which run at this same startup stage), would have shown up in that log. What it does *not*
-confirm: `registerRecipes` only runs after joining a world (it needs the synced `RecipeMap`, which
-doesn't exist before then) -- so whether each of the 7 categories' recipes actually populate and
-render correctly, whether the slot-grid layouts look reasonable, and whether the Arc Furnace GUI
-fix actually clears the label, still need a real person to launch the game, join a world, and
-check.
+via `xvfb-run`, since this environment still has no display), and -- thanks to the
+`--quickPlaySingleplayer` trick above -- the first time one actually reached a loaded world rather
+than just the main menu. That's how the `OnDatapackSyncEvent` bug above was caught and confirmed
+fixed with real data (recipe counts before/after), not a guess. What's still unverified: the
+Crusher/Forge recipe *counts* are now confirmed correct, but the JEI category *pages themselves*
+-- whether the slot-grid layouts look reasonable, whether the Arc Furnace GUI fix actually clears
+the label, whether the recipes are easy to actually find/browse -- still need a real person
+looking at the screen.
 
 ---
 
