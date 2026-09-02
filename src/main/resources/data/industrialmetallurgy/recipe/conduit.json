@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "c c",
+    " g ",
+    "c c"
+  ],
+  "key": {
+    "c": "minecraft:copper_ingot",
+    "g": "industrialmetallurgy:gear"
+  },
+  "result": { "id": "industrialmetallurgy:conduit", "count": 4 }
+}

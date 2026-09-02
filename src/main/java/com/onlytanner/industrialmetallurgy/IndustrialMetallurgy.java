@@ -78,6 +78,10 @@ public class IndustrialMetallurgy {
                 (blockEntity, side) -> blockEntity.getEnergyHandler());
         event.registerBlockEntity(Capabilities.Energy.BLOCK, ModTileEntityTypes.ELECTRIC_FURNACE.get(),
                 (blockEntity, side) -> blockEntity.getEnergyHandler());
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, ModTileEntityTypes.SOLAR_PANEL.get(),
+                (blockEntity, side) -> blockEntity.getEnergyHandler());
+        event.registerBlockEntity(Capabilities.Energy.BLOCK, ModTileEntityTypes.IO_PORT.get(),
+                (blockEntity, side) -> blockEntity.getEnergyDelegate());
     }
 
 }

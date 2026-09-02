@@ -32,14 +32,18 @@ public class ThermoelectricGeneratorBlockEntity extends BlockEntity implements M
 
     public static final int FUEL_ID = 0;
     public static final int NUM_EXTRA_FUEL_SLOTS = 4;
+    public static final int COUPLING_ID = 5;
     public static final int MAX_ENERGY = 500000;
     public static final int MAX_ENERGY_PROVIDED = 80;
     public static final int ENERGY_GENERATED_PER_TICK = 80;
+    // Real thermocouples pair Constantan with Copper for the Seebeck effect -- an installed
+    // Thermoelectric Coupling isn't consumed, it just makes every burn tick more efficient.
+    public static final double COUPLING_BOOST = 1.25;
 
     private Component customName;
     public int burnTimeRemaining;
     public int currentMaxBurnTime;
-    private final ModItemHandler inventory = new ModItemHandler(5);
+    private final ModItemHandler inventory = new ModItemHandler(6);
     private final SimpleEnergyHandler energyHandler = new SimpleEnergyHandler(MAX_ENERGY) {
         @Override
         protected void onEnergyChanged(int previousAmount) {
@@ -69,13 +73,14 @@ public class ThermoelectricGeneratorBlockEntity extends BlockEntity implements M
             }
 
             int energy = this.energyHandler.getAmountAsInt();
+            int generatedPerTick = hasCoupling() ? (int) (ENERGY_GENERATED_PER_TICK * COUPLING_BOOST) : ENERGY_GENERATED_PER_TICK;
             if (hasFuel() && burnTimeRemaining == 0 && energy < MAX_ENERGY) {
                 consumeFuel(serverLevel);
                 this.level.setBlockAndUpdate(this.getBlockPos(), this.getBlockState().setValue(ThermoelectricGeneratorBlock.LIT, true));
                 dirty = true;
-            } else if (burnTimeRemaining > 0 && energy < (MAX_ENERGY - ENERGY_GENERATED_PER_TICK)) {
+            } else if (burnTimeRemaining > 0 && energy < (MAX_ENERGY - generatedPerTick)) {
                 this.burnTimeRemaining--;
-                this.energyHandler.set(energy + ENERGY_GENERATED_PER_TICK);
+                this.energyHandler.set(energy + generatedPerTick);
             } else if (burnTimeRemaining > 0 && energy == MAX_ENERGY) {
                 this.burnTimeRemaining--;
             } else {
@@ -121,6 +126,10 @@ public class ThermoelectricGeneratorBlockEntity extends BlockEntity implements M
 
     public boolean hasFuel() {
         return this.inventory.getStackInSlot(FUEL_ID).getCount() > 0;
+    }
+
+    public boolean hasCoupling() {
+        return this.inventory.getStackInSlot(COUPLING_ID).getItem().equals(RegistryHandler.THERMOELECTRIC_COUPLING.get());
     }
 
     public void consumeFuel(ServerLevel level) {

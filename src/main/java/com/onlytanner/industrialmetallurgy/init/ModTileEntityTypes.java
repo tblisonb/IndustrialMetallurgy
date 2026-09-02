@@ -13,6 +13,9 @@ import com.onlytanner.industrialmetallurgy.tileentity.ChemicalCentrifugeBlockEnt
 import com.onlytanner.industrialmetallurgy.tileentity.ChemicalReactorBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ElectricFurnaceBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ForgeTier4BlockEntity;
+import com.onlytanner.industrialmetallurgy.tileentity.ConduitBlockEntity;
+import com.onlytanner.industrialmetallurgy.tileentity.IOPortBlockEntity;
+import com.onlytanner.industrialmetallurgy.tileentity.SolarPanelBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.SolderingStationBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ThermoelectricGeneratorBlockEntity;
 import com.onlytanner.industrialmetallurgy.util.RegistryHandler;
@@ -67,6 +70,15 @@ public class ModTileEntityTypes {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ElectricFurnaceBlockEntity>> ELECTRIC_FURNACE =
             BLOCK_ENTITY_TYPES.register("electric_furnace", () -> new BlockEntityType<>(ElectricFurnaceBlockEntity::new, RegistryHandler.ELECTRIC_FURNACE.get()));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<SolarPanelBlockEntity>> SOLAR_PANEL =
+            BLOCK_ENTITY_TYPES.register("solar_panel", () -> new BlockEntityType<>(SolarPanelBlockEntity::new, RegistryHandler.SOLAR_PANEL.get()));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<IOPortBlockEntity>> IO_PORT =
+            BLOCK_ENTITY_TYPES.register("io_port", () -> new BlockEntityType<>(IOPortBlockEntity::new, RegistryHandler.IO_PORT.get()));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ConduitBlockEntity>> CONDUIT =
+            BLOCK_ENTITY_TYPES.register("conduit", () -> new BlockEntityType<>(ConduitBlockEntity::new, RegistryHandler.CONDUIT.get()));
 
     public static void init(IEventBus modEventBus) {
         BLOCK_ENTITY_TYPES.register(modEventBus);

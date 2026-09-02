@@ -54,7 +54,10 @@ its source text lives in `GUIDE.md`. Every item and block now has a real texture
 held-item icon (`ROADMAP.md` Parts 12-13 recovered ~160 assets that never made the jump from the
 1.16.4 branch, plus a handful of genuinely new ones). JEI integration is reconnected -- all 7
 custom machine recipe types are browsable, gated appropriately, tier-labeled where relevant (see
-`ROADMAP.md` Part 13). See `ROADMAP.md` for the full history and current design notes.
+`ROADMAP.md` Part 13). A Solar Panel and a Thermoelectric Coupling upgrade round out the FE
+generation side, and a minimal energy-only logistics system (I/O Port + Conduit) can move FE
+between machines without hand-wiring every block face-to-face (see `ROADMAP.md` Part 15). See
+`ROADMAP.md` for the full history and current design notes.
 
 **Not yet ported:**
 - **Worn-armor textures** — the 4 armor materials (Steel/Titanium/Stellite/Tungsten-Rhenium) have

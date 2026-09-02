@@ -33,6 +33,7 @@ public class ThermoelectricGeneratorContainer extends AbstractContainerMenu {
         this.addSlot(new FuelSlot(inventory, 2, 8, 26));
         this.addSlot(new FuelSlot(inventory, 3, 8, 44));
         this.addSlot(new FuelSlot(inventory, 4, 8, 62));
+        this.addSlot(new CouplingSlot(inventory, ThermoelectricGeneratorBlockEntity.COUPLING_ID, 132, 35));
 
         // Player Inventory
         for (int i = 0; i < 3; i++) {
@@ -119,6 +120,24 @@ public class ThermoelectricGeneratorContainer extends AbstractContainerMenu {
         public boolean mayPlace(ItemStack stack) {
             return (blockEntity.getLevel() != null && blockEntity.getLevel().fuelValues().burnDuration(stack) > 0)
                     || stack.getItem().equals(RegistryHandler.COAL_COKE.get());
+        }
+
+    }
+
+    private static class CouplingSlot extends SlotItemHandler {
+
+        public CouplingSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
+            super(itemHandler, index, xPosition, yPosition);
+        }
+
+        @Override
+        public boolean mayPlace(ItemStack stack) {
+            return stack.getItem().equals(RegistryHandler.THERMOELECTRIC_COUPLING.get());
+        }
+
+        @Override
+        public int getMaxStackSize() {
+            return 1;
         }
 
     }

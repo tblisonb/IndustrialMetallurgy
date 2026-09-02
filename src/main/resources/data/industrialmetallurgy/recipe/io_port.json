@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "minecraft:copper_ingot",
+    "minecraft:copper_ingot",
+    "minecraft:redstone",
+    "industrialmetallurgy:gear"
+  ],
+  "result": {
+    "id": "industrialmetallurgy:io_port"
+  }
+}

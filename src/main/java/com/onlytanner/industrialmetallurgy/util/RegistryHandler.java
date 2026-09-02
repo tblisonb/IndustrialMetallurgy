@@ -179,6 +179,10 @@ public class RegistryHandler {
     public static final DeferredItem<Item> HEAT_SINK = ITEMS.registerSimpleItem("heat_sink");
     public static final DeferredItem<Item> HEATING_ELEMENT = ITEMS.registerSimpleItem("heating_element");
     public static final DeferredItem<Item> INDUCTION_CORE = ITEMS.registerSimpleItem("induction_core");
+    // Real thermocouples pair Constantan with Copper for the Seebeck effect -- this is that pair,
+    // as an installed (not consumed) upgrade for the Thermoelectric Generator. See
+    // ThermoelectricGeneratorBlockEntity#hasCoupling.
+    public static final DeferredItem<Item> THERMOELECTRIC_COUPLING = ITEMS.registerSimpleItem("thermoelectric_coupling");
     public static final DeferredItem<Item> MAGNET_WIRE = ITEMS.registerSimpleItem("magnet_wire");
     public static final DeferredItem<Item> MEMORY_WIRE = ITEMS.registerSimpleItem("memory_wire");
     public static final DeferredItem<Item> RESISTANCE_WIRE = ITEMS.registerSimpleItem("resistance_wire");
@@ -379,6 +383,14 @@ public class RegistryHandler {
     public static final DeferredBlock<Block> CHEMICAL_REACTOR = BLOCKS.registerBlock("chemical_reactor", ChemicalReactorBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
     public static final DeferredBlock<Block> BATTERY_BOX = BLOCKS.registerBlock("battery_box", BatteryBoxBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
     public static final DeferredBlock<Block> ELECTRIC_FURNACE = BLOCKS.registerBlock("electric_furnace", ElectricFurnaceBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
+    // Solar Panel -- passive FE generator, no fuel/recipe, see SolarPanelBlockEntity.
+    public static final DeferredBlock<Block> SOLAR_PANEL = BLOCKS.registerBlock("solar_panel", SolarPanelBlock::new, SolarPanelBlock::newProperties);
+    // Minimal in-mod logistics (Part 4/ROADMAP): an I/O Port exposes a neighboring machine's
+    // energy capability with an Input/Output/Both filter; a Conduit relays energy between
+    // whatever I/O Ports or raw machines sit at the ends of a connected run of Conduits. See
+    // ConduitBlockEntity/IOPortBlockEntity.
+    public static final DeferredBlock<Block> IO_PORT = BLOCKS.registerBlock("io_port", IOPortBlock::new, IOPortBlock::newProperties);
+    public static final DeferredBlock<Block> CONDUIT = BLOCKS.registerBlock("conduit", ConduitBlock::new, ConduitBlock::newProperties);
 
     // Block Items
     // Metal Blocks
@@ -448,6 +460,9 @@ public class RegistryHandler {
     public static final DeferredItem<BlockItem> CHEMICAL_REACTOR_ITEM = ITEMS.registerSimpleBlockItem("chemical_reactor", CHEMICAL_REACTOR);
     public static final DeferredItem<BlockItem> BATTERY_BOX_ITEM = ITEMS.registerSimpleBlockItem("battery_box", BATTERY_BOX);
     public static final DeferredItem<BlockItem> ELECTRIC_FURNACE_ITEM = ITEMS.registerSimpleBlockItem("electric_furnace", ELECTRIC_FURNACE);
+    public static final DeferredItem<BlockItem> SOLAR_PANEL_ITEM = ITEMS.registerSimpleBlockItem("solar_panel", SOLAR_PANEL);
+    public static final DeferredItem<BlockItem> IO_PORT_ITEM = ITEMS.registerSimpleBlockItem("io_port", IO_PORT);
+    public static final DeferredItem<BlockItem> CONDUIT_ITEM = ITEMS.registerSimpleBlockItem("conduit", CONDUIT);
 
     public static void init(IEventBus modEventBus) {
         ITEMS.register(modEventBus);

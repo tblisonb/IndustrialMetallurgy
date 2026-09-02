@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ggg",
+    "sss",
+    "mmm"
+  ],
+  "key": {
+    "g": "minecraft:glass",
+    "s": "industrialmetallurgy:silicon_plate",
+    "m": "industrialmetallurgy:magnet_wire"
+  },
+  "result": { "id": "industrialmetallurgy:solar_panel" }
+}

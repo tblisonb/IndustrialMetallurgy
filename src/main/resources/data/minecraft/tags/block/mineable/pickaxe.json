@@ -61,6 +61,9 @@
     "industrialmetallurgy:chemical_centrifuge",
     "industrialmetallurgy:chemical_reactor",
     "industrialmetallurgy:battery_box",
-    "industrialmetallurgy:electric_furnace"
+    "industrialmetallurgy:electric_furnace",
+    "industrialmetallurgy:solar_panel",
+    "industrialmetallurgy:io_port",
+    "industrialmetallurgy:conduit"
   ]
 }

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    "industrialmetallurgy:constantan_ingot",
+    "minecraft:copper_ingot",
+    "industrialmetallurgy:magnet_wire"
+  ],
+  "result": {
+    "id": "industrialmetallurgy:thermoelectric_coupling"
+  }
+}

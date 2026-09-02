@@ -163,11 +163,12 @@ Left open at the end of this pass; picked up immediately after as the first item
 ## Part 3 — Ideas for giving real jobs to underutilized items
 
 Organized by theme. Each ties back to a specific item above and to the real-world property that
-justified adding that material in the first place. Seven of these (Battery Box and the two
-dead-end recipe edits from Part 2, Electric Furnace, the tool/armor tier, powered tools, and the
-Arc Furnace tier) are now done, and are left here with a status note rather than removed, since
-the rest of the section still reads as a single set of ideas. What's left below (Solar Panel,
-powered armor) is its own bigger scope of work, not blocked on anything from this pass.
+justified adding that material in the first place. All but one of these (Battery Box and the two
+dead-end recipe edits from Part 2, Electric Furnace, the tool/armor tier, powered tools, the Arc
+Furnace tier, and — as of Part 15 — the Solar Panel and Thermoelectric upgrade) are now done, and
+are left here with a status note rather than removed, since the rest of the section still reads
+as a single set of ideas. What's left (powered armor) is its own bigger scope of work, not
+blocked on anything from this pass.
 
 ### Electric Furnace — **done**
 Built as a direct follow-on to Part 2 (same session, right after): a 7th FE-family machine,
@@ -195,17 +196,17 @@ specifically.
 
 ### Rechargeable battery-powered tools — **done, see Part 7**
 
-### Solar panel — uses `silicon_plate`
+### Solar panel — **done, see Part 15**
 Real photovoltaic cells are silicon. You already mine toward silicon (lepidolite → silicon →
-silicon_plate for integrated circuits) — a solar panel using silicon_plate + copper/silver wire
-+ glass is a legitimate real-world use, not just an IC2 reference.
+silicon_plate for integrated circuits) — a solar panel using silicon_plate + copper wire + glass
+is a legitimate real-world use, not just an IC2 reference.
 
-### Thermoelectric upgrade — uses `constantan`
+### Thermoelectric upgrade — **done, see Part 15**
 Real thermocouples and thermoelectric generators pair constantan with copper (the Seebeck
 effect) — that's specifically why constantan exists as an alloy rather than being folded into
 something else, and it's now literally what the Thermoelectric Generator's own crafting recipe
-uses (Part 1 §1). An efficiency upgrade/component built the same way would extend that loop
-further.
+uses (Part 1 §1). Built as the Thermoelectric Coupling: an installed (not consumed) efficiency
+upgrade for that same machine.
 
 ### Powered tools — **done, see Part 7**
 
@@ -812,26 +813,70 @@ that's exactly what prompted this whole Part, so the next playtest pass is the r
 
 ---
 
-## Part 4 — Basic in-mod logistics (per your last message)
+## Part 15 — Thermoelectric Coupling, Solar Panel, and minimal logistics — **DONE**
 
-You described wanting something minimal rather than depending on another mod: a machine-side
-I/O block, and a plain conduit that connects them. Rough shape for that:
+The three remaining Part 3/Part 4 ideas, picked up together.
 
-- **I/O port** — a small block (maybe one per side of a machine, or a single block adjacent to a
-  machine that exposes its item/energy/fluid capability to the network) that can be configured
-  input-only, output-only, or both.
-- **Conduit/pipe block** — connects two I/O ports and moves whatever they agree to move. Doesn't
-  need to be smart routing on day one — even "round-robin between connected outputs" is enough
-  to be useful, matching how BuildCraft's earliest pipes worked before gates/facades existed.
-- **Item vs. fluid vs. energy** could realistically be three different conduit types, or one
-  conduit type that just moves whatever `IItemHandler`/fluid-handler/energy-handler capability
-  it finds on both ends — the latter is less flavorful but a lot less code to maintain.
+### Thermoelectric Coupling
+A real thermocouple pairing (Constantan + Copper, for the Seebeck effect -- see Part 1's own
+justification for why Constantan exists) crafted into an installed, non-consumed upgrade for the
+Thermoelectric Generator. A new 6th slot (drawn directly onto the existing GUI texture by copying
+its own slot-border art, rather than hand-painting new art) accepts one Coupling; while present,
+FE generation per tick is boosted 25%. Not a wear item like a burr set or `heating_element` --
+real thermocouples are passive circuit components, not something a machine grinds down.
 
-This also directly answers the fluids-vs-bottles question from before: if a conduit just moves
-items, bottled chemicals (`sulfuric_acid_bottle`, `ethylene_bottle`, etc.) work through it with
-zero extra effort. Migrating to real fluids would only be worth it if you specifically want tank
-blocks, or want a chemical to move without needing a glass bottle as a middleman — worth deciding
-once, since it's a bigger commitment than the pipe system itself.
+### Solar Panel
+`silicon_plate` + `magnet_wire` (real copper wire, per the recipe fix earlier this Part) + glass,
+as Part 3 suggested. Deliberately has no inventory, no recipe, no GUI at all -- a real solar panel
+has nothing to insert, so right-clicking just reports status (buffer level, and why it isn't
+generating if it isn't) as an action-bar message instead of opening a menu with nothing in it.
+Generates FE only with an unobstructed view of the sky during actual daylight (tracked via
+`Level#getSkyDarken()`, which follows real dawn/dusk brightness rather than a blunt "is it past
+sunrise" check), at a reduced rate in rain and further reduced in thunderstorms -- then pushes
+straight to neighbors exactly like the Thermoelectric Generator already does. Intentionally a
+much smaller buffer and lower per-tick rate than that machine: free (no fuel cost) generation's
+real tradeoff is a lower, weather/daylight-gated rate, not a strictly-better power source.
+
+### Minimal in-mod logistics
+Built as **energy-only** for this pass, not the three-conduit-types (item/fluid/energy) sketch
+originally written here -- item movement turned out to need the same `IItemHandler` ->
+`net.neoforged.neoforge.transfer` migration this codebase's own capability-registration comment
+already flags as not yet done (every machine's inventory is still the older `IItemHandlerModifiable`-based
+`ModItemHandler`, which isn't natively compatible with the newer `Capabilities.Item.BLOCK`
+`ResourceHandler<ItemResource>` capability the transfer API expects). Rather than quietly take on
+that unrelated migration as a hidden prerequisite, this pass ships what's already fully on the
+modern API throughout the mod -- energy -- and item/fluid conduits are now a clearly-scoped
+follow-up rather than an open question.
+
+- **I/O Port** -- not a machine, holds no energy of its own. It's a capability *proxy*: it scans
+  its own 6 neighbors for the first real `EnergyHandler` that isn't another port or a Conduit
+  (i.e. the machine it's physically attached to) and re-exposes that capability on itself,
+  filtered by a three-state Input/Output/Both mode (cycled by right-click, no GUI needed for one
+  toggle). A Conduit talking to a port sees exactly the same `EnergyHandler` interface it'd see
+  talking straight to a machine.
+- **Conduit** -- deliberately not a smart network. Every tick, every Conduit in a connected run
+  floods out through its neighboring Conduits (BFS, capped at 64 blocks) to find every
+  non-Conduit capability endpoint reachable that way -- raw machines and I/O Ports alike, no
+  special-casing needed since both just answer the same capability query -- then round-robins
+  energy from whichever endpoints have some to give into whichever have room to take. Only the
+  "leader" (lowest `BlockPos` in the connected run) actually moves anything each tick; everyone
+  else in the run finds the identical set and no-ops, so a longer chain doesn't multiply its own
+  throughput. This is genuinely "round-robin between connected outputs," matching the "doesn't
+  need to be smart routing on day one" bar this Part originally set, not a full priority/filter
+  system.
+
+Both are full, non-directional cube blocks for this pass -- no connected-pipe geometry, no
+facing/thin-panel visuals. That's real, deliberate scope-conservatism (the "less flavorful but a
+lot less code" tradeoff this Part's original sketch already named), not an oversight; nicer
+connecting geometry is a pure-polish follow-up if wanted later.
+
+### What's still unverified
+Same standing caveat as every other Part in this session: compiles clean, builds clean, dedicated
+server loads everything with zero errors (1861 recipes, up from 1857 -- Thermoelectric Coupling,
+Solar Panel, Conduit, and I/O Port each added one new craft). None of the actual runtime behavior
+(does the Coupling slot visually sit right in the GUI, does the Solar Panel's status message read
+correctly, does energy actually flow through a real multi-block Conduit run in practice) has been
+confirmed with a real client yet.
 
 ---
 
@@ -851,9 +896,11 @@ once, since it's a bigger commitment than the pipe system itself.
    Rhenium is my pick if you want the replacement to *justify* an endgame machine rather than
    just be an expensive tool material.
 
-2. **How far to take the logistics system.** Part 4 sketches the minimum viable version; whether
-   it grows filters/sorting/multiple conduit types later is worth leaving open rather than
-   deciding now.
+2. **How far to take the logistics system — the minimum viable version now exists, see Part 15.**
+   It's energy-only (item conduits need the `IItemHandler` → transfer-API migration first — a
+   real, separate task, not done as a hidden prerequisite here) and deliberately not smart
+   routing. Whether it grows filters/priority/item-fluid support/nicer connecting geometry later
+   is still worth leaving open rather than deciding now.
 
 3. **Placeholder art still owed — mostly resolved, see Part 12.** `oily_sand`, Battery Box, and
    Electric Furnace all turned out to already have real art; the actual gap was ~160 items/blocks
