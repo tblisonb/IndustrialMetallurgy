@@ -9,13 +9,16 @@ import com.onlytanner.industrialmetallurgy.client.gui.CrusherScreen;
 import com.onlytanner.industrialmetallurgy.client.gui.ChemicalCentrifugeScreen;
 import com.onlytanner.industrialmetallurgy.client.gui.ChemicalReactorScreen;
 import com.onlytanner.industrialmetallurgy.client.gui.ExtruderScreen;
+import com.onlytanner.industrialmetallurgy.client.gui.PowerToolWearDecorator;
 import com.onlytanner.industrialmetallurgy.client.gui.SolderingStationScreen;
 import com.onlytanner.industrialmetallurgy.client.gui.ThermoelectricGeneratorScreen;
 import com.onlytanner.industrialmetallurgy.init.ModContainerTypes;
+import com.onlytanner.industrialmetallurgy.util.RegistryHandler;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.RegisterItemDecorationsEvent;
 import net.neoforged.neoforge.client.event.RegisterMenuScreensEvent;
 
 // This class will not load on dedicated servers. Accessing client side code from here is safe.
@@ -40,6 +43,15 @@ public class IndustrialMetallurgyClient {
         event.register(ModContainerTypes.CHEMICAL_REACTOR.get(), ChemicalReactorScreen::new);
         event.register(ModContainerTypes.BATTERY_BOX.get(), BatteryBoxScreen::new);
         event.register(ModContainerTypes.ELECTRIC_FURNACE.get(), ElectricFurnaceScreen::new);
+    }
+
+    @SubscribeEvent
+    static void onRegisterItemDecorations(RegisterItemDecorationsEvent event) {
+        PowerToolWearDecorator decorator = new PowerToolWearDecorator();
+        event.register(RegistryHandler.POWER_DRILL.get(), decorator);
+        event.register(RegistryHandler.CHAINSAW.get(), decorator);
+        event.register(RegistryHandler.CULTIVATOR.get(), decorator);
+        event.register(RegistryHandler.PROSPECTOR.get(), decorator);
     }
 
 }

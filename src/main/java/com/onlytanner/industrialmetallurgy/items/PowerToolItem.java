@@ -5,6 +5,7 @@ import com.onlytanner.industrialmetallurgy.util.RegistryHandler;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -18,17 +19,44 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import java.util.List;
 import java.util.function.Consumer;
 
-// Shared machinery for the FE-powered hand tools (Power Drill, Chainsaw, Cultivator): a live
-// "implement" socket (bit/chain/blade -- wears down with use, same durability numbers as the
-// hand-tool tiers) and a live "battery pack" socket (drained per action, refilled at a Battery
-// Box). Both sockets are swapped in and out with the exact click-onto-item interaction vanilla
-// Bundles use (Item#overrideOtherStackedOnMe) rather than a dedicated screen -- left-click a valid
-// item onto the tool to install it, right-click the tool with an empty cursor to pull the
-// currently-installed implement out (or the battery, if no implement is installed).
+// Shared machinery for the FE-powered hand tools (Power Drill, Chainsaw, Cultivator, Prospector):
+// a live "implement" socket (bit/chain/blade/sample -- wears down with use for tools, same
+// durability numbers as the hand-tool tiers) and a live "battery pack" socket (drained per
+// action, refilled at a Battery Box). Both sockets are swapped in and out with the exact
+// click-onto-item interaction vanilla Bundles use (Item#overrideOtherStackedOnMe) rather than a
+// dedicated screen -- left-click a valid item onto the tool to install it, right-click the tool
+// with an empty cursor to pull the currently-installed implement out (or the battery, if no
+// implement is installed).
+//
+// The socketed battery's charge uses vanilla's one built-in item durability-bar slot (below);
+// the socketed implement's wear gets a second bar via PowerToolWearDecorator (client/gui package,
+// registered through RegisterItemDecorationsEvent), since vanilla only supports one bar per item
+// natively.
 public abstract class PowerToolItem extends Item {
 
     public PowerToolItem(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public boolean isBarVisible(ItemStack stack) {
+        return !getBattery(stack).isEmpty();
+    }
+
+    @Override
+    public int getBarWidth(ItemStack stack) {
+        ItemStack battery = getBattery(stack);
+        if (battery.isEmpty()) {
+            return 0;
+        }
+        int capacity = BatteryPackItem.capacityOf(battery.getItem());
+        int stored = battery.getOrDefault(ModDataComponents.STORED_ENERGY.get(), 0);
+        return capacity <= 0 ? 0 : Mth.clamp(Math.round(13.0F * stored / capacity), 0, 13);
+    }
+
+    @Override
+    public int getBarColor(ItemStack stack) {
+        return 0x3B8FE0; // matches BatteryPackItem's own bar color, so the two read as the same "charge" color
     }
 
     protected abstract boolean isValidImplement(Item item);
