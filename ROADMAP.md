@@ -955,6 +955,52 @@ clean" -- the actual visuals haven't been confirmed with a real client yet.
 
 ---
 
+## Part 17 — Multiblock framework — **DONE**
+
+Deliberately scoped to just the framework: a generic, reusable way to define and detect a
+multiblock structure. No machine has been converted to use it yet -- Forges and the Arc Furnace
+are the intended first consumers, but wiring them up (deciding each one's actual structure shape,
+what "formed" unlocks, migrating existing saves) is real design work left for later, tracked below.
+
+### What's in `com.onlytanner.industrialmetallurgy.multiblock`
+
+- **`MultiblockPattern`** -- a structure as a set of block positions relative to a controller,
+  each paired with a `Predicate<BlockState>` the world must satisfy there. Authored against
+  `Direction.NORTH`; `matches(Level, BlockPos, Direction)` rotates the whole pattern onto the
+  controller's actual facing before checking the world. Rotation reuses vanilla's own
+  `Rotation`/`BlockPos.rotate` (the same primitive structure blocks and jigsaw pieces rotate with)
+  rather than hand-rolled trig -- consistent with this repo's habit of reusing vanilla mechanics
+  over rebuilding them (see Part 10). Also exposes `findFirstMismatch` for future "here's what's
+  missing" player feedback.
+- **`MultiblockPatternBuilder`** -- authors a pattern as a stack of ASCII-art aisles (Y layers,
+  bottom to top; each aisle is Z rows of X columns), the same ergonomic idea as vanilla's own
+  `BlockPatternBuilder` (used for the Wither). One cell is marked as the controller (`'C'` by
+  default); every other cell's offset is computed relative to it automatically.
+- **`MultiblockPredicates`** -- small helper library for `.where()`: `any()`, `air()`,
+  `of(Block...)`, `tag(TagKey<Block>)`.
+- **`MultiblockControllerBlockEntity`** -- abstract base block entity: tracks a `formed` boolean,
+  persists it, and exposes `refreshStructure()` to re-check the pattern and fire
+  `onStructureFormed()`/`onStructureBroken()` hooks on a transition. It does *not* re-check on a
+  timer -- the owning block's `neighborChanged` (plus once on placement) is expected to call
+  `refreshStructure()`, the same event-driven approach vanilla uses for redstone/beacon-style
+  structures rather than polling every tick. `formed` is persisted but not yet synced to the
+  client -- there's nothing client-visual gated on it yet.
+
+### What this Part deliberately does not include
+No concrete multiblock machine, no conversion of the existing Forges/Arc Furnace to use it, no
+GUI/rendering hookup for "formed" state, no player-facing feedback when a structure is incomplete
+(the `findFirstMismatch` hook exists for this later). All of that is real per-machine design work,
+not framework work -- see the open item below.
+
+### What's still unverified
+Compiles clean (`./gradlew compileJava`). Since nothing in the mod calls this code yet, there's no
+in-game behavior to verify at all -- this Part is pure unconsumed library code, checked only by
+the type checker and by hand-verified rotation math (worked through by hand for all 4 horizontal
+facings against `BlockPos.rotate`'s known formulas). The real verification happens when a machine
+is actually converted to use it.
+
+---
+
 ## Part 5 — Open questions
 
 1. **Nequitum's fate — resolved, see Part 8.** Replaced outright with Tungsten-Rhenium (Rhenium
@@ -974,8 +1020,12 @@ clean" -- the actual visuals haven't been confirmed with a real client yet.
 2. **How far to take the logistics system — the minimum viable version now exists, see Part 15.**
    It's energy-only (item conduits need the `IItemHandler` → transfer-API migration first — a
    real, separate task, not done as a hidden prerequisite here) and deliberately not smart
-   routing. Whether it grows filters/priority/item-fluid support/nicer connecting geometry later
-   is still worth leaving open rather than deciding now.
+   routing. Direction from the user (2026-09-02): EnderIO-flavored item/fluid/energy conduits,
+   kept simple in spirit like the existing I/O-port energy system -- I/O blocks interfacing with
+   machine capabilities, conduits completing the connection, no smart routing required. Not
+   started yet; picked as the *second* of three next-up ideas (after the multiblock framework,
+   Part 17), with energy-gen-machine research picked third. Still genuinely open on scope --
+   filters/priority/nicer connecting geometry are all still undecided.
 
 3. **Placeholder art still owed — fully resolved, see Part 12.** `oily_sand`, Battery Box, and
    Electric Furnace all turned out to already have real art; the actual gap was ~160 items/blocks
@@ -992,3 +1042,16 @@ clean" -- the actual visuals haven't been confirmed with a real client yet.
    Station, Chemical Centrifuge, and Chemical Reactor all borrow Crusher's side/top textures,
    confirmed original to the mod rather than a porting bug. Worth 4 more machine housing textures
    at some point, or fine to leave as a shared "housing family" look — open.
+
+5. **Multiblock machine conversion — framework exists, see Part 17; machines not yet converted.**
+   Forges (all 4 tiers) and the Arc Furnace are the intended first consumers, picked by the user
+   as good starting points (2026-09-02). Converting them means real design decisions per machine
+   -- structure shape, what forming/breaking should do to in-progress recipes, whether existing
+   single-block placements in the world need a migration path -- deliberately left open rather
+   than decided as a side effect of building the framework.
+
+6. **More energy-generating machines — research task, not started.** Currently just Solar Panel
+   and Thermoelectric Generator (Part 15). The user flagged this as still fuzzy on purpose
+   (2026-09-02) -- picked third of three next-up ideas, after the multiblock framework and the
+   logistics system, specifically so it can get a research/brainstorm pass once those sharpen
+   what's actually missing rather than being designed in a vacuum now.
