@@ -789,16 +789,20 @@ Install it alongside JEI and it should work without any changes here, assuming t
 to introspect -- untested, since that's exactly the kind of thing that needs a real client.
 
 **Ores dropping a "Raw X" intermediate (matching vanilla's raw_iron/raw_gold/raw_copper) --
-confirmed as the direction to go, not yet implemented.** You picked the version that replaces the
-ore block drop with a new Raw X item (silk touch still gets the block), rewiring the Crusher's
-recipes to take Raw X instead of the ore block -- keeping the whole Crusher-\>Forge chain and its
-byproducts intact, just reskinning the first step. This is a real content addition, not yet
-started: 12 new "Raw X" items (every ore except Lepidolite, which already skips the Crusher
-entirely and doesn't need one), item registration + textures/models (probably one more
-procedural-recolor pass, matching Part 12's technique), 12 updated ore loot tables, and rewiring
-the 12 Crusher recipes that currently key off an ore block
-(`crushed_argentite_ore`/`crushed_bauxite_ore`/etc.) to key off the new Raw X item instead. Next
-up.
+DONE.** Added `raw_<mineral>_ore` for all 12 ores that go through the Crusher (Argentite, Bauxite,
+Cassiterite, Chromite, Cobaltite, Galena, Garnierite, Pyrolusite, Rutile, Scheelite, Sphalerite,
+Rheniite -- Lepidolite already skipped the Crusher entirely via its own crystal drop, so it needed
+no change). Each ore block's loot table now drops the Raw X item (with fortune applying via
+`ore_drops`), with silk touch still giving the block itself; the 12 Crusher recipes that used to
+take the ore block now take the matching Raw X item instead, so the Crusher-\>Forge chain and its
+byproducts are unchanged, just fed from a loose material instead of a block. Textures are new art
+(this mechanic didn't exist in 1.16.4, so there was nothing to recover) -- same hue-shift recolor
+technique as the rest of this session, based on vanilla `raw_iron`'s silhouette, each tinted to a
+color sampled from its own ore block's real fleck color (grey-family minerals like Argentite,
+Galena, Cobaltite, and Pyrolusite kept their real low-saturation grey/near-black/pale-pink
+identity rather than being forced into an arbitrary hue). Also updated: the Prospector now accepts
+Raw X items as scan samples too (not just crushed ore), since you'll have one in hand before you
+ever build a Crusher; and `GUIDE.md`'s Prospector page now mentions raw ore samples.
 
 ### What's still unverified
 Same standing caveat: the magnet wire and tool-tag fixes are confirmed correct at the data level

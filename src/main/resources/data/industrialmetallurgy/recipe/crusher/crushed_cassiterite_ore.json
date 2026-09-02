@@ -1,6 +1,6 @@
 {
   "type": "industrialmetallurgy:crusher",
-  "ingredient": "industrialmetallurgy:cassiterite_ore",
+  "ingredient": "industrialmetallurgy:raw_cassiterite_ore",
   "result": {
     "id": "industrialmetallurgy:crushed_cassiterite_ore"
   }

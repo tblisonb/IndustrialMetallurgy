@@ -1,6 +1,6 @@
 {
   "type": "industrialmetallurgy:crusher",
-  "ingredient": "industrialmetallurgy:bauxite_ore",
+  "ingredient": "industrialmetallurgy:raw_bauxite_ore",
   "result": {
     "id": "industrialmetallurgy:crushed_bauxite_ore"
   }

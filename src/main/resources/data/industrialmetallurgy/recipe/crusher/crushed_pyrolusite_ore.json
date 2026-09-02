@@ -1,6 +1,6 @@
 {
   "type": "industrialmetallurgy:crusher",
-  "ingredient": "industrialmetallurgy:pyrolusite_ore",
+  "ingredient": "industrialmetallurgy:raw_pyrolusite_ore",
   "result": {
     "id": "industrialmetallurgy:crushed_pyrolusite_ore"
   }

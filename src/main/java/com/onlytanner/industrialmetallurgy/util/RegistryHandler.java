@@ -98,6 +98,22 @@ public class RegistryHandler {
     public static final DeferredItem<Item> TUNGSTEN_NUGGET = ITEMS.registerSimpleItem("tungsten_nugget");
     public static final DeferredItem<Item> TUNGSTEN_STEEL_NUGGET = ITEMS.registerSimpleItem("tungsten_steel_nugget");
     public static final DeferredItem<Item> ZINC_NUGGET = ITEMS.registerSimpleItem("zinc_nugget");
+    // Raw Ores -- dropped by mining the ore block directly (silk touch gets the block instead),
+    // matching vanilla's raw_iron/raw_gold/raw_copper pattern. Feeds the Crusher exactly like the
+    // ore block used to; Lepidolite has no entry here since it already skips the Crusher entirely
+    // (see LEPIDOLITE below).
+    public static final DeferredItem<Item> RAW_ARGENTITE_ORE = ITEMS.registerSimpleItem("raw_argentite_ore");
+    public static final DeferredItem<Item> RAW_BAUXITE_ORE = ITEMS.registerSimpleItem("raw_bauxite_ore");
+    public static final DeferredItem<Item> RAW_CASSITERITE_ORE = ITEMS.registerSimpleItem("raw_cassiterite_ore");
+    public static final DeferredItem<Item> RAW_CHROMITE_ORE = ITEMS.registerSimpleItem("raw_chromite_ore");
+    public static final DeferredItem<Item> RAW_COBALTITE_ORE = ITEMS.registerSimpleItem("raw_cobaltite_ore");
+    public static final DeferredItem<Item> RAW_GALENA_ORE = ITEMS.registerSimpleItem("raw_galena_ore");
+    public static final DeferredItem<Item> RAW_GARNIERITE_ORE = ITEMS.registerSimpleItem("raw_garnierite_ore");
+    public static final DeferredItem<Item> RAW_PYROLUSITE_ORE = ITEMS.registerSimpleItem("raw_pyrolusite_ore");
+    public static final DeferredItem<Item> RAW_RUTILE_ORE = ITEMS.registerSimpleItem("raw_rutile_ore");
+    public static final DeferredItem<Item> RAW_SCHEELITE_ORE = ITEMS.registerSimpleItem("raw_scheelite_ore");
+    public static final DeferredItem<Item> RAW_SPHALERITE_ORE = ITEMS.registerSimpleItem("raw_sphalerite_ore");
+    public static final DeferredItem<Item> RAW_RHENIITE_ORE = ITEMS.registerSimpleItem("raw_rheniite_ore");
     // Crushed Ores
     public static final DeferredItem<Item> CRUSHED_ARGENTITE_ORE = ITEMS.registerSimpleItem("crushed_argentite_ore");
     public static final DeferredItem<Item> CRUSHED_BAUXITE_ORE = ITEMS.registerSimpleItem("crushed_bauxite_ore");

@@ -1,6 +1,6 @@
 {
   "type": "industrialmetallurgy:crusher",
-  "ingredient": "industrialmetallurgy:cobaltite_ore",
+  "ingredient": "industrialmetallurgy:raw_cobaltite_ore",
   "result": {
     "id": "industrialmetallurgy:crushed_cobaltite_ore"
   }

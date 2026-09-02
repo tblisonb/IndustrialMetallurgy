@@ -1,6 +1,6 @@
 {
   "type": "industrialmetallurgy:crusher",
-  "ingredient": "industrialmetallurgy:scheelite_ore",
+  "ingredient": "industrialmetallurgy:raw_scheelite_ore",
   "result": {
     "id": "industrialmetallurgy:crushed_scheelite_ore"
   }

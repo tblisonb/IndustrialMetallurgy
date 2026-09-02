@@ -36,7 +36,7 @@ public final class GuideBookData {
                     "Higher tiers need a better pickaxe (or a Power Drill with a higher-tier bit) to even harvest. Tier gates both where you'll find a metal, and what you need in hand to mine it."
             )),
             new GuideEntry("The Prospector", List.of(
-                    "Once you know roughly where an ore should be, the **Prospector** finds the exact vein. Socket a sample — a crushed-ore item, or raw Lepidolite — then right-click to sweep the area.",
+                    "Once you know roughly where an ore should be, the **Prospector** finds the exact vein. Socket a sample — a raw or crushed ore item, or raw Lepidolite — then right-click to sweep the area.",
                     "It reports distance, direction, and whether the ore's above or below you. A scan costs charge from a socketed battery, so it's for confirming a hunch, not wall-hacking a whole mountain.",
                     "If nothing's in range, that's real information too — you're probably in the wrong biome, or the wrong dimension, for whatever sample you loaded."
             ))

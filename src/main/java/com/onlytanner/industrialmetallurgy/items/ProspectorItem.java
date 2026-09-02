@@ -57,6 +57,20 @@ public class ProspectorItem extends PowerToolItem {
         map.put(RegistryHandler.LEPIDOLITE.get(), List.of(RegistryHandler.LEPIDOLITE_ORE.get()));
         map.put(RegistryHandler.CRUSHED_GOLD_ORE.get(), List.of(Blocks.GOLD_ORE, Blocks.DEEPSLATE_GOLD_ORE, Blocks.NETHER_GOLD_ORE));
         map.put(RegistryHandler.CRUSHED_IRON_ORE.get(), List.of(Blocks.IRON_ORE, Blocks.DEEPSLATE_IRON_ORE));
+        // Raw ore drops (Part 14) work as samples too -- you'll have one of these in hand before
+        // you ever touch a Crusher, so the Prospector shouldn't require the crushed form.
+        map.put(RegistryHandler.RAW_ARGENTITE_ORE.get(), List.of(RegistryHandler.ARGENTITE_ORE.get()));
+        map.put(RegistryHandler.RAW_BAUXITE_ORE.get(), List.of(RegistryHandler.BAUXITE_ORE.get()));
+        map.put(RegistryHandler.RAW_CASSITERITE_ORE.get(), List.of(RegistryHandler.CASSITERITE_ORE.get()));
+        map.put(RegistryHandler.RAW_CHROMITE_ORE.get(), List.of(RegistryHandler.CHROMITE_ORE.get()));
+        map.put(RegistryHandler.RAW_COBALTITE_ORE.get(), List.of(RegistryHandler.COBALTITE_ORE.get()));
+        map.put(RegistryHandler.RAW_GALENA_ORE.get(), List.of(RegistryHandler.GALENA_ORE.get()));
+        map.put(RegistryHandler.RAW_GARNIERITE_ORE.get(), List.of(RegistryHandler.GARNIERITE_ORE.get()));
+        map.put(RegistryHandler.RAW_PYROLUSITE_ORE.get(), List.of(RegistryHandler.PYROLUSITE_ORE.get()));
+        map.put(RegistryHandler.RAW_RHENIITE_ORE.get(), List.of(RegistryHandler.RHENIITE_ORE.get()));
+        map.put(RegistryHandler.RAW_RUTILE_ORE.get(), List.of(RegistryHandler.RUTILE_ORE.get()));
+        map.put(RegistryHandler.RAW_SPHALERITE_ORE.get(), List.of(RegistryHandler.SPHALERITE_ORE.get()));
+        map.put(RegistryHandler.RAW_SCHEELITE_ORE.get(), List.of(RegistryHandler.SCHEELITE_ORE.get()));
         return Map.copyOf(map);
     }
 

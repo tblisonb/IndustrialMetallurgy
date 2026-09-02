@@ -1,6 +1,6 @@
 {
   "type": "industrialmetallurgy:crusher",
-  "ingredient": "industrialmetallurgy:garnierite_ore",
+  "ingredient": "industrialmetallurgy:raw_garnierite_ore",
   "result": {
     "id": "industrialmetallurgy:crushed_garnierite_ore"
   }

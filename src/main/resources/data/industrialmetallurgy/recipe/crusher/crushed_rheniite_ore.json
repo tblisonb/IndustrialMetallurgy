@@ -1,6 +1,6 @@
 {
   "type": "industrialmetallurgy:crusher",
-  "ingredient": "industrialmetallurgy:rheniite_ore",
+  "ingredient": "industrialmetallurgy:raw_rheniite_ore",
   "result": {
     "id": "industrialmetallurgy:crushed_rheniite_ore"
   }

@@ -1,6 +1,6 @@
 {
   "type": "industrialmetallurgy:crusher",
-  "ingredient": "industrialmetallurgy:chromite_ore",
+  "ingredient": "industrialmetallurgy:raw_chromite_ore",
   "result": {
     "id": "industrialmetallurgy:crushed_chromite_ore"
   }

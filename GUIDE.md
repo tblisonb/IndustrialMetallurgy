@@ -76,7 +76,7 @@ Tier gates both where you'll find a metal, and what you need in hand to mine it.
 ### The Prospector
 
 Once you know roughly where an ore should be, the **Prospector** finds the exact vein. Socket a
-sample — a crushed-ore item, or raw Lepidolite — then right-click to sweep the area.
+sample — a raw or crushed ore item, or raw Lepidolite — then right-click to sweep the area.
 <!-- page -->
 It reports distance, direction, and whether the ore's above or below you. A scan costs charge
 from a socketed battery, so it's for confirming a hunch, not wall-hacking a whole mountain.
