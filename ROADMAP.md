@@ -1001,6 +1001,70 @@ is actually converted to use it.
 
 ---
 
+## Part 18 — Item transfer for the Conduit and I/O Port — **DONE**
+
+The second of three next-up ideas from Part 5 item 2: real item movement through the existing
+logistics blocks (Part 15), not just energy. Fluids are deliberately still out of scope -- see below.
+
+### The blocker, and the actual fix
+NeoForge's own item capability (`Capabilities.Item.BLOCK`) now returns a
+`net.neoforged.neoforge.transfer.ResourceHandler<ItemResource>`, not the classic
+`IItemHandler`/`IItemHandlerModifiable` every machine's inventory (`ModItemHandler`, itself built
+on the now-deprecated `ItemStackHandler`) actually implements. Routing item transfer through
+NeoForge's official capability would mean migrating every machine's storage -- 10+ block entity
+classes, their containers, and their recipe-lookup code -- off a paradigm (slot index in, `ItemStack`
+out) onto a different one entirely (resource + amount, transactional insert/extract). That's real,
+invasive, cross-cutting work, not something to fold in silently as a side effect of "add conduits."
+
+The actual fix is much smaller: `ModCapabilities.ITEM_HANDLER`
+(`com.onlytanner.industrialmetallurgy.util.ModCapabilities`) is a capability of our own -- declared
+with the same `BlockCapability.createSided` factory NeoForge itself uses for `Capabilities.Energy.BLOCK`
+-- carrying exactly the `IItemHandlerModifiable` every machine already has. Registering it for all
+14 item-bearing machines (every machine with a `getInventory()`, including the coal-fired Forge
+tiers 1/2 and the Coke Oven, which never got energy capability since they don't use FE at all) in
+`IndustrialMetallurgy#registerCapabilities` is one line each, mirroring the existing energy
+registrations exactly -- no machine's internals changed at all.
+
+### One universal Conduit, not a second pipe type
+Rather than adding dedicated Item Conduit/Item I/O Port blocks alongside the energy ones, the
+existing `Conduit` and `I/O Port` were extended to carry both resources over the same physical
+network -- one placed run of Conduits now moves energy *and* items each tick, and the I/O Port's
+existing Input/Output/Both `Mode` toggle governs both. This is the "simplicity of Extra Utilities"
+half of the brief: one block type per role, not one per resource. No new blocks, textures, models,
+blockstates, recipes, or loot tables were needed -- this whole Part is pure Java.
+
+- **`ConduitBlockEntity`** -- `tick()` now runs its existing energy round-robin, then a parallel
+  item round-robin over the same connected-Conduit BFS set, found via
+  `ModCapabilities.ITEM_HANDLER` instead of `Capabilities.Energy.BLOCK`. `findEndpoints` was
+  generalized to take either capability type rather than duplicated. Item movement can't reuse
+  `Transaction` (that's a transfer-API-only concept `IItemHandler` predates) -- `moveItems` uses
+  the classic simulate-then-commit two-step (`ItemHandlerHelper.insertItem` for the sink,
+  `extractItem(slot, amount, simulate)` for the source), moving one slot's contents per
+  source-sink pair per tick, the same "one slice per pair, not a full drain loop" restraint
+  `distributeEnergy` already used.
+- **`IOPortBlockEntity`** -- gained a `PortItemHandler` (`IItemHandlerModifiable`) alongside the
+  existing `PortEnergyHandler`, built the same way: `findHostItemHandler()` scans the port's 6
+  neighbors for the first real item handler that isn't another port or Conduit, and the delegate
+  gates `insertItem`/`extractItem` by the same `Mode` field the energy delegate already reads --
+  one toggle, both resources.
+
+### Fluids -- still out of scope, on purpose
+Not attempted this pass: nothing in the mod produces or consumes a fluid anywhere (`grep`-confirmed
+-- no `FluidHandler`, `FluidStack`, or `Fluids.` reference exists outside vanilla). A Fluid Conduit
+today would have nothing to connect to. Worth building once a real fluid-bearing machine exists
+(the Chemical Reactor's `acidLevel` is presently just a plain `int`, not an actual fluid) -- tracked
+below rather than built hollow ahead of a consumer.
+
+### What's still unverified
+Compiles clean, builds clean, and a dedicated server load was watched end-to-end this time (not
+just checked after the fact): `RecipeManager` loaded the same 1861 recipes as Part 15 (no new
+recipes this Part), reached `Done (0.209s)!`, and logged no exceptions or capability-registration
+errors for any of the 14 new `ModCapabilities.ITEM_HANDLER` registrations. What's still
+unconfirmed is the same standing caveat as always -- actual item movement between two real
+machines through a real placed Conduit run hasn't been watched with a live client.
+
+---
+
 ## Part 5 — Open questions
 
 1. **Nequitum's fate — resolved, see Part 8.** Replaced outright with Tungsten-Rhenium (Rhenium
@@ -1017,15 +1081,16 @@ is actually converted to use it.
    Rhenium is my pick if you want the replacement to *justify* an endgame machine rather than
    just be an expensive tool material.
 
-2. **How far to take the logistics system — the minimum viable version now exists, see Part 15.**
-   It's energy-only (item conduits need the `IItemHandler` → transfer-API migration first — a
-   real, separate task, not done as a hidden prerequisite here) and deliberately not smart
-   routing. Direction from the user (2026-09-02): EnderIO-flavored item/fluid/energy conduits,
-   kept simple in spirit like the existing I/O-port energy system -- I/O blocks interfacing with
-   machine capabilities, conduits completing the connection, no smart routing required. Not
-   started yet; picked as the *second* of three next-up ideas (after the multiblock framework,
-   Part 17), with energy-gen-machine research picked third. Still genuinely open on scope --
-   filters/priority/nicer connecting geometry are all still undecided.
+2. **How far to take the logistics system — energy and items both now exist, see Parts 15 and 18.**
+   Item transfer shipped without the full `IItemHandler` → transfer-API migration by giving the
+   Conduit/I-O Port their own small `ModCapabilities.ITEM_HANDLER` instead of NeoForge's official
+   (transfer-API-based) item capability -- that migration is still real, separate, undone work,
+   just no longer a blocker for this. One universal Conduit/I-O Port pair now carries energy and
+   items together rather than needing per-resource pipe types, per the user's own "doesn't have to
+   be complex" steer (2026-09-02). Fluids are the one resource still missing, deliberately: no
+   machine in the mod produces or consumes a fluid yet, so a Fluid Conduit has nothing to connect
+   to today -- revisit once a real fluid-bearing machine exists. Filters/priority/nicer connecting
+   geometry are all still undecided and still open.
 
 3. **Placeholder art still owed — fully resolved, see Part 12.** `oily_sand`, Battery Box, and
    Electric Furnace all turned out to already have real art; the actual gap was ~160 items/blocks

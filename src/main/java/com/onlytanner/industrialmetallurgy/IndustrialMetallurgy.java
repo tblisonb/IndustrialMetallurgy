@@ -4,6 +4,7 @@ import com.onlytanner.industrialmetallurgy.init.ModContainerTypes;
 import com.onlytanner.industrialmetallurgy.init.ModDataComponents;
 import com.onlytanner.industrialmetallurgy.init.ModRecipes;
 import com.onlytanner.industrialmetallurgy.init.ModTileEntityTypes;
+import com.onlytanner.industrialmetallurgy.util.ModCapabilities;
 import com.onlytanner.industrialmetallurgy.util.RegistryHandler;
 import org.slf4j.Logger;
 
@@ -52,10 +53,13 @@ public class IndustrialMetallurgy {
     }
 
     private void registerCapabilities(RegisterCapabilitiesEvent event) {
-        // NOTE: item-handler capability exposure (for hoppers/pipes) still uses the deprecated
-        // ItemStackHandler/IItemHandler internally and hasn't been migrated to the new
-        // net.neoforged.neoforge.transfer resource API -- only energy is exposed for now, since
-        // that's what's needed for a power-generating machine to charge the crusher.
+        // Every machine's inventory still uses the deprecated ItemStackHandler/IItemHandler
+        // internally rather than the new net.neoforged.neoforge.transfer resource API, so none of
+        // it is exposed through NeoForge's own (ResourceHandler-based) Capabilities.Item.BLOCK --
+        // migrating every machine's storage to that paradigm is a real, separate task. Instead,
+        // ModCapabilities.ITEM_HANDLER is a capability of our own carrying the plain
+        // IItemHandlerModifiable every machine already has, which is all the Conduit and I/O Port
+        // need to move items around (see ModCapabilities and ConduitBlockEntity).
         event.registerBlockEntity(Capabilities.Energy.BLOCK, ModTileEntityTypes.CRUSHER.get(),
                 (blockEntity, side) -> blockEntity.getEnergyHandler());
         event.registerBlockEntity(Capabilities.Energy.BLOCK, ModTileEntityTypes.THERMOELECTRIC_GENERATOR.get(),
@@ -82,6 +86,37 @@ public class IndustrialMetallurgy {
                 (blockEntity, side) -> blockEntity.getEnergyHandler());
         event.registerBlockEntity(Capabilities.Energy.BLOCK, ModTileEntityTypes.IO_PORT.get(),
                 (blockEntity, side) -> blockEntity.getEnergyDelegate());
+
+        event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, ModTileEntityTypes.CRUSHER.get(),
+                (blockEntity, side) -> blockEntity.getInventory());
+        event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, ModTileEntityTypes.COKE_OVEN.get(),
+                (blockEntity, side) -> blockEntity.getInventory());
+        event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, ModTileEntityTypes.THERMOELECTRIC_GENERATOR.get(),
+                (blockEntity, side) -> blockEntity.getInventory());
+        event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, ModTileEntityTypes.FORGE_TIER1.get(),
+                (blockEntity, side) -> blockEntity.getInventory());
+        event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, ModTileEntityTypes.FORGE_TIER2.get(),
+                (blockEntity, side) -> blockEntity.getInventory());
+        event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, ModTileEntityTypes.FORGE_TIER3.get(),
+                (blockEntity, side) -> blockEntity.getInventory());
+        event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, ModTileEntityTypes.FORGE_TIER4.get(),
+                (blockEntity, side) -> blockEntity.getInventory());
+        event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, ModTileEntityTypes.ARC_FURNACE.get(),
+                (blockEntity, side) -> blockEntity.getInventory());
+        event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, ModTileEntityTypes.EXTRUDER.get(),
+                (blockEntity, side) -> blockEntity.getInventory());
+        event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, ModTileEntityTypes.SOLDERING_STATION.get(),
+                (blockEntity, side) -> blockEntity.getInventory());
+        event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, ModTileEntityTypes.CHEMICAL_CENTRIFUGE.get(),
+                (blockEntity, side) -> blockEntity.getInventory());
+        event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, ModTileEntityTypes.CHEMICAL_REACTOR.get(),
+                (blockEntity, side) -> blockEntity.getInventory());
+        event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, ModTileEntityTypes.BATTERY_BOX.get(),
+                (blockEntity, side) -> blockEntity.getInventory());
+        event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, ModTileEntityTypes.ELECTRIC_FURNACE.get(),
+                (blockEntity, side) -> blockEntity.getInventory());
+        event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, ModTileEntityTypes.IO_PORT.get(),
+                (blockEntity, side) -> blockEntity.getItemDelegate());
     }
 
 }
