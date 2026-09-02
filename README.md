@@ -50,15 +50,16 @@ Electric Furnace, and Arc Furnace (a higher-yield/faster 5th Forge tier). Nequit
 outright with Tungsten-Rhenium, a real alloy, closing out the mod's one remaining "unobtainium."
 Ore world generation is wired up, every ore block has a real (procedural) texture, and there's
 an in-game guide book (craft: `minecraft:book` + `minecraft:iron_nugget`) explaining the mod --
-its source text lives in `GUIDE.md`. See `ROADMAP.md` for the full history and current design
-notes.
+its source text lives in `GUIDE.md`. Every item and block now has a real texture and a working
+held-item icon (`ROADMAP.md` Parts 12-13 recovered ~160 assets that never made the jump from the
+1.16.4 branch, plus a handful of genuinely new ones). JEI integration is reconnected -- all 7
+custom machine recipe types are browsable, gated appropriately, tier-labeled where relevant (see
+`ROADMAP.md` Part 13). See `ROADMAP.md` for the full history and current design notes.
 
 **Not yet ported:**
-- **JEI integration** — present on the 1.16.4 branch, not yet reconnected.
-- **Real art** — almost every raw ore block and base-metal ingot/nugget/block in the mod has no
-  texture at all yet (not just "a handful"); machines and most processed/intermediate items reuse
-  recolored placeholder art rather than final textures. A first procedural pass on ore-block
-  textures is underway (`ROADMAP.md` Part 9).
+- **Worn-armor textures** — the 4 armor materials (Steel/Titanium/Stellite/Tungsten-Rhenium) have
+  item icons but no worn-body layer texture; equipped armor currently renders untextured on the
+  player model. Never existed in either era of the mod (`ROADMAP.md` Part 5).
 
 ## Building & running
 

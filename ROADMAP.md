@@ -671,6 +671,64 @@ unverified). That needs real client eyes.
 
 ---
 
+## Part 13 — Held-item icon fix, Arc Furnace GUI fix, and JEI integration — **DONE**
+
+Three follow-ups from actually placing/holding the Part 12 blocks in a real client for the first
+time this session.
+
+### Held-item icons needed a second file, not just the block model
+`models/item/<name>.json` alone renders the block correctly when placed (via the blockstate), but
+this MC version also requires an explicit `assets/industrialmetallurgy/items/<name>.json` client
+item definition for the *held/inventory* icon -- there's no fallback from one to the other. Every
+block that already worked (argentite_ore, the forges, crusher, coke oven, thermoelectric
+generator, arc furnace) happened to already have this file; the 32 blocks restored in Part 12
+didn't, and neither did 19 pre-existing ore/machine blocks or 3 plain items (`guide_book`,
+`oily_sand`, `prospector`) that had silently had the same bug since their own original ports.
+Fixed for all 57 at once.
+
+### Arc Furnace's GUI title covering its own energy bar
+`AdvancedForgeScreen` (shared by Forge Tier 3, Tier 4, and Arc Furnace) never got the inventory
+label repositioning `CrusherScreen` already carries for the exact same reason -- its energy bar
+runs from y=8 to y=78, which the default "Inventory" label position (y=72) sits right on top of.
+Same one-line fix as Crusher's.
+
+### JEI integration
+Added `mezz.jei:jei-26.2-neoforge` (version `30.29.0.199`, confirmed the correct build for this
+NeoForge/MC version via Modrinth) as a `localRuntime`/`compileOnly` dependency and a real
+`IModPlugin` (`client/jei/`) registering all 7 custom recipe types -- Crusher, Coke Oven,
+Forge/Arc Furnace (one shared category, tier-gated, tier drawn on each recipe), Extruder,
+Soldering Station, Chemical Centrifuge, Chemical Reactor -- as JEI recipe categories with plain
+functional slot-grid layouts (no custom GUI art; this is a spot-check tool, not polish). Electric
+Furnace and Thermoelectric Generator aren't custom types (plain vanilla smelting / vanilla fuel
+values), so they're just registered as extra catalysts on JEI's own built-in `SMELTING`/
+`SMELTING_FUEL` categories instead of duplicating them.
+
+**The one non-obvious part**: this MC version stopped syncing full recipe objects to the client at
+all (`ClientboundUpdateRecipesPacket` only carries `RecipePropertySet`s now, for search/ghost-slot
+purposes) -- there is no `Level.getRecipeManager()` anymore client-side. Even JEI's own built-in
+vanilla categories don't use one; they read back out of JEI's *own* client-synced `RecipeMap`
+(`mezz.jei.common.Internal.getClientSyncedRecipes()`), which is the only place a full `RecipeHolder`
+list actually exists on the client. There's no public API for this yet, so this plugin does
+exactly what JEI's own `VanillaPlugin` does internally: filter that map by `RecipeType` and hand
+the results to `IRecipeRegistration.addRecipes`. Confirmed via decompiling `VanillaPlugin` itself
+that this is genuinely how JEI, including its own bundled categories, gets recipe data now.
+
+### What's actually been verified vs. still unverified
+This is the first point in the whole 26.2 rewrite where a real client was ever launched (headless,
+via `xvfb-run`, since this environment still has no display) -- `runClient` ran for 2 minutes with
+zero errors or warnings referencing this mod or JEI, loaded every texture atlas (including JEI's
+own GUI atlas) with zero missing-texture warnings, and reached the main menu cleanly. That's real
+signal, not just a guess: any block/item model referencing a texture that couldn't resolve, or any
+exception thrown during our `IModPlugin`'s `registerCategories`/`registerRecipeCatalysts` calls
+(which run at this same startup stage), would have shown up in that log. What it does *not*
+confirm: `registerRecipes` only runs after joining a world (it needs the synced `RecipeMap`, which
+doesn't exist before then) -- so whether each of the 7 categories' recipes actually populate and
+render correctly, whether the slot-grid layouts look reasonable, and whether the Arc Furnace GUI
+fix actually clears the label, still need a real person to launch the game, join a world, and
+check.
+
+---
+
 ## Part 4 — Basic in-mod logistics (per your last message)
 
 You described wanting something minimal rather than depending on another mod: a machine-side
