@@ -921,6 +921,24 @@ jar) for proportion and outline weight:
   splayed claw tines fanning from a collar at the top, on a wood-toned shaft (tying it visually to
   a garden tool rather than a power tool), consistent with its job as a hoe replacement.
 
+**Follow-up: shading.** The first pass above used mostly one flat fill tone per surface and read
+as flat/no depth. Redone with the same technique vanilla's own tool icons use (confirmed by
+inspecting `iron_pickaxe`'s actual pixel data) -- 3-4 hand-placed value steps per surface with a
+consistent top-left light source (light rim outline on lit edges, full-black outline in shadowed
+crevices, a light/mid/dark band across each flank) rather than one flat color per part. Also
+prototyped a generic algorithmic bevel/AO post-filter (diagonal gradient + edge-detection against
+transparent background) as a possible reusable tool for this, but at 16x16 with narrow 2-4px-wide
+fill regions its effect was too weak to matter once clamped -- most of the visible depth above
+really is the hand-placed bands, not the filter. Didn't check the filter in as-is since it doesn't
+pull its own weight yet; worth revisiting if a real texture-generation tool ever gets built, but
+that's a bigger undertaking than this pass.
+
+**Follow-up: shared machine housings.** Confirmed (checked the 1.16.4 branch too) this isn't a
+porting regression -- Crusher, Extruder, Soldering Station, Chemical Centrifuge, and Chemical
+Reactor have only ever had unique *front* textures; side/top were always borrowed from Crusher's,
+in both eras of the mod. Left alone for now, pending a decision on whether it's worth 4 more
+machine housing textures or not (see Part 5).
+
 **All 15 implements (drill bits, chains, cultivator blades) redrawn.** These were the literal
 worst offender -- same blob shape regardless of type, only the per-material tint differed. Each
 of the 3 implement types now has its own real silhouette (twist-bit-with-shank for drill bits, a
@@ -967,3 +985,8 @@ clean" -- the actual visuals haven't been confirmed with a real client yet.
    (`textures/models/armor/*.png`) in either branch — equipped armor currently renders on the
    player model with no texture at all. This is a distinct asset from the item icon (which each
    armor piece already has) and hasn't been made in either era of the mod.
+
+4. **Shared machine housings — flagged, not resolved, see Part 16.** Crusher, Extruder, Soldering
+   Station, Chemical Centrifuge, and Chemical Reactor all borrow Crusher's side/top textures,
+   confirmed original to the mod rather than a porting bug. Worth 4 more machine housing textures
+   at some point, or fine to leave as a shared "housing family" look — open.
