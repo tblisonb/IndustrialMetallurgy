@@ -977,14 +977,16 @@ clean" -- the actual visuals haven't been confirmed with a real client yet.
    routing. Whether it grows filters/priority/item-fluid support/nicer connecting geometry later
    is still worth leaving open rather than deciding now.
 
-3. **Placeholder art still owed — mostly resolved, see Part 12.** `oily_sand`, Battery Box, and
+3. **Placeholder art still owed — fully resolved, see Part 12.** `oily_sand`, Battery Box, and
    Electric Furnace all turned out to already have real art; the actual gap was ~160 items/blocks
    whose *wiring* (blockstate/model files), not art, never made it over from 1.16.4 — fixed in
-   Part 12 by restoring the 1.16.4 originals. One real gap remains: the 4 armor materials
-   (Steel/Titanium/Stellite/Tungsten-Rhenium) have no worn-armor layer texture
-   (`textures/models/armor/*.png`) in either branch — equipped armor currently renders on the
-   player model with no texture at all. This is a distinct asset from the item icon (which each
-   armor piece already has) and hasn't been made in either era of the mod.
+   Part 12 by restoring the 1.16.4 originals. This item previously flagged a supposed gap in the 4
+   armor materials' worn-armor layer texture, checked against the old pre-1.20.5
+   `textures/models/armor/*.png` convention — that path was never going to exist on this branch.
+   Re-checked directly (2026-09-02): `assets/industrialmetallurgy/equipment/*.json` plus
+   `textures/entity/equipment/humanoid{,_leggings}/*.png` exist and are correctly wired for all 4
+   materials (Steel/Titanium/Stellite/Tungsten-Rhenium), and have been since the Part 6 commit
+   (`d9c009f`) — real per-material art, not placeholders. Nothing to do here.
 
 4. **Shared machine housings — flagged, not resolved, see Part 16.** Crusher, Extruder, Soldering
    Station, Chemical Centrifuge, and Chemical Reactor all borrow Crusher's side/top textures,
