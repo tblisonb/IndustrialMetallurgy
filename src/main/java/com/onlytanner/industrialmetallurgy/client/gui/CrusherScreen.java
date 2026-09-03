@@ -2,6 +2,7 @@ package com.onlytanner.industrialmetallurgy.client.gui;
 
 import com.onlytanner.industrialmetallurgy.IndustrialMetallurgy;
 import com.onlytanner.industrialmetallurgy.containers.CrusherContainer;
+import com.onlytanner.industrialmetallurgy.tileentity.CrusherBlockEntity;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -39,6 +40,15 @@ public class CrusherScreen extends AbstractContainerScreen<CrusherContainer> {
 
         int acidOffset = 28 - this.menu.getAcidLevelScaled();
         graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, x + 157, y + 29 + acidOffset, 192.0F, acidOffset + 17.0F, 6, this.menu.getAcidLevelScaled(), 256, 256);
+    }
+
+    @Override
+    protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        super.extractTooltip(graphics, mouseX, mouseY);
+        if (this.isHovering(8, 8, 16, 70, mouseX, mouseY)) {
+            graphics.setTooltipForNextFrame(this.font, Component.translatable("tooltip.industrialmetallurgy.stored_energy",
+                    this.menu.currentEnergy.get(), CrusherBlockEntity.MAX_ENERGY), mouseX, mouseY);
+        }
     }
 
 }

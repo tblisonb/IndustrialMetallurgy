@@ -14,11 +14,20 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.DoubleBlockCombiner;
+import net.minecraft.world.level.block.entity.BlockEntityTypes;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
+import net.neoforged.neoforge.items.wrapper.InvWrapper;
+import net.neoforged.neoforge.items.wrapper.SidedInvWrapper;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -51,6 +60,28 @@ public class IndustrialMetallurgy {
 
         modEventBus.addListener(this::registerCapabilities);
     }
+
+    // Mirrors NeoForge's own vanilla chest handling (CapabilityHooks#CHEST_COMBINER_HANDLER) but
+    // built on the legacy IItemHandlerModifiable types our own ModCapabilities.ITEM_HANDLER carries,
+    // so a Conduit/I-O Port sees one 54-slot inventory across a double chest instead of two 27-slot
+    // ones depending on which half it happens to touch.
+    private static final DoubleBlockCombiner.Combiner<ChestBlockEntity, IItemHandlerModifiable> CHEST_COMBINER =
+            new DoubleBlockCombiner.Combiner<>() {
+                @Override
+                public IItemHandlerModifiable acceptDouble(ChestBlockEntity chest1, ChestBlockEntity chest2) {
+                    return new CombinedInvWrapper(new InvWrapper(chest1), new InvWrapper(chest2));
+                }
+
+                @Override
+                public IItemHandlerModifiable acceptSingle(ChestBlockEntity chest) {
+                    return new InvWrapper(chest);
+                }
+
+                @Override
+                public IItemHandlerModifiable acceptNone() {
+                    return null;
+                }
+            };
 
     private void registerCapabilities(RegisterCapabilitiesEvent event) {
         // Every machine's inventory still uses the deprecated ItemStackHandler/IItemHandler
@@ -117,6 +148,35 @@ public class IndustrialMetallurgy {
                 (blockEntity, side) -> blockEntity.getInventory());
         event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, ModTileEntityTypes.IO_PORT.get(),
                 (blockEntity, side) -> blockEntity.getItemDelegate());
+
+        // Vanilla storage: without these, an I/O Port or Conduit touching a plain chest/hopper/etc.
+        // finds nothing, since ModCapabilities.ITEM_HANDLER is only ever registered against the
+        // block-entity types listed above by default. Same vanilla type list NeoForge itself wires
+        // up for its own Capabilities.Item.BLOCK (see CapabilityHooks#registerVanillaProviders),
+        // just built on the legacy wrapper types that match what this mod's own machines expose.
+        event.registerBlock(ModCapabilities.ITEM_HANDLER,
+                (level, pos, state, blockEntity, side) -> ((ChestBlock) state.getBlock()).combine(state, level, pos, true).apply(CHEST_COMBINER),
+                Blocks.CHEST, Blocks.TRAPPED_CHEST);
+
+        event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, BlockEntityTypes.FURNACE,
+                (blockEntity, side) -> new SidedInvWrapper(blockEntity, side));
+        event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, BlockEntityTypes.BLAST_FURNACE,
+                (blockEntity, side) -> new SidedInvWrapper(blockEntity, side));
+        event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, BlockEntityTypes.SMOKER,
+                (blockEntity, side) -> new SidedInvWrapper(blockEntity, side));
+        event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, BlockEntityTypes.BREWING_STAND,
+                (blockEntity, side) -> new SidedInvWrapper(blockEntity, side));
+        event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, BlockEntityTypes.SHULKER_BOX,
+                (blockEntity, side) -> new SidedInvWrapper(blockEntity, side));
+
+        event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, BlockEntityTypes.BARREL,
+                (blockEntity, side) -> new InvWrapper(blockEntity));
+        event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, BlockEntityTypes.DISPENSER,
+                (blockEntity, side) -> new InvWrapper(blockEntity));
+        event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, BlockEntityTypes.DROPPER,
+                (blockEntity, side) -> new InvWrapper(blockEntity));
+        event.registerBlockEntity(ModCapabilities.ITEM_HANDLER, BlockEntityTypes.HOPPER,
+                (blockEntity, side) -> new InvWrapper(blockEntity));
     }
 
 }

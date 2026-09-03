@@ -37,4 +37,13 @@ public class BasicForgeScreen extends AbstractContainerScreen<BasicForgeContaine
         graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, x + 164, y + 76 - this.menu.getTemperatureScaled(), 176.0F, 31.0F, 7, 7, 256, 256);
     }
 
+    @Override
+    protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        super.extractTooltip(graphics, mouseX, mouseY);
+        if (this.isHovering(164, 6, 7, 77, mouseX, mouseY)) {
+            graphics.setTooltipForNextFrame(this.font, Component.translatable("tooltip.industrialmetallurgy.temperature",
+                    this.menu.currentTemperature.get(), this.menu.blockEntity.maxTemperature), mouseX, mouseY);
+        }
+    }
+
 }

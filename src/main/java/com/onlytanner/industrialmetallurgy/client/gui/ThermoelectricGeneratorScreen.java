@@ -2,6 +2,7 @@ package com.onlytanner.industrialmetallurgy.client.gui;
 
 import com.onlytanner.industrialmetallurgy.IndustrialMetallurgy;
 import com.onlytanner.industrialmetallurgy.containers.ThermoelectricGeneratorContainer;
+import com.onlytanner.industrialmetallurgy.tileentity.ThermoelectricGeneratorBlockEntity;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
@@ -39,6 +40,15 @@ public class ThermoelectricGeneratorScreen extends AbstractContainerScreen<Therm
 
         int energyOffset = 70 - this.menu.getCurrentEnergyScaled();
         graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, x + ENERGY_X, y + ENERGY_Y + energyOffset, 176.0F, energyOffset + 14.0F, 16, this.menu.getCurrentEnergyScaled(), 256, 256);
+    }
+
+    @Override
+    protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
+        super.extractTooltip(graphics, mouseX, mouseY);
+        if (this.isHovering(ENERGY_X, ENERGY_Y, 16, 70, mouseX, mouseY)) {
+            graphics.setTooltipForNextFrame(this.font, Component.translatable("tooltip.industrialmetallurgy.stored_energy",
+                    this.menu.currentEnergy.get(), ThermoelectricGeneratorBlockEntity.MAX_ENERGY), mouseX, mouseY);
+        }
     }
 
 }

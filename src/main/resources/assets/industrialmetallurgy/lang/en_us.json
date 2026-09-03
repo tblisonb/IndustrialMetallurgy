@@ -240,6 +240,7 @@
   "tooltip.industrialmetallurgy.no_battery_installed": "No battery pack installed",
   "tooltip.industrialmetallurgy.battery_installed": "Battery: %s / %s FE",
   "tooltip.industrialmetallurgy.stored_energy": "%s / %s FE stored",
+  "tooltip.industrialmetallurgy.temperature": "Temperature: %s / %s",
   "message.industrialmetallurgy.prospector_found": "%s detected: %s blocks away, %s",
   "message.industrialmetallurgy.prospector_not_found": "No %s detected within range",
   "message.industrialmetallurgy.prospector_no_charge": "Prospector's battery is depleted",

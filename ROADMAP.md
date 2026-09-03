@@ -1065,6 +1065,52 @@ machines through a real placed Conduit run hasn't been watched with a live clien
 
 ---
 
+## Part 19 — Vanilla-container item transfer, and GUI hover tooltips — **DONE**
+
+Two small fixes from live playtesting (2026-09-02): I/O Ports next to a chest/hopper moved
+nothing, and the energy/temperature bars lost the 1.16.4 hover tooltips in the rewrite.
+
+### I/O Ports and Conduits couldn't see vanilla storage
+`ModCapabilities.ITEM_HANDLER` (Part 18) was only ever registered against this mod's own 14
+block-entity types and the I/O Port. A chest, barrel, hopper, dispenser, dropper, furnace, or
+shulker box next to a Conduit/I-O Port has no such registration, so `findHostItemHandler`/
+`findEndpoints` found nothing and the port silently moved zero items -- not a bug in the transfer
+logic itself, just a missing registration for anything that isn't one of our own machines.
+
+Fixed in `IndustrialMetallurgy#registerCapabilities` by registering the same capability against
+the standard vanilla storage block entities, mirroring the exact type list NeoForge itself wires
+up for its own `Capabilities.Item.BLOCK` (`CapabilityHooks#registerVanillaProviders`) but built on
+the legacy wrapper types (`InvWrapper`, `SidedInvWrapper`, `CombinedInvWrapper`) that match what
+this mod's own machines expose instead of the new transfer-API ones:
+- **Chest / Trapped Chest** -- registered at the block level via `ChestBlock#combine`, so a double
+  chest presents as one 54-slot inventory (`CombinedInvWrapper`) regardless of which half a Conduit
+  happens to touch, not two independent 27-slot ones.
+- **Furnace / Blast Furnace / Smoker / Brewing Stand / Shulker Box** -- `SidedInvWrapper`, since
+  these are `WorldlyContainer`s with real per-side input/output slot restrictions (a hopper can't
+  push fuel into a furnace's output slot, and neither should a Conduit).
+- **Barrel / Dispenser / Dropper / Hopper** -- plain `InvWrapper`, no side restrictions.
+
+Decorative/non-storage vanilla containers (jukebox, chiseled bookshelf, decorated pot, crafter,
+shelf) were deliberately left out -- out of scope for "let a port talk to the chest/hopper next to
+it," which is what was actually reported.
+
+### GUI hover tooltips
+1.16.4 let you hover the energy bar in a machine's GUI to see its stored FE, and the forge's
+temperature bar to see its current temperature. Neither existed yet in this rewrite. Added
+`AbstractContainerScreen#extractTooltip` overrides (called each frame after the item-slot tooltip
+logic, via `extractRenderState`) to the 9 screens with an energy bar and the 2 forge screens with a
+temperature bar, checking `isHovering` against the bar's fixed screen-space rect (the full track,
+not just the current fill height) and showing `tooltip.industrialmetallurgy.stored_energy` (reused
+from the battery-pack tooltip, Part 6) or the new `tooltip.industrialmetallurgy.temperature`.
+
+### What's still unverified
+Both fixes compile clean and build clean; the capability registration was watched loading on a
+dedicated server with no exceptions. Neither has been confirmed with a live client yet -- actually
+piping items out of a placed chest through a Conduit, or hovering a GUI bar in-game to see the
+tooltip render.
+
+---
+
 ## Part 5 — Open questions
 
 1. **Nequitum's fate — resolved, see Part 8.** Replaced outright with Tungsten-Rhenium (Rhenium
@@ -1090,7 +1136,9 @@ machines through a real placed Conduit run hasn't been watched with a live clien
    be complex" steer (2026-09-02). Fluids are the one resource still missing, deliberately: no
    machine in the mod produces or consumes a fluid yet, so a Fluid Conduit has nothing to connect
    to today -- revisit once a real fluid-bearing machine exists. Filters/priority/nicer connecting
-   geometry are all still undecided and still open.
+   geometry are all still undecided and still open. Vanilla storage (chest/barrel/hopper/furnace/
+   etc.) now interoperates too, see Part 19 -- that gap was a missing capability registration, not
+   a design decision.
 
 3. **Placeholder art still owed — fully resolved, see Part 12.** `oily_sand`, Battery Box, and
    Electric Furnace all turned out to already have real art; the actual gap was ~160 items/blocks
