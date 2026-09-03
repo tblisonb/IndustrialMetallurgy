@@ -46,7 +46,7 @@ public class ThermoelectricGeneratorScreen extends AbstractContainerScreen<Therm
     protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
         super.extractTooltip(graphics, mouseX, mouseY);
         if (this.isHovering(ENERGY_X, ENERGY_Y, 16, 70, mouseX, mouseY)) {
-            graphics.setTooltipForNextFrame(this.font, Component.translatable("tooltip.industrialmetallurgy.stored_energy",
+            graphics.setTooltipForNextFrame(this.font, Component.translatable("tooltip.industrialmetallurgy.machine_energy",
                     this.menu.currentEnergy.get(), ThermoelectricGeneratorBlockEntity.MAX_ENERGY), mouseX, mouseY);
         }
     }

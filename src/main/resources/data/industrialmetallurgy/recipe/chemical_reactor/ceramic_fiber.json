@@ -3,7 +3,11 @@
   "input": [
     "minecraft:magma_block",
     "industrialmetallurgy:petroleum_bottle",
-    "minecraft:potion"
+    {
+      "neoforge:ingredient_type": "neoforge:components",
+      "items": ["minecraft:potion"],
+      "components": { "minecraft:potion_contents": "minecraft:water" }
+    }
   ],
   "output": [
     { "id": "industrialmetallurgy:ceramic_fiber" },

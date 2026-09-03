@@ -2,7 +2,11 @@
   "type": "industrialmetallurgy:chemical_reactor",
   "input": [
     "minecraft:sulfur",
-    "minecraft:potion",
+    {
+      "neoforge:ingredient_type": "neoforge:components",
+      "items": ["minecraft:potion"],
+      "components": { "minecraft:potion_contents": "minecraft:water" }
+    },
     "industrialmetallurgy:lead_ingot"
   ],
   "output": [

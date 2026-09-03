@@ -1,9 +1,12 @@
 package com.onlytanner.industrialmetallurgy.client.gui;
 
 import com.onlytanner.industrialmetallurgy.IndustrialMetallurgy;
+import com.onlytanner.industrialmetallurgy.client.TemperatureUnit;
 import com.onlytanner.industrialmetallurgy.containers.AdvancedForgeContainer;
 import com.onlytanner.industrialmetallurgy.tileentity.AdvancedForgeBlockEntity;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
@@ -26,6 +29,13 @@ public class AdvancedForgeScreen extends AbstractContainerScreen<AdvancedForgeCo
         // clear of it.
         this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
         this.inventoryLabelX += 20;
+        this.addRenderableWidget(Button.builder(Component.literal(TemperatureUnit.current().symbol()), button -> {
+                    TemperatureUnit.toggle();
+                    button.setMessage(Component.literal(TemperatureUnit.current().symbol()));
+                })
+                .bounds(this.leftPos, this.topPos - 22, 20, 20)
+                .tooltip(Tooltip.create(Component.translatable("gui.industrialmetallurgy.toggle_temperature_unit")))
+                .build());
     }
 
     @Override
@@ -46,11 +56,11 @@ public class AdvancedForgeScreen extends AbstractContainerScreen<AdvancedForgeCo
     protected void extractTooltip(GuiGraphicsExtractor graphics, int mouseX, int mouseY) {
         super.extractTooltip(graphics, mouseX, mouseY);
         if (this.isHovering(8, 8, 16, 70, mouseX, mouseY)) {
-            graphics.setTooltipForNextFrame(this.font, Component.translatable("tooltip.industrialmetallurgy.stored_energy",
+            graphics.setTooltipForNextFrame(this.font, Component.translatable("tooltip.industrialmetallurgy.machine_energy",
                     this.menu.currentEnergy.get(), AdvancedForgeBlockEntity.MAX_ENERGY), mouseX, mouseY);
         } else if (this.isHovering(164, 6, 7, 77, mouseX, mouseY)) {
             graphics.setTooltipForNextFrame(this.font, Component.translatable("tooltip.industrialmetallurgy.temperature",
-                    this.menu.currentTemperature.get(), this.menu.blockEntity.maxTemperature), mouseX, mouseY);
+                    TemperatureUnit.current().format(this.menu.currentTemperature.get())), mouseX, mouseY);
         }
     }
 

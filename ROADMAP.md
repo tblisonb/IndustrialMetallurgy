@@ -1168,6 +1168,50 @@ and I/O Ports in an actual running game hasn't happened yet.
 
 ---
 
+## Part 21 — Live-playtesting fixes: tooltip wording, temperature units, water bottle recipes — **DONE**
+
+Three small things the user found while actually running the client against Part 20 (2026-09-03).
+
+### Tooltip wording
+The energy-bar hover tooltip (`tooltip.industrialmetallurgy.machine_energy`, new key -- the old
+`tooltip.industrialmetallurgy.stored_energy` stays as-is, since it's still used by the Battery Pack/
+Prospector/Power Tool item tooltips and wasn't part of the ask) now reads `"%s / %s FE"`, dropping
+the trailing "stored". The temperature tooltip drops both the `"Temperature: "` prefix and the max
+value entirely -- see below for what replaced it.
+
+### Temperature units, with a global F/C toggle
+Every forge's `currentTemperature`/`maxTemperature` was already effectively Fahrenheit-scale (Tier 1
+through the Arc Furnace run 2000-4200) -- it just had no unit attached. Added
+`client.TemperatureUnit` (a two-value enum, FAHRENHEIT/CELSIUS, each knowing how to convert a
+Fahrenheit int and format it with its own degree symbol) with a single static "current" field --
+genuinely global, shared by every forge screen, not persisted to disk (resets to Fahrenheit each
+session; the mod has no config system yet to persist it into, and one boolean didn't seem worth
+introducing one for). `BasicForgeScreen`/`AdvancedForgeScreen` each got a small toggle button
+(top-left, just above the GUI box) that flips it and updates its own label. The temperature tooltip
+is now just `TemperatureUnit.current().format(currentTemperature)` -- e.g. `"1000°F"` or, toggled,
+`"538°C"`.
+
+### Water bottle recipes were matching any potion
+`ceramic_fiber`/`sulfuric_acid_bottle`/`ethylene_glycol_bottle` (all `chemical_reactor` recipes)
+specified their water-bottle ingredient as a bare `"minecraft:potion"` item id, which matches *any*
+potion item regardless of its `minecraft:potion_contents` component -- including the default
+"Uncraftable Potion" stack (`minecraft:potion` with no `potion_contents` set at all), which is
+exactly what the user saw filling the slot instead of a real water bottle. Fixed by switching those
+three ingredients to NeoForge's `neoforge:components` custom ingredient
+(`net.neoforged.neoforge.common.crafting.DataComponentIngredient`), which matches the item **and**
+a component patch -- `{"minecraft:potion_contents": "minecraft:water"}` -- so only an actual water
+bottle satisfies it. `chemical_centrifuge/packed_ice.json` also references `minecraft:potion`, but
+only as an *output* (untouched -- the report was specifically about recipes that consume a water
+bottle as input).
+
+### What's still unverified
+Compiles clean, builds clean, and a dedicated server was watched loading with the same 1861 recipes
+and no errors on any of the three edited recipe files. Not yet confirmed with a live client: the
+toggle button's on-screen position/appearance, that the water-bottle recipes now reject an
+Uncraftable Potion and accept a real one, or that Celsius conversion reads correctly in-game.
+
+---
+
 ## Part 5 — Open questions
 
 1. **Nequitum's fate — resolved, see Part 8.** Replaced outright with Tungsten-Rhenium (Rhenium
@@ -1226,3 +1270,12 @@ and I/O Ports in an actual running game hasn't happened yet.
    (2026-09-02) -- picked third of three next-up ideas, after the multiblock framework and the
    logistics system, specifically so it can get a research/brainstorm pass once those sharpen
    what's actually missing rather than being designed in a vacuum now.
+
+7. **Acid wash machine — idea only, not started.** A powered late-game machine that takes a
+   crushed ore plus an acid (sulfuric, or a new acid dedicated to this) and produces a tertiary
+   processed material for smelting -- a third yield-boosting tier alongside crushing/washing that
+   already exist, aimed specifically at late-game/rare resources. The user was explicit (2026-09-03)
+   that this needs real cost to offset the extra yield: high power draw, consumes the acid, and
+   should land as an endgame-tier machine rather than something available early. Not scoped in any
+   detail yet -- which ores it applies to, the actual yield bonus, whether it's a new acid or reuses
+   sulfuric, and where it sits in the existing crusher/forge progression are all still open.

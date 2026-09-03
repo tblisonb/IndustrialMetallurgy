@@ -1,8 +1,11 @@
 package com.onlytanner.industrialmetallurgy.client.gui;
 
 import com.onlytanner.industrialmetallurgy.IndustrialMetallurgy;
+import com.onlytanner.industrialmetallurgy.client.TemperatureUnit;
 import com.onlytanner.industrialmetallurgy.containers.BasicForgeContainer;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
@@ -21,6 +24,13 @@ public class BasicForgeScreen extends AbstractContainerScreen<BasicForgeContaine
     protected void init() {
         super.init();
         this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
+        this.addRenderableWidget(Button.builder(Component.literal(TemperatureUnit.current().symbol()), button -> {
+                    TemperatureUnit.toggle();
+                    button.setMessage(Component.literal(TemperatureUnit.current().symbol()));
+                })
+                .bounds(this.leftPos, this.topPos - 22, 20, 20)
+                .tooltip(Tooltip.create(Component.translatable("gui.industrialmetallurgy.toggle_temperature_unit")))
+                .build());
     }
 
     @Override
@@ -42,7 +52,7 @@ public class BasicForgeScreen extends AbstractContainerScreen<BasicForgeContaine
         super.extractTooltip(graphics, mouseX, mouseY);
         if (this.isHovering(164, 6, 7, 77, mouseX, mouseY)) {
             graphics.setTooltipForNextFrame(this.font, Component.translatable("tooltip.industrialmetallurgy.temperature",
-                    this.menu.currentTemperature.get(), this.menu.blockEntity.maxTemperature), mouseX, mouseY);
+                    TemperatureUnit.current().format(this.menu.currentTemperature.get())), mouseX, mouseY);
         }
     }
 

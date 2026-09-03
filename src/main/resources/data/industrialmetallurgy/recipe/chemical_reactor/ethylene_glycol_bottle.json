@@ -2,7 +2,11 @@
   "type": "industrialmetallurgy:chemical_reactor",
   "input": [
     "industrialmetallurgy:ethylene_bottle",
-    "minecraft:potion",
+    {
+      "neoforge:ingredient_type": "neoforge:components",
+      "items": ["minecraft:potion"],
+      "components": { "minecraft:potion_contents": "minecraft:water" }
+    },
     "industrialmetallurgy:sulfuric_acid_bottle"
   ],
   "output": [
