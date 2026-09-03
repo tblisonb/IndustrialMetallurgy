@@ -9,60 +9,70 @@ Mod ID: `industrialmetallurgy`.
 ## What it adds
 
 - **13 ores** across 4 mining-tool tiers (argentite, bauxite, cassiterite, chromite, cobaltite,
-  cuprite, galena, garnierite, lepidolite, pyrolusite, rutile, scheelite, sphalerite), plus oil
-  sand as a bitumen source.
-- **~27 metals and alloys** (brass, bronze, steel, stellite, invar, nichrome, nikrothal, kanthal,
-  constantan, electrum, cobalt steel, tungsten steel, copper tungsten, alnico, solder, nequitum,
-  and the base metals that feed them), each with an ingot, nugget, and storage block.
+  galena, garnierite, lepidolite, pyrolusite, rheniite, rutile, scheelite, sphalerite), plus oil
+  sand as a bitumen source. Every ore favors one real-world-plausible biome and mining-tool tier,
+  so finding a metal is also an excuse to go explore.
+- **~28 metals and alloys** (brass, bronze, steel, stellite, invar, nichrome, nikrothal, kanthal,
+  constantan, electrum, cobalt steel, tungsten steel, tungsten-rhenium, copper tungsten, alnico,
+  solder, and the base metals that feed them), each with an ingot, nugget, and storage block, and
+  each alloy chosen for a real metallurgical property rather than an arbitrary tier gate.
+- **5 tool tiers** (Steel, Cobalt Steel, Stellite, Tungsten Steel, Tungsten-Rhenium) and **4
+  armor sets** (Steel, Titanium, Stellite, Tungsten-Rhenium), plus **4 FE-powered hand tools**
+  (Power Drill, Chainsaw, Cultivator, and Prospector — a handheld ore magnetometer), each crafted
+  once and configured via two swappable sockets (a tiered implement, and a rechargeable Battery
+  Pack) instead of needing five more tool tiers apiece.
 - Intermediate materials for two downstream crafting chains: **electronics** (conducting
   elements, printed circuit boards, integrated circuits, capacitors, batteries, controller
   boards, electric motors) and **chemistry** (sulfur, phosphorus, arsenic, sulfuric acid,
   ethylene glycol, HDPE, ceramic fiber, welding flux, fertilizer, and more), built from ore
   byproducts most other mods discard.
-- **9 processing machines**, each Forge Energy (FE)-powered:
+- **11 processing machines**, each Forge Energy (FE)-powered unless noted:
   - **Crusher** — breaks ores into crushed ore (better yield than a furnace) using consumable
     burr sets; an optional sulfuric acid bottle boosts output.
-  - **Coke Oven** — cokes coal/charcoal into coal coke, a hotter fuel used by the higher forge
-    tiers.
-  - **Forge** (4 tiers: Iron/Steel solid-fuel, Cobalt/Tungsten electric) — combines multiple
-    ingredients into alloy ingots once hot enough; each tier gates which alloy recipes it can run.
-  - **Thermoelectric Generator** — burns fuel to generate FE for the other machines.
+  - **Coke Oven** — solid-fuel; cokes coal/charcoal into coal coke, a hotter fuel used by the
+    higher forge tiers.
+  - **Forge** (4 tiers: Iron/Steel solid-fuel, Cobalt/Tungsten electric) plus the **Arc Furnace**
+    (a 5th tier) — combine multiple ingredients into alloy ingots once hot enough; the Arc
+    Furnace also refines crushed ore into ingots at a 50% yield bonus, and is the only place
+    Rhenium can be smelted.
+  - **Electric Furnace** — runs ordinary vanilla smelting recipes on FE instead of fuel.
+  - **Autoclave** — leaches a crushed ore with a lixiviant (an acid, alkaline, or cyanide
+    solution, matched to that ore's real chemistry) into a metal-bearing solution; paired with
+    the Chemical Reactor's precipitation step, this is a third, late-game yield tier — 2x the
+    crushed-ore baseline.
+  - **Thermoelectric Generator** — burns fuel to generate FE via a real copper/constantan
+    thermocouple pairing; upgradeable with an installed Thermoelectric Coupling.
+  - **Solar Panel** — passive FE generation from an unobstructed daytime sky view, no fuel or
+    recipe.
+  - **Battery Box** — discharges a battery item into a shared FE buffer, and recharges Battery
+    Packs.
   - **Extruder** — reshapes ingots into plates, foil, wire, gears, and magnets.
   - **Soldering Station** — assembles electronics from a 3x3 grid of components plus solder wire.
   - **Chemical Centrifuge** — spins a single input apart into up to 3 byproducts.
-  - **Chemical Reactor** — combines 3 reagents into 1-2 chemical products.
+  - **Chemical Reactor** — combines up to 3 reagents into 1-2 chemical products, including
+    leach-solution precipitation.
+- **Minimal in-mod logistics** — one universal Conduit + I/O Port pair moves both FE and items
+  between machines and vanilla storage (chests, hoppers, furnaces, etc.), no per-resource pipe
+  types.
+- **World generation** — every ore spawns in a specific biome and height band, gated by mining
+  tier.
+- **An in-game guide book** (craft: a book + an iron nugget) explaining the mod, with `GUIDE.md`
+  as its human-readable source text.
+- **JEI integration** — every custom machine recipe type is browsable in Just Enough Items.
 
 ## Project status
 
-The mod is mid-rewrite from Minecraft 1.16.4 / Forge to Minecraft `26.2` / NeoForge; `master`
-tracks the NeoForge rewrite (the pre-rewrite 1.16.4 Forge codebase is preserved on the
-[`1.16.4`](../../tree/1.16.4) branch). See `CLAUDE.md` for the current architecture.
+The mod is a from-scratch rewrite from Minecraft 1.16.4 / Forge to Minecraft `26.2` / NeoForge;
+`master` tracks the rewrite (the pre-rewrite 1.16.4 Forge codebase is preserved on the
+[`1.16.4`](../../tree/1.16.4) branch). See `CLAUDE.md` for the current architecture, `ROADMAP.md`
+for what's still open, and `GUIDE.md` for a player-facing walkthrough.
 
-**Ported to 26.2:**
-- Full item and block registry (metals, ores, misc resources).
-- All 9 processing machines above, each with a working block/tile-entity/GUI/recipe stack on
-  the modern data-component, transfer-API-energy, `ValueInput`/`ValueOutput` APIs.
-
-Since that initial rewrite: recipe/progression gaps closed, a full tool tier (Steel/Cobalt
-Steel/Stellite/Tungsten Steel/Tungsten-Rhenium) and 4-set armor line, FE-powered hand tools
-(Power Drill/Chainsaw/Cultivator/Prospector) with swappable bit/battery sockets, Battery Box,
-Electric Furnace, and Arc Furnace (a higher-yield/faster 5th Forge tier). Nequitum was replaced
-outright with Tungsten-Rhenium, a real alloy, closing out the mod's one remaining "unobtainium."
-Ore world generation is wired up, every ore block has a real (procedural) texture, and there's
-an in-game guide book (craft: `minecraft:book` + `minecraft:iron_nugget`) explaining the mod --
-its source text lives in `GUIDE.md`. Every item and block now has a real texture and a working
-held-item icon (`ROADMAP.md` Parts 12-13 recovered ~160 assets that never made the jump from the
-1.16.4 branch, plus a handful of genuinely new ones). JEI integration is reconnected -- all 7
-custom machine recipe types are browsable, gated appropriately, tier-labeled where relevant (see
-`ROADMAP.md` Part 13). A Solar Panel and a Thermoelectric Coupling upgrade round out the FE
-generation side, and a minimal energy-only logistics system (I/O Port + Conduit) can move FE
-between machines without hand-wiring every block face-to-face (see `ROADMAP.md` Part 15). See
-`ROADMAP.md` for the full history and current design notes.
-
-**Not yet ported:**
-- **Worn-armor textures** — the 4 armor materials (Steel/Titanium/Stellite/Tungsten-Rhenium) have
-  item icons but no worn-body layer texture; equipped armor currently renders untextured on the
-  player model. Never existed in either era of the mod (`ROADMAP.md` Part 5).
+Everything listed above is implemented, data-driven, and verified compiling/building/loading on
+a dedicated server. It has not yet been confirmed end-to-end against a real graphical client (no
+display is available in this development environment) — treat anything visual (icon readability,
+GUI layout, worn-armor fit, on-screen text) as compiled-correct but not eyes-verified until
+played. Placeholder/procedurally-generated art still covers a meaningful fraction of the mod's
+items and textures; see `ROADMAP.md` if you want to help push any of it toward final art.
 
 ## Building & running
 
