@@ -2,6 +2,7 @@ package com.onlytanner.industrialmetallurgy.containers;
 
 import com.onlytanner.industrialmetallurgy.tileentity.AdvancedForgeBlockEntity;
 import com.onlytanner.industrialmetallurgy.util.FunctionalIntReferenceHolder;
+import com.onlytanner.industrialmetallurgy.util.ModItemHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -9,8 +10,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.SlotItemHandler;
+import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
 
 /** Shared by the electric forge tiers (3-4); only the registered MenuType (read off the block entity) differs. */
 public class AdvancedForgeContainer extends AbstractContainerMenu {
@@ -26,12 +26,12 @@ public class AdvancedForgeContainer extends AbstractContainerMenu {
         this.blockEntity = blockEntity;
         this.canInteractWithCallable = ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos());
 
-        IItemHandler inventory = blockEntity.getInventory();
-        this.addSlot(new SlotItemHandler(inventory, 0, 47, 22));
-        this.addSlot(new SlotItemHandler(inventory, 1, 73, 22));
-        this.addSlot(new SlotItemHandler(inventory, 2, 47, 48));
-        this.addSlot(new SlotItemHandler(inventory, 3, 73, 48));
-        this.addSlot(new SlotItemHandler(inventory, AdvancedForgeBlockEntity.OUTPUT_ID, 127, 35) {
+        ModItemHandler inventory = blockEntity.getInventory();
+        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, 0, 47, 22));
+        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, 1, 73, 22));
+        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, 2, 47, 48));
+        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, 3, 73, 48));
+        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, AdvancedForgeBlockEntity.OUTPUT_ID, 127, 35) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return false;

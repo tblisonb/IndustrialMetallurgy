@@ -3,6 +3,7 @@ package com.onlytanner.industrialmetallurgy.containers;
 import com.onlytanner.industrialmetallurgy.init.ModContainerTypes;
 import com.onlytanner.industrialmetallurgy.tileentity.CokeOvenBlockEntity;
 import com.onlytanner.industrialmetallurgy.util.FunctionalIntReferenceHolder;
+import com.onlytanner.industrialmetallurgy.util.ModItemHandler;
 import com.onlytanner.industrialmetallurgy.util.RegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
@@ -11,8 +12,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.SlotItemHandler;
+import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
 
 public class CokeOvenContainer extends AbstractContainerMenu {
 
@@ -25,9 +25,9 @@ public class CokeOvenContainer extends AbstractContainerMenu {
         this.blockEntity = blockEntity;
         this.canInteractWithCallable = ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos());
 
-        IItemHandler inventory = blockEntity.getInventory();
-        this.addSlot(new SlotItemHandler(inventory, CokeOvenBlockEntity.INPUT_ID, 56, 35));
-        this.addSlot(new SlotItemHandler(inventory, CokeOvenBlockEntity.OUTPUT_ID, 116, 35) {
+        ModItemHandler inventory = blockEntity.getInventory();
+        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, CokeOvenBlockEntity.INPUT_ID, 56, 35));
+        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, CokeOvenBlockEntity.OUTPUT_ID, 116, 35) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return false;

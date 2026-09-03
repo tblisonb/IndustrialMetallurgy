@@ -23,7 +23,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -190,7 +189,7 @@ public abstract class BasicForgeBlockEntity extends BlockEntity implements MenuP
         output.putInt("BurnTimeRemaining", this.burnTimeRemaining);
     }
 
-    public final IItemHandlerModifiable getInventory() {
+    public final ModItemHandler getInventory() {
         return this.inventory;
     }
 

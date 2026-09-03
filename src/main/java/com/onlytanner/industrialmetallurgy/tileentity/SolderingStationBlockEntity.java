@@ -23,7 +23,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.transfer.energy.EnergyHandler;
 import net.neoforged.neoforge.transfer.energy.SimpleEnergyHandler;
 
@@ -148,7 +147,7 @@ public class SolderingStationBlockEntity extends BlockEntity implements MenuProv
         this.energyHandler.serialize(output.child("Energy"));
     }
 
-    public final IItemHandlerModifiable getInventory() {
+    public final ModItemHandler getInventory() {
         return this.inventory;
     }
 

@@ -24,7 +24,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.transfer.energy.EnergyHandler;
 import net.neoforged.neoforge.transfer.energy.SimpleEnergyHandler;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
@@ -213,7 +212,7 @@ public class BatteryBoxBlockEntity extends BlockEntity implements MenuProvider {
         this.energyHandler.serialize(output.child("Energy"));
     }
 
-    public final IItemHandlerModifiable getInventory() {
+    public final ModItemHandler getInventory() {
         return this.inventory;
     }
 

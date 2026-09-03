@@ -1,29 +1,28 @@
 package com.onlytanner.industrialmetallurgy.tileentity;
 
 import com.onlytanner.industrialmetallurgy.init.ModTileEntityTypes;
-import com.onlytanner.industrialmetallurgy.util.ModCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.energy.EnergyHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.transaction.TransactionContext;
 
 import javax.annotation.Nullable;
 
 // A capability proxy, not a machine -- it holds no energy or items of its own. It scans its own 6
-// neighbors for the first real EnergyHandler/IItemHandlerModifiable that isn't another port or a
-// Conduit (the "host" machine it's attached to) and re-exposes that capability on itself, filtered
-// by one shared Mode for both resource types. A Conduit connecting to a port sees exactly the same
-// interface it'd see talking straight to a machine -- the port is purely what adds directional
-// control on top of that.
+// neighbors for the first real EnergyHandler/ResourceHandler<ItemResource> that isn't another port
+// or a Conduit (the "host" machine it's attached to) and re-exposes that capability on itself,
+// filtered by one shared Mode for both resource types. A Conduit connecting to a port sees exactly
+// the same interface it'd see talking straight to a machine -- the port is purely what adds
+// directional control on top of that.
 public class IOPortBlockEntity extends BlockEntity {
 
     public enum Mode {
@@ -40,7 +39,7 @@ public class IOPortBlockEntity extends BlockEntity {
 
     private Mode mode = Mode.BOTH;
     private final EnergyHandler energyDelegate = new PortEnergyHandler();
-    private final IItemHandlerModifiable itemDelegate = new PortItemHandler();
+    private final ResourceHandler<ItemResource> itemDelegate = new PortItemHandler();
 
     public IOPortBlockEntity(BlockPos pos, BlockState state) {
         super(ModTileEntityTypes.IO_PORT.get(), pos, state);
@@ -79,7 +78,7 @@ public class IOPortBlockEntity extends BlockEntity {
     }
 
     @Nullable
-    private IItemHandlerModifiable findHostItemHandler() {
+    private ResourceHandler<ItemResource> findHostItemHandler() {
         if (this.level == null) {
             return null;
         }
@@ -89,7 +88,7 @@ public class IOPortBlockEntity extends BlockEntity {
             if (neighbor instanceof IOPortBlockEntity || neighbor instanceof ConduitBlockEntity) {
                 continue;
             }
-            IItemHandlerModifiable handler = ModCapabilities.ITEM_HANDLER.getCapability(this.level, neighborPos, null, null, direction.getOpposite());
+            ResourceHandler<ItemResource> handler = Capabilities.Item.BLOCK.getCapability(this.level, neighborPos, null, null, direction.getOpposite());
             if (handler != null) {
                 return handler;
             }
@@ -97,7 +96,7 @@ public class IOPortBlockEntity extends BlockEntity {
         return null;
     }
 
-    public IItemHandlerModifiable getItemDelegate() {
+    public ResourceHandler<ItemResource> getItemDelegate() {
         return this.itemDelegate;
     }
 
@@ -147,56 +146,54 @@ public class IOPortBlockEntity extends BlockEntity {
 
     }
 
-    private class PortItemHandler implements IItemHandlerModifiable {
+    private class PortItemHandler implements ResourceHandler<ItemResource> {
 
         @Override
-        public int getSlots() {
-            IItemHandlerModifiable host = findHostItemHandler();
-            return host != null ? host.getSlots() : 0;
+        public int size() {
+            ResourceHandler<ItemResource> host = findHostItemHandler();
+            return host != null ? host.size() : 0;
         }
 
         @Override
-        public ItemStack getStackInSlot(int slot) {
-            IItemHandlerModifiable host = findHostItemHandler();
-            return host != null ? host.getStackInSlot(slot) : ItemStack.EMPTY;
+        public ItemResource getResource(int index) {
+            ResourceHandler<ItemResource> host = findHostItemHandler();
+            return host != null ? host.getResource(index) : ItemResource.EMPTY;
         }
 
         @Override
-        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+        public long getAmountAsLong(int index) {
+            ResourceHandler<ItemResource> host = findHostItemHandler();
+            return host != null ? host.getAmountAsLong(index) : 0;
+        }
+
+        @Override
+        public long getCapacityAsLong(int index, ItemResource resource) {
+            ResourceHandler<ItemResource> host = findHostItemHandler();
+            return host != null ? host.getCapacityAsLong(index, resource) : 0;
+        }
+
+        @Override
+        public boolean isValid(int index, ItemResource resource) {
+            ResourceHandler<ItemResource> host = findHostItemHandler();
+            return host != null && host.isValid(index, resource);
+        }
+
+        @Override
+        public int insert(int index, ItemResource resource, int amount, TransactionContext transaction) {
             if (mode == Mode.OUTPUT) {
-                return stack;
+                return 0;
             }
-            IItemHandlerModifiable host = findHostItemHandler();
-            return host != null ? host.insertItem(slot, stack, simulate) : stack;
+            ResourceHandler<ItemResource> host = findHostItemHandler();
+            return host != null ? host.insert(index, resource, amount, transaction) : 0;
         }
 
         @Override
-        public ItemStack extractItem(int slot, int amount, boolean simulate) {
+        public int extract(int index, ItemResource resource, int amount, TransactionContext transaction) {
             if (mode == Mode.INPUT) {
-                return ItemStack.EMPTY;
+                return 0;
             }
-            IItemHandlerModifiable host = findHostItemHandler();
-            return host != null ? host.extractItem(slot, amount, simulate) : ItemStack.EMPTY;
-        }
-
-        @Override
-        public int getSlotLimit(int slot) {
-            IItemHandlerModifiable host = findHostItemHandler();
-            return host != null ? host.getSlotLimit(slot) : 0;
-        }
-
-        @Override
-        public boolean isItemValid(int slot, ItemStack stack) {
-            IItemHandlerModifiable host = findHostItemHandler();
-            return host != null && host.isItemValid(slot, stack);
-        }
-
-        @Override
-        public void setStackInSlot(int slot, ItemStack stack) {
-            IItemHandlerModifiable host = findHostItemHandler();
-            if (host != null) {
-                host.setStackInSlot(slot, stack);
-            }
+            ResourceHandler<ItemResource> host = findHostItemHandler();
+            return host != null ? host.extract(index, resource, amount, transaction) : 0;
         }
 
     }

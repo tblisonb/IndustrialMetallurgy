@@ -23,7 +23,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -136,7 +135,7 @@ public class CokeOvenBlockEntity extends BlockEntity implements MenuProvider {
         output.putInt("BurnTimeRemaining", this.burnTimeRemaining);
     }
 
-    public final IItemHandlerModifiable getInventory() {
+    public final ModItemHandler getInventory() {
         return this.inventory;
     }
 

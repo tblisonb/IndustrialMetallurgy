@@ -3,6 +3,7 @@ package com.onlytanner.industrialmetallurgy.containers;
 import com.onlytanner.industrialmetallurgy.init.ModContainerTypes;
 import com.onlytanner.industrialmetallurgy.tileentity.ElectricFurnaceBlockEntity;
 import com.onlytanner.industrialmetallurgy.util.FunctionalIntReferenceHolder;
+import com.onlytanner.industrialmetallurgy.util.ModItemHandler;
 import com.onlytanner.industrialmetallurgy.util.RegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
@@ -11,8 +12,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.SlotItemHandler;
+import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
 
 public class ElectricFurnaceContainer extends AbstractContainerMenu {
 
@@ -26,15 +26,15 @@ public class ElectricFurnaceContainer extends AbstractContainerMenu {
         this.blockEntity = blockEntity;
         this.canInteractWithCallable = ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos());
 
-        IItemHandler inventory = blockEntity.getInventory();
-        this.addSlot(new SlotItemHandler(inventory, ElectricFurnaceBlockEntity.INPUT_ID, 56, 35));
-        this.addSlot(new SlotItemHandler(inventory, ElectricFurnaceBlockEntity.HEATING_ELEMENT_ID, 152, 8) {
+        ModItemHandler inventory = blockEntity.getInventory();
+        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, ElectricFurnaceBlockEntity.INPUT_ID, 56, 35));
+        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, ElectricFurnaceBlockEntity.HEATING_ELEMENT_ID, 152, 8) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return stack.getItem().equals(RegistryHandler.HEATING_ELEMENT.get());
             }
         });
-        this.addSlot(new SlotItemHandler(inventory, ElectricFurnaceBlockEntity.OUTPUT_ID, 116, 35) {
+        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, ElectricFurnaceBlockEntity.OUTPUT_ID, 116, 35) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return false;

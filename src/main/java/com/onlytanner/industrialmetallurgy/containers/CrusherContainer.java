@@ -3,6 +3,7 @@ package com.onlytanner.industrialmetallurgy.containers;
 import com.onlytanner.industrialmetallurgy.init.ModContainerTypes;
 import com.onlytanner.industrialmetallurgy.tileentity.CrusherBlockEntity;
 import com.onlytanner.industrialmetallurgy.util.FunctionalIntReferenceHolder;
+import com.onlytanner.industrialmetallurgy.util.ModItemHandler;
 import com.onlytanner.industrialmetallurgy.util.RegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
@@ -11,8 +12,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.SlotItemHandler;
+import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
 
 public class CrusherContainer extends AbstractContainerMenu {
 
@@ -29,9 +29,9 @@ public class CrusherContainer extends AbstractContainerMenu {
         this.canInteractWithCallable = ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos());
         this.playerInventory = player;
 
-        IItemHandler inventory = blockEntity.getInventory();
-        this.addSlot(new SlotItemHandler(inventory, CrusherBlockEntity.INPUT_ID, 56, 35));
-        this.addSlot(new SlotItemHandler(inventory, CrusherBlockEntity.BURR_SET_ID, 152, 8) {
+        ModItemHandler inventory = blockEntity.getInventory();
+        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, CrusherBlockEntity.INPUT_ID, 56, 35));
+        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, CrusherBlockEntity.BURR_SET_ID, 152, 8) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return stack.getItem().equals(RegistryHandler.BRASS_BURR_SET.get()) ||
@@ -41,13 +41,13 @@ public class CrusherContainer extends AbstractContainerMenu {
                         stack.getItem().equals(RegistryHandler.TUNGSTEN_RHENIUM_BURR_SET.get());
             }
         });
-        this.addSlot(new SlotItemHandler(inventory, CrusherBlockEntity.OUTPUT_ID, 116, 35) {
+        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, CrusherBlockEntity.OUTPUT_ID, 116, 35) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return false;
             }
         });
-        this.addSlot(new SlotItemHandler(inventory, CrusherBlockEntity.ACID_ID, 152, 62) {
+        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, CrusherBlockEntity.ACID_ID, 152, 62) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return stack.getItem().equals(RegistryHandler.SULFURIC_ACID_BOTTLE.get());

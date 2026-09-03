@@ -1111,6 +1111,63 @@ tooltip render.
 
 ---
 
+## Part 20 — Item storage migrated to the new transfer API — **DONE**
+
+Part 18 deliberately avoided migrating every machine's storage off the deprecated
+`IItemHandler`/`ItemStackHandler` paradigm, calling it "real, separate, invasive work" and giving
+the Conduit/I-O Port their own `ModCapabilities.ITEM_HANDLER` capability instead. Since nothing
+else uses this mod yet, the user asked to just do that migration rather than carry the workaround
+-- so this Part does the real thing: every machine's inventory is now genuinely backed by
+`net.neoforged.neoforge.transfer`, the same paradigm energy storage (`SimpleEnergyHandler`,
+`EnergyHandler`) has been on since Part 15.
+
+### What actually moved
+- **`ModItemHandler`** now extends `ItemStacksResourceHandler` (a `ResourceHandler<ItemResource>`)
+  instead of `ItemStackHandler`. It keeps the same convenience-method surface it always had
+  (`getStackInSlot`, `insertItem`, `extractItem`, `decrStackSize`, `setStackInSlot`, `isItemValid`,
+  `getSlotLimit`) so every machine's `tick()`/recipe-processing logic -- ~100 call sites across the
+  11 machine block entities -- needed **zero changes**; those methods are just implemented on top
+  of the new `insert`/`extract(Transaction)`/`set` primitives now instead of the old simulate-then-
+  commit ones. Recipe matching itself was already insulated (`CrusherRecipeInput` etc. are plain
+  `ItemStack` records), so none of the `recipes/` package changed either.
+- **11 block entities** -- `getInventory()` now returns the concrete `ModItemHandler` type directly
+  (previously `IItemHandlerModifiable`); that's the only line each one needed.
+- **11 containers** -- `SlotItemHandler` (deprecated, wraps `IItemHandler`) replaced with
+  `ResourceHandlerSlot` (wraps `ResourceHandler<ItemResource>`, needs the handler's `set` method as
+  an `IndexModifier` alongside it: `new ResourceHandlerSlot(inventory, inventory::set, slot, x, y)`).
+  Anonymous `mayPlace` overrides (burr set/acid bottle/output-slot whitelists) carried over
+  unchanged. `BatteryBoxContainer` and `ThermoelectricGeneratorContainer`'s named slot subclasses
+  (`BatterySlot`, `ChargeSlot`, `FuelSlot`, `CouplingSlot`) got the same treatment.
+- **`ConduitBlockEntity`/`IOPortBlockEntity`** -- this is the one place that got a genuine rewrite
+  rather than a mechanical swap, since these cross real block-to-block boundaries where the
+  transactional API is the point. `moveItems` now mirrors `distributeEnergy`'s own "insert into the
+  sink first, then pull that exact amount out of the source, all inside one `Transaction`" pattern
+  -- which is actually more correct than the old simulate-then-commit dance (no window where a
+  sink's state could change between the simulate and the commit). `IOPortBlockEntity`'s
+  `PortItemHandler` now implements `ResourceHandler<ItemResource>` directly (7 methods: `size`,
+  `getResource`, `getAmountAsLong`, `getCapacityAsLong`, `isValid`, `insert`, `extract`), each
+  Mode-gated exactly like the existing `PortEnergyHandler`.
+- **Capability registration** -- all 14 machine/I-O-port item registrations moved from
+  `ModCapabilities.ITEM_HANDLER` to NeoForge's own `Capabilities.Item.BLOCK`.
+
+### The actual payoff: Part 19's vanilla-storage workaround is gone
+`ModCapabilities.ITEM_HANDLER` and the entire vanilla-storage registration block Part 19 added
+(chest double-block combining, `SidedInvWrapper`/`InvWrapper` for furnaces/barrels/hoppers/etc.) are
+deleted outright -- `ModCapabilities.java` no longer exists. NeoForge already registers all of that
+by default against its own `Capabilities.Item.BLOCK` (`CapabilityHooks#registerVanillaProviders`),
+so once this mod's own machines register against that same capability, a chest or hopper next to a
+Conduit/I-O Port just works with no mod-side code for it at all. The diff for this whole Part is
+net **negative** (26 files touched, +233/-309, plus one file deleted) -- migrating removed more
+workaround code than it added.
+
+### What's still unverified
+Compiles clean, builds clean, and a dedicated server was watched loading with the same 1861 recipes
+and no exceptions (both before and after this change). The standing caveat is unchanged from every
+other Part: live-client confirmation that items still move correctly through machines, Conduits,
+and I/O Ports in an actual running game hasn't happened yet.
+
+---
+
 ## Part 5 — Open questions
 
 1. **Nequitum's fate — resolved, see Part 8.** Replaced outright with Tungsten-Rhenium (Rhenium
@@ -1127,13 +1184,14 @@ tooltip render.
    Rhenium is my pick if you want the replacement to *justify* an endgame machine rather than
    just be an expensive tool material.
 
-2. **How far to take the logistics system — energy and items both now exist, see Parts 15 and 18.**
-   Item transfer shipped without the full `IItemHandler` → transfer-API migration by giving the
-   Conduit/I-O Port their own small `ModCapabilities.ITEM_HANDLER` instead of NeoForge's official
-   (transfer-API-based) item capability -- that migration is still real, separate, undone work,
-   just no longer a blocker for this. One universal Conduit/I-O Port pair now carries energy and
-   items together rather than needing per-resource pipe types, per the user's own "doesn't have to
-   be complex" steer (2026-09-02). Fluids are the one resource still missing, deliberately: no
+2. **How far to take the logistics system — energy and items both now exist, see Parts 15, 18-20.**
+   Item transfer shipped in Part 18 without the full `IItemHandler` → transfer-API migration
+   (a temporary `ModCapabilities.ITEM_HANDLER` instead of NeoForge's official item capability);
+   Part 20 did that migration -- every machine's storage is now genuinely on
+   `net.neoforged.neoforge.transfer`, same as energy has been since Part 15. One universal
+   Conduit/I-O Port pair carries energy and items together rather than needing per-resource pipe
+   types, per the user's own "doesn't have to be complex" steer (2026-09-02). Fluids are the one
+   resource still missing, deliberately: no
    machine in the mod produces or consumes a fluid yet, so a Fluid Conduit has nothing to connect
    to today -- revisit once a real fluid-bearing machine exists. Filters/priority/nicer connecting
    geometry are all still undecided and still open. Vanilla storage (chest/barrel/hopper/furnace/

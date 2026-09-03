@@ -1,18 +1,16 @@
 package com.onlytanner.industrialmetallurgy.tileentity;
 
 import com.onlytanner.industrialmetallurgy.init.ModTileEntityTypes;
-import com.onlytanner.industrialmetallurgy.util.ModCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.energy.EnergyHandler;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 import java.util.ArrayDeque;
@@ -57,7 +55,7 @@ public class ConduitBlockEntity extends BlockEntity {
             distributeEnergy(energyEndpoints);
         }
 
-        List<IItemHandlerModifiable> itemEndpoints = findEndpoints(serverLevel, connectedConduits, ModCapabilities.ITEM_HANDLER);
+        List<ResourceHandler<ItemResource>> itemEndpoints = findEndpoints(serverLevel, connectedConduits, Capabilities.Item.BLOCK);
         if (itemEndpoints.size() >= 2) {
             distributeItems(itemEndpoints);
         }
@@ -136,17 +134,17 @@ public class ConduitBlockEntity extends BlockEntity {
         }
     }
 
-    private void distributeItems(List<IItemHandlerModifiable> endpoints) {
+    private void distributeItems(List<ResourceHandler<ItemResource>> endpoints) {
         int budget = MAX_ITEM_TRANSFER_PER_TICK;
-        for (IItemHandlerModifiable source : endpoints) {
+        for (ResourceHandler<ItemResource> source : endpoints) {
             if (budget <= 0) {
                 return;
             }
-            List<IItemHandlerModifiable> sinks = endpoints.stream().filter(e -> e != source).toList();
+            List<ResourceHandler<ItemResource>> sinks = endpoints.stream().filter(e -> e != source).toList();
             if (sinks.isEmpty()) {
                 continue;
             }
-            for (IItemHandlerModifiable sink : sinks) {
+            for (ResourceHandler<ItemResource> sink : sinks) {
                 if (budget <= 0) {
                     break;
                 }
@@ -155,34 +153,32 @@ public class ConduitBlockEntity extends BlockEntity {
         }
     }
 
-    // Pulls the first non-empty slot's contents from source (up to maxAmount) and offers them to
-    // sink across all its slots, the same simulate-then-commit two-step every legacy IItemHandler
-    // mover uses (there's no Transaction type for this older API). Moves at most one slot's worth
+    // Pulls the first non-empty index's contents from source (up to maxAmount) and offers them to
+    // sink (any index it chooses), the same "insert first, then pull that same amount out of the
+    // source" transactional pattern distributeEnergy already uses. Moves at most one index's worth
     // per source-sink pair per tick -- another deliberately unsmart choice, matching
     // distributeEnergy's own "one slice per pair, not a full drain loop."
-    private int moveItems(IItemHandlerModifiable source, IItemHandlerModifiable sink, int maxAmount) {
-        for (int slot = 0; slot < source.getSlots(); slot++) {
-            ItemStack available = source.extractItem(slot, maxAmount, true);
-            if (available.isEmpty()) {
+    private int moveItems(ResourceHandler<ItemResource> source, ResourceHandler<ItemResource> sink, int maxAmount) {
+        for (int index = 0; index < source.size(); index++) {
+            ItemResource resource = source.getResource(index);
+            if (resource.isEmpty()) {
                 continue;
             }
-            ItemStack remainder = ItemHandlerHelper.insertItem(sink, available, true);
-            int insertable = available.getCount() - remainder.getCount();
-            if (insertable <= 0) {
+            int available = Math.min(source.getAmountAsInt(index), maxAmount);
+            if (available <= 0) {
                 continue;
             }
-            ItemStack extracted = source.extractItem(slot, insertable, false);
-            if (extracted.isEmpty()) {
-                continue;
+            try (Transaction transaction = Transaction.openRoot()) {
+                int inserted = sink.insert(resource, available, transaction);
+                if (inserted <= 0) {
+                    continue;
+                }
+                int extracted = source.extract(index, resource, inserted, transaction);
+                if (extracted == inserted) {
+                    transaction.commit();
+                    return extracted;
+                }
             }
-            ItemStack notInserted = ItemHandlerHelper.insertItem(sink, extracted, false);
-            if (!notInserted.isEmpty()) {
-                // Shouldn't happen -- the insert was already simulated for this exact count --
-                // but if the sink's state somehow changed between simulate and commit, put back
-                // whatever didn't fit rather than dropping it.
-                source.insertItem(slot, notInserted, false);
-            }
-            return extracted.getCount() - notInserted.getCount();
         }
         return 0;
     }

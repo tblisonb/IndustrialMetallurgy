@@ -3,6 +3,7 @@ package com.onlytanner.industrialmetallurgy.containers;
 import com.onlytanner.industrialmetallurgy.init.ModContainerTypes;
 import com.onlytanner.industrialmetallurgy.tileentity.ChemicalReactorBlockEntity;
 import com.onlytanner.industrialmetallurgy.util.FunctionalIntReferenceHolder;
+import com.onlytanner.industrialmetallurgy.util.ModItemHandler;
 import com.onlytanner.industrialmetallurgy.util.RegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
@@ -12,8 +13,7 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.SlotItemHandler;
+import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
 
 public class ChemicalReactorContainer extends AbstractContainerMenu {
 
@@ -29,17 +29,17 @@ public class ChemicalReactorContainer extends AbstractContainerMenu {
         this.canInteractWithCallable = ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos());
         this.playerInventory = player;
 
-        IItemHandler inventory = blockEntity.getInventory();
-        this.addSlot(new SlotItemHandler(inventory, ChemicalReactorBlockEntity.INPUT_ID, 57, 24));
-        this.addSlot(new SlotItemHandler(inventory, ChemicalReactorBlockEntity.INPUT_ID + 1, 80, 17));
-        this.addSlot(new SlotItemHandler(inventory, ChemicalReactorBlockEntity.INPUT_ID + 2, 103, 24));
-        this.addSlot(new SlotItemHandler(inventory, ChemicalReactorBlockEntity.BOTTLE_ID, 152, 62) {
+        ModItemHandler inventory = blockEntity.getInventory();
+        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, ChemicalReactorBlockEntity.INPUT_ID, 57, 24));
+        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, ChemicalReactorBlockEntity.INPUT_ID + 1, 80, 17));
+        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, ChemicalReactorBlockEntity.INPUT_ID + 2, 103, 24));
+        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, ChemicalReactorBlockEntity.BOTTLE_ID, 152, 62) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return stack.getItem().equals(Items.GLASS_BOTTLE);
             }
         });
-        this.addSlot(new SlotItemHandler(inventory, ChemicalReactorBlockEntity.OUTPUT_ID, 80, 58) {
+        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, ChemicalReactorBlockEntity.OUTPUT_ID, 80, 58) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return false;

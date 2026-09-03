@@ -3,6 +3,7 @@ package com.onlytanner.industrialmetallurgy.containers;
 import com.onlytanner.industrialmetallurgy.init.ModContainerTypes;
 import com.onlytanner.industrialmetallurgy.tileentity.ThermoelectricGeneratorBlockEntity;
 import com.onlytanner.industrialmetallurgy.util.FunctionalIntReferenceHolder;
+import com.onlytanner.industrialmetallurgy.util.ModItemHandler;
 import com.onlytanner.industrialmetallurgy.util.RegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
@@ -11,8 +12,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.SlotItemHandler;
+import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
 
 public class ThermoelectricGeneratorContainer extends AbstractContainerMenu {
 
@@ -27,7 +27,7 @@ public class ThermoelectricGeneratorContainer extends AbstractContainerMenu {
         this.blockEntity = blockEntity;
         this.canInteractWithCallable = ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos());
 
-        IItemHandler inventory = blockEntity.getInventory();
+        ModItemHandler inventory = blockEntity.getInventory();
         this.addSlot(new FuelSlot(inventory, ThermoelectricGeneratorBlockEntity.FUEL_ID, 80, 35));
         this.addSlot(new FuelSlot(inventory, 1, 8, 8));
         this.addSlot(new FuelSlot(inventory, 2, 8, 26));
@@ -110,10 +110,10 @@ public class ThermoelectricGeneratorContainer extends AbstractContainerMenu {
                 : 0;
     }
 
-    private class FuelSlot extends SlotItemHandler {
+    private class FuelSlot extends ResourceHandlerSlot {
 
-        public FuelSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
-            super(itemHandler, index, xPosition, yPosition);
+        public FuelSlot(ModItemHandler itemHandler, int index, int xPosition, int yPosition) {
+            super(itemHandler, itemHandler::set, index, xPosition, yPosition);
         }
 
         @Override
@@ -124,10 +124,10 @@ public class ThermoelectricGeneratorContainer extends AbstractContainerMenu {
 
     }
 
-    private static class CouplingSlot extends SlotItemHandler {
+    private static class CouplingSlot extends ResourceHandlerSlot {
 
-        public CouplingSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
-            super(itemHandler, index, xPosition, yPosition);
+        public CouplingSlot(ModItemHandler itemHandler, int index, int xPosition, int yPosition) {
+            super(itemHandler, itemHandler::set, index, xPosition, yPosition);
         }
 
         @Override

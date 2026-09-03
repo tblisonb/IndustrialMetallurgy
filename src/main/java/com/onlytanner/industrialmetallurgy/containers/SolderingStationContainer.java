@@ -3,6 +3,7 @@ package com.onlytanner.industrialmetallurgy.containers;
 import com.onlytanner.industrialmetallurgy.init.ModContainerTypes;
 import com.onlytanner.industrialmetallurgy.tileentity.SolderingStationBlockEntity;
 import com.onlytanner.industrialmetallurgy.util.FunctionalIntReferenceHolder;
+import com.onlytanner.industrialmetallurgy.util.ModItemHandler;
 import com.onlytanner.industrialmetallurgy.util.RegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
@@ -11,8 +12,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.SlotItemHandler;
+import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
 
 public class SolderingStationContainer extends AbstractContainerMenu {
 
@@ -28,20 +28,20 @@ public class SolderingStationContainer extends AbstractContainerMenu {
         this.canInteractWithCallable = ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos());
         this.playerInventory = player;
 
-        IItemHandler inventory = blockEntity.getInventory();
+        ModItemHandler inventory = blockEntity.getInventory();
         // 3x3 main grid
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                this.addSlot(new SlotItemHandler(inventory, i * 3 + j, 42 + (j * 18), 17 + (i * 18)));
+                this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, i * 3 + j, 42 + (j * 18), 17 + (i * 18)));
             }
         }
-        this.addSlot(new SlotItemHandler(inventory, SolderingStationBlockEntity.SOLDER_ID, 132, 17) {
+        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, SolderingStationBlockEntity.SOLDER_ID, 132, 17) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return stack.getItem().equals(RegistryHandler.SOLDER_WIRE.get());
             }
         });
-        this.addSlot(new SlotItemHandler(inventory, SolderingStationBlockEntity.OUTPUT_ID, 136, 49) {
+        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, SolderingStationBlockEntity.OUTPUT_ID, 136, 49) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return false;
