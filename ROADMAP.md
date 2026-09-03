@@ -43,12 +43,13 @@ When an item below gets built, move what's genuinely still worth knowing into `R
    true in both eras of the mod, not a porting regression. Worth 4 more machine housing textures
    at some point, or fine to leave as a shared "housing family" look.
 
-5. **Convert Forges/Arc Furnace to the multiblock framework.** The framework itself
-   (`com.onlytanner.industrialmetallurgy.multiblock`) exists and compiles, but nothing in the mod
-   uses it yet. Converting the Forges and Arc Furnace means real per-machine design work —
-   structure shape, what forming/breaking should do to an in-progress recipe, whether existing
-   single-block placements in the world need a migration path — deliberately left open rather
-   than decided as a side effect of building the framework.
+5. **Convert Forge Tiers 1-4 to the multiblock framework.** The Arc Furnace is converted — a
+   3x3x3 Tungsten Steel Block shell around a Tungsten-Rhenium Block core, with the existing
+   single-block Arc Furnace as the controller on the front face. Tiers 1-4 are still plain
+   single-block machines. Extending the same idea to them means real per-tier design work —
+   would each tier want its own shell material/shape (scaling structure size with tier, say), or
+   share one — deliberately left open rather than decided as a side effect of doing the Arc
+   Furnace first.
 
 6. **More energy-generating machines.** Currently just the Solar Panel and Thermoelectric
    Generator. Intentionally left fuzzy — worth a real research/brainstorm pass on what's actually

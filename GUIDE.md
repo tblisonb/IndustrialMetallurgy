@@ -258,6 +258,12 @@ real rhenium has the second-highest melting point of any element.
 <!-- page -->
 Rheniite, its ore, was discovered in a single volcanic fumarole in 1994 — also why it's the
 rarest, most narrowly-gated ore in the mod.
+<!-- page -->
+Unlike every other machine, the Arc Furnace is a multiblock: place it, then build a 3×3×3 shell
+of Tungsten Steel Blocks around it with a Tungsten-Rhenium Block hidden at the true center.
+<!-- page -->
+Its GUI still opens with the shell incomplete, but says so, and won't run until the structure is
+whole — the mod's first real multiblock machine, real arc furnaces are built, not just placed.
 
 ### Tungsten-Rhenium
 

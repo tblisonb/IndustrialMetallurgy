@@ -3,6 +3,7 @@ package com.onlytanner.industrialmetallurgy.tileentity;
 import com.onlytanner.industrialmetallurgy.blocks.ForgeBlock;
 import com.onlytanner.industrialmetallurgy.containers.AdvancedForgeContainer;
 import com.onlytanner.industrialmetallurgy.init.ModRecipes;
+import com.onlytanner.industrialmetallurgy.multiblock.MultiblockPattern;
 import com.onlytanner.industrialmetallurgy.recipes.ForgeRecipe;
 import com.onlytanner.industrialmetallurgy.recipes.ForgeRecipeInput;
 import com.onlytanner.industrialmetallurgy.util.ModItemHandler;
@@ -56,6 +57,13 @@ public abstract class AdvancedForgeBlockEntity extends BlockEntity implements Me
     private final Set<String> acceptedTiers;
     private final Component defaultName;
     private final MenuType<AdvancedForgeContainer> menuType;
+    /**
+     * True whenever this tier has no multiblock structure to check ({@link #getMultiblockPattern()}
+     * returns null, the default) -- Tiers 3/4 are plain single-block machines and are always
+     * considered formed. Only a tier that overrides {@link #getMultiblockPattern()} (currently just
+     * the Arc Furnace) tracks real formed/unformed state here.
+     */
+    private boolean formed = true;
     private final SimpleEnergyHandler energyHandler = new SimpleEnergyHandler(MAX_ENERGY) {
         @Override
         protected void onEnergyChanged(int previousAmount) {
@@ -80,11 +88,51 @@ public abstract class AdvancedForgeBlockEntity extends BlockEntity implements Me
         return this.menuType;
     }
 
+    /**
+     * The multiblock structure this tier requires around itself, or null for a plain single-block
+     * tier (the default -- overridden only by {@link ArcFurnaceBlockEntity} today). Authored
+     * against {@link ForgeBlock#FACING} = NORTH; see {@link com.onlytanner.industrialmetallurgy.multiblock.MultiblockPatternBuilder}.
+     */
+    @Nullable
+    protected MultiblockPattern getMultiblockPattern() {
+        return null;
+    }
+
+    /**
+     * Re-checks {@link #getMultiblockPattern()} against the world every tick -- cheap enough (a
+     * handful of block-state lookups) not to need throttling, and simpler/more correct than
+     * relying on {@code neighborChanged} propagation, which only reaches blocks directly adjacent
+     * to the controller and would miss most of a structure this size being broken further away.
+     * A no-op whenever there's no pattern to check.
+     */
+    private void refreshStructure() {
+        MultiblockPattern pattern = getMultiblockPattern();
+        if (pattern == null) {
+            return;
+        }
+        boolean matches = pattern.matches(this.level, this.worldPosition, this.getBlockState().getValue(ForgeBlock.FACING));
+        if (matches != this.formed) {
+            this.formed = matches;
+            this.setChanged();
+        }
+    }
+
+    /** True if this tier has no structure requirement, or its structure is currently intact. */
+    public boolean isFormed() {
+        return this.formed;
+    }
+
+    /** For the menu's synced formed-state DataSlot; see FunctionalIntReferenceHolder. */
+    public void setFormed(boolean formed) {
+        this.formed = formed;
+    }
+
     @Override
     public void tick() {
         boolean dirty = false;
         if (this.level instanceof ServerLevel serverLevel) {
-            Optional<RecipeHolder<ForgeRecipe>> recipe = getRecipe(serverLevel);
+            refreshStructure();
+            Optional<RecipeHolder<ForgeRecipe>> recipe = this.formed ? getRecipe(serverLevel) : Optional.empty();
             int energy = this.energyHandler.getAmountAsInt();
             if (recipe.isPresent() && canProcess(recipe.get()) && energy >= ENERGY_USAGE_PER_TICK && currentTemperature > minRunningTemperature) {
                 this.level.setBlockAndUpdate(this.getBlockPos(), this.getBlockState().setValue(ForgeBlock.LIT, true));
@@ -170,6 +218,7 @@ public abstract class AdvancedForgeBlockEntity extends BlockEntity implements Me
         this.currentSmeltTime = input.getIntOr("CurrentSmeltTime", 0);
         this.currentTemperature = input.getIntOr("CurrentTemperature", 0);
         this.energyHandler.deserialize(input.childOrEmpty("Energy"));
+        this.formed = input.getBooleanOr("Formed", true);
     }
 
     @Override
@@ -182,6 +231,7 @@ public abstract class AdvancedForgeBlockEntity extends BlockEntity implements Me
         output.putInt("CurrentSmeltTime", this.currentSmeltTime);
         output.putInt("CurrentTemperature", this.currentTemperature);
         this.energyHandler.serialize(output.child("Energy"));
+        output.putBoolean("Formed", this.formed);
     }
 
     public final ModItemHandler getInventory() {

@@ -50,6 +50,13 @@ public class AdvancedForgeScreen extends AbstractContainerScreen<AdvancedForgeCo
         graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, x + 8, y + 8 + energyOffset, 176.0F, energyOffset + 24.0F, 16, this.menu.getCurrentEnergyScaled(), 256, 256);
 
         graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, x + 164, y + 76 - this.menu.getTemperatureScaled(), 176.0F, 17.0F, 7, 7, 256, 256);
+
+        // Only ever true for a tier with a multiblock structure requirement (currently just the
+        // Arc Furnace) -- Tiers 3/4 always report formed and never draw this.
+        if (!this.menu.isFormed()) {
+            graphics.centeredText(this.font, Component.translatable("gui.industrialmetallurgy.structure_incomplete"),
+                    x + this.imageWidth / 2, y + 68, 0xFF5555);
+        }
     }
 
     @Override

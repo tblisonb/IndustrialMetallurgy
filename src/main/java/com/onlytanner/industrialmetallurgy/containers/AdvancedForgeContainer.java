@@ -20,6 +20,7 @@ public class AdvancedForgeContainer extends AbstractContainerMenu {
     public FunctionalIntReferenceHolder currentSmeltTime;
     public FunctionalIntReferenceHolder currentEnergy;
     public FunctionalIntReferenceHolder currentTemperature;
+    public FunctionalIntReferenceHolder formed;
 
     public AdvancedForgeContainer(final int id, final Inventory player, final AdvancedForgeBlockEntity blockEntity) {
         super(blockEntity.getMenuType(), id);
@@ -52,6 +53,8 @@ public class AdvancedForgeContainer extends AbstractContainerMenu {
         this.addDataSlot(currentSmeltTime = new FunctionalIntReferenceHolder(() -> this.blockEntity.currentSmeltTime, value -> this.blockEntity.currentSmeltTime = value));
         this.addDataSlot(currentEnergy = new FunctionalIntReferenceHolder(this.blockEntity::getEnergyAmount, this.blockEntity::setEnergyAmount));
         this.addDataSlot(currentTemperature = new FunctionalIntReferenceHolder(() -> this.blockEntity.currentTemperature, value -> this.blockEntity.currentTemperature = value));
+        this.addDataSlot(formed = new FunctionalIntReferenceHolder(
+                () -> this.blockEntity.isFormed() ? 1 : 0, value -> this.blockEntity.setFormed(value != 0)));
     }
 
     public AdvancedForgeContainer(final int id, final Inventory player, final net.minecraft.network.RegistryFriendlyByteBuf data) {
@@ -117,6 +120,10 @@ public class AdvancedForgeContainer extends AbstractContainerMenu {
         return this.currentTemperature.get() != 0
                 ? this.currentTemperature.get() * 70 / this.blockEntity.maxTemperature
                 : 0;
+    }
+
+    public boolean isFormed() {
+        return this.formed.get() != 0;
     }
 
 }

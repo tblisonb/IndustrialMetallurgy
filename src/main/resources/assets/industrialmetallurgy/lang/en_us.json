@@ -261,6 +261,7 @@
   "tooltip.industrialmetallurgy.machine_energy": "%s / %s FE",
   "tooltip.industrialmetallurgy.temperature": "%s",
   "gui.industrialmetallurgy.toggle_temperature_unit": "Toggle temperature unit",
+  "gui.industrialmetallurgy.structure_incomplete": "Structure Incomplete",
   "message.industrialmetallurgy.prospector_found": "%s detected: %s blocks away, %s",
   "message.industrialmetallurgy.prospector_not_found": "No %s detected within range",
   "message.industrialmetallurgy.prospector_no_charge": "Prospector's battery is depleted",
