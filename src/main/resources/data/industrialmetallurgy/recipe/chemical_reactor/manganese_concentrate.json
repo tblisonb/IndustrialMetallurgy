@@ -1,0 +1,11 @@
+{
+  "type": "industrialmetallurgy:chemical_reactor",
+  "input": [
+    "industrialmetallurgy:manganese_sulfate_bottle",
+    "industrialmetallurgy:calcium_oxide"
+  ],
+  "output": [
+    { "id": "industrialmetallurgy:manganese_concentrate" },
+    { "id": "industrialmetallurgy:calcium_sulfate" }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "type": "industrialmetallurgy:chemical_reactor",
+  "input": [
+    {
+      "neoforge:ingredient_type": "neoforge:components",
+      "items": ["minecraft:potion"],
+      "components": { "minecraft:potion_contents": "minecraft:water" }
+    },
+    "industrialmetallurgy:calcium_oxide"
+  ],
+  "output": [
+    { "id": "industrialmetallurgy:sodium_hydroxide_bottle" }
+  ]
+}

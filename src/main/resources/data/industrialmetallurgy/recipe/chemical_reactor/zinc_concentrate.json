@@ -1,0 +1,11 @@
+{
+  "type": "industrialmetallurgy:chemical_reactor",
+  "input": [
+    "industrialmetallurgy:zinc_sulfate_bottle",
+    "industrialmetallurgy:calcium_oxide"
+  ],
+  "output": [
+    { "id": "industrialmetallurgy:zinc_concentrate" },
+    { "id": "industrialmetallurgy:calcium_sulfate" }
+  ]
+}

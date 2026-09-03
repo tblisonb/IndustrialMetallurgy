@@ -1,0 +1,10 @@
+{
+  "type": "industrialmetallurgy:autoclave",
+  "input": [
+    "industrialmetallurgy:crushed_bauxite_ore",
+    "industrialmetallurgy:sodium_hydroxide_bottle"
+  ],
+  "output": {
+    "id": "industrialmetallurgy:sodium_aluminate_bottle"
+  }
+}

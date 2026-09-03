@@ -2,6 +2,7 @@ package com.onlytanner.industrialmetallurgy.init;
 
 import com.onlytanner.industrialmetallurgy.IndustrialMetallurgy;
 import com.onlytanner.industrialmetallurgy.tileentity.ArcFurnaceBlockEntity;
+import com.onlytanner.industrialmetallurgy.tileentity.AutoclaveBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.BatteryBoxBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.CokeOvenBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.CrusherBlockEntity;
@@ -79,6 +80,9 @@ public class ModTileEntityTypes {
 
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<ConduitBlockEntity>> CONDUIT =
             BLOCK_ENTITY_TYPES.register("conduit", () -> new BlockEntityType<>(ConduitBlockEntity::new, RegistryHandler.CONDUIT.get()));
+
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<AutoclaveBlockEntity>> AUTOCLAVE =
+            BLOCK_ENTITY_TYPES.register("autoclave", () -> new BlockEntityType<>(AutoclaveBlockEntity::new, RegistryHandler.AUTOCLAVE.get()));
 
     public static void init(IEventBus modEventBus) {
         BLOCK_ENTITY_TYPES.register(modEventBus);

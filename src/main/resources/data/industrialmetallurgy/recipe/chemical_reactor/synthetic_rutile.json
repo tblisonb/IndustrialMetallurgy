@@ -1,0 +1,11 @@
+{
+  "type": "industrialmetallurgy:chemical_reactor",
+  "input": [
+    "industrialmetallurgy:titanyl_sulfate_bottle",
+    "industrialmetallurgy:calcium_oxide"
+  ],
+  "output": [
+    { "id": "industrialmetallurgy:synthetic_rutile" },
+    { "id": "industrialmetallurgy:calcium_sulfate" }
+  ]
+}

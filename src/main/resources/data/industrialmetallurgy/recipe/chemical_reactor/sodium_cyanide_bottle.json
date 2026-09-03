@@ -1,0 +1,15 @@
+{
+  "type": "industrialmetallurgy:chemical_reactor",
+  "input": [
+    {
+      "neoforge:ingredient_type": "neoforge:components",
+      "items": ["minecraft:potion"],
+      "components": { "minecraft:potion_contents": "minecraft:water" }
+    },
+    "industrialmetallurgy:coal_coke",
+    "industrialmetallurgy:potassium_nitrate"
+  ],
+  "output": [
+    { "id": "industrialmetallurgy:sodium_cyanide_bottle" }
+  ]
+}

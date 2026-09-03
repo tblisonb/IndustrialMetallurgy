@@ -1,0 +1,10 @@
+{
+  "type": "industrialmetallurgy:autoclave",
+  "input": [
+    "industrialmetallurgy:crushed_garnierite_ore",
+    "industrialmetallurgy:sulfuric_acid_bottle"
+  ],
+  "output": {
+    "id": "industrialmetallurgy:nickel_sulfate_bottle"
+  }
+}

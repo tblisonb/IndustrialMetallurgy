@@ -1,0 +1,10 @@
+{
+  "type": "industrialmetallurgy:autoclave",
+  "input": [
+    "industrialmetallurgy:crushed_cobaltite_ore",
+    "industrialmetallurgy:sulfuric_acid_bottle"
+  ],
+  "output": {
+    "id": "industrialmetallurgy:cobalt_sulfate_bottle"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": "industrialmetallurgy:alumina",
+  "result": {
+    "id": "industrialmetallurgy:aluminum_ingot",
+    "count": 2
+  },
+  "experience": 0.7
+}

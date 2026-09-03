@@ -41,7 +41,8 @@ public class IndustrialMetallurgyJeiPlugin implements IModPlugin {
                 new ExtruderRecipeCategory(guiHelper),
                 new SolderingStationRecipeCategory(guiHelper),
                 new ChemicalCentrifugeRecipeCategory(guiHelper),
-                new ChemicalReactorRecipeCategory(guiHelper)
+                new ChemicalReactorRecipeCategory(guiHelper),
+                new AutoclaveRecipeCategory(guiHelper)
         );
     }
 
@@ -55,6 +56,7 @@ public class IndustrialMetallurgyJeiPlugin implements IModPlugin {
         registration.addRecipes(SolderingStationRecipeCategory.TYPE, new ArrayList<>(recipeMap.byType(ModRecipes.SOLDERING_STATION_TYPE.get())));
         registration.addRecipes(ChemicalCentrifugeRecipeCategory.TYPE, new ArrayList<>(recipeMap.byType(ModRecipes.CHEMICAL_CENTRIFUGE_TYPE.get())));
         registration.addRecipes(ChemicalReactorRecipeCategory.TYPE, new ArrayList<>(recipeMap.byType(ModRecipes.CHEMICAL_REACTOR_TYPE.get())));
+        registration.addRecipes(AutoclaveRecipeCategory.TYPE, new ArrayList<>(recipeMap.byType(ModRecipes.AUTOCLAVE_TYPE.get())));
     }
 
     @Override
@@ -68,6 +70,7 @@ public class IndustrialMetallurgyJeiPlugin implements IModPlugin {
         registration.addCraftingStation(SolderingStationRecipeCategory.TYPE, RegistryHandler.SOLDERING_STATION.get());
         registration.addCraftingStation(ChemicalCentrifugeRecipeCategory.TYPE, RegistryHandler.CHEMICAL_CENTRIFUGE.get());
         registration.addCraftingStation(ChemicalReactorRecipeCategory.TYPE, RegistryHandler.CHEMICAL_REACTOR.get());
+        registration.addCraftingStation(AutoclaveRecipeCategory.TYPE, RegistryHandler.AUTOCLAVE.get());
 
         // Not custom recipe types -- Electric Furnace runs plain vanilla smelting, and the
         // Thermoelectric Generator burns vanilla fuel values (plus coal_coke, special-cased in

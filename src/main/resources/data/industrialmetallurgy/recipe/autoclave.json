@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sfx",
+    "gmg",
+    "pbp"
+  ],
+  "key": {
+    "s": "industrialmetallurgy:controller_board",
+    "f": "industrialmetallurgy:refractory_composite",
+    "x": "industrialmetallurgy:heat_sink",
+    "p": "industrialmetallurgy:tungsten_steel_ingot",
+    "g": "industrialmetallurgy:gear",
+    "m": "industrialmetallurgy:electric_motor",
+    "b": "industrialmetallurgy:battery_bank"
+  },
+  "result": { "id": "industrialmetallurgy:autoclave" }
+}

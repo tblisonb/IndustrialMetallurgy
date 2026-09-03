@@ -147,6 +147,32 @@ public class RegistryHandler {
     public static final DeferredItem<Item> METHANE_BOTTLE = ITEMS.registerSimpleItem("methane_bottle");
     public static final DeferredItem<Item> PETROLEUM_BOTTLE = ITEMS.registerSimpleItem("petroleum_bottle");
     public static final DeferredItem<Item> SULFURIC_ACID_BOTTLE = ITEMS.registerSimpleItem("sulfuric_acid_bottle");
+    // Lixiviants -- the leaching reagents an Autoclave recipe requires, matching each ore's real
+    // acid/alkaline/cyanide leaching chemistry. See sulfuric_acid_bottle above for the acid case.
+    public static final DeferredItem<Item> SODIUM_HYDROXIDE_BOTTLE = ITEMS.registerSimpleItem("sodium_hydroxide_bottle");
+    public static final DeferredItem<Item> SODIUM_CYANIDE_BOTTLE = ITEMS.registerSimpleItem("sodium_cyanide_bottle");
+    // Pregnant leach solutions -- the Autoclave's output, and the Chemical Reactor's precipitation
+    // input. Each is the real intermediate compound for that metal's leaching route.
+    public static final DeferredItem<Item> NICKEL_SULFATE_BOTTLE = ITEMS.registerSimpleItem("nickel_sulfate_bottle");
+    public static final DeferredItem<Item> ZINC_SULFATE_BOTTLE = ITEMS.registerSimpleItem("zinc_sulfate_bottle");
+    public static final DeferredItem<Item> COBALT_SULFATE_BOTTLE = ITEMS.registerSimpleItem("cobalt_sulfate_bottle");
+    public static final DeferredItem<Item> MANGANESE_SULFATE_BOTTLE = ITEMS.registerSimpleItem("manganese_sulfate_bottle");
+    public static final DeferredItem<Item> TITANYL_SULFATE_BOTTLE = ITEMS.registerSimpleItem("titanyl_sulfate_bottle");
+    public static final DeferredItem<Item> SODIUM_ALUMINATE_BOTTLE = ITEMS.registerSimpleItem("sodium_aluminate_bottle");
+    public static final DeferredItem<Item> SILVER_CYANIDE_BOTTLE = ITEMS.registerSimpleItem("silver_cyanide_bottle");
+    // Metal concentrates -- precipitated out of a leach solution by the Chemical Reactor; smelts
+    // into the metal's ingot at a better yield than smelting the crushed ore directly.
+    public static final DeferredItem<Item> NICKEL_CONCENTRATE = ITEMS.registerSimpleItem("nickel_concentrate");
+    public static final DeferredItem<Item> ZINC_CONCENTRATE = ITEMS.registerSimpleItem("zinc_concentrate");
+    public static final DeferredItem<Item> COBALT_CONCENTRATE = ITEMS.registerSimpleItem("cobalt_concentrate");
+    public static final DeferredItem<Item> MANGANESE_CONCENTRATE = ITEMS.registerSimpleItem("manganese_concentrate");
+    public static final DeferredItem<Item> SYNTHETIC_RUTILE = ITEMS.registerSimpleItem("synthetic_rutile");
+    public static final DeferredItem<Item> ALUMINA = ITEMS.registerSimpleItem("alumina");
+    public static final DeferredItem<Item> SILVER_CONCENTRATE = ITEMS.registerSimpleItem("silver_concentrate");
+    // Calcium sulfate (gypsum) -- the real byproduct of neutralizing a sulfate leach solution with
+    // calcium oxide during precipitation. Not consumed by anything yet; noted as a future ROADMAP
+    // item (decorative blocks, or a Cultivator fertilizer input).
+    public static final DeferredItem<Item> CALCIUM_SULFATE = ITEMS.registerSimpleItem("calcium_sulfate");
     public static final DeferredItem<Item> COAL_COKE = ITEMS.registerSimpleItem("coal_coke");
     public static final DeferredItem<Item> SILICON = ITEMS.registerSimpleItem("silicon");
     public static final DeferredItem<Item> BITUMEN = ITEMS.registerSimpleItem("bitumen");
@@ -391,6 +417,10 @@ public class RegistryHandler {
     // ConduitBlockEntity/IOPortBlockEntity.
     public static final DeferredBlock<Block> IO_PORT = BLOCKS.registerBlock("io_port", IOPortBlock::new, IOPortBlock::newProperties);
     public static final DeferredBlock<Block> CONDUIT = BLOCKS.registerBlock("conduit", ConduitBlock::new, ConduitBlock::newProperties);
+    // Autoclave -- late-game leaching machine (ROADMAP Part 22): a sealed pressure vessel that
+    // leaches a crushed ore with a lixiviant bottle into a pregnant leach solution, which the
+    // Chemical Reactor then precipitates into a metal concentrate. See GUIDE.md.
+    public static final DeferredBlock<Block> AUTOCLAVE = BLOCKS.registerBlock("autoclave", AutoclaveBlock::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
 
     // Block Items
     // Metal Blocks
@@ -462,6 +492,7 @@ public class RegistryHandler {
     public static final DeferredItem<BlockItem> ELECTRIC_FURNACE_ITEM = ITEMS.registerSimpleBlockItem("electric_furnace", ELECTRIC_FURNACE);
     public static final DeferredItem<BlockItem> SOLAR_PANEL_ITEM = ITEMS.registerSimpleBlockItem("solar_panel", SOLAR_PANEL);
     public static final DeferredItem<BlockItem> IO_PORT_ITEM = ITEMS.registerSimpleBlockItem("io_port", IO_PORT);
+    public static final DeferredItem<BlockItem> AUTOCLAVE_ITEM = ITEMS.registerSimpleBlockItem("autoclave", AUTOCLAVE);
     public static final DeferredItem<BlockItem> CONDUIT_ITEM = ITEMS.registerSimpleBlockItem("conduit", CONDUIT);
 
     public static void init(IEventBus modEventBus) {

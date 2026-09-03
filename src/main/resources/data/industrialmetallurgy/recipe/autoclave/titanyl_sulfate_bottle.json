@@ -1,0 +1,10 @@
+{
+  "type": "industrialmetallurgy:autoclave",
+  "input": [
+    "industrialmetallurgy:crushed_rutile_ore",
+    "industrialmetallurgy:sulfuric_acid_bottle"
+  ],
+  "output": {
+    "id": "industrialmetallurgy:titanyl_sulfate_bottle"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "type": "industrialmetallurgy:autoclave",
+  "input": [
+    "industrialmetallurgy:crushed_argentite_ore",
+    "industrialmetallurgy:sodium_cyanide_bottle"
+  ],
+  "output": {
+    "id": "industrialmetallurgy:silver_cyanide_bottle"
+  }
+}

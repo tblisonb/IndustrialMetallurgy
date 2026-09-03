@@ -1,0 +1,11 @@
+{
+  "type": "industrialmetallurgy:chemical_reactor",
+  "input": [
+    "industrialmetallurgy:cobalt_sulfate_bottle",
+    "industrialmetallurgy:calcium_oxide"
+  ],
+  "output": [
+    { "id": "industrialmetallurgy:cobalt_concentrate" },
+    { "id": "industrialmetallurgy:calcium_sulfate" }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "type": "industrialmetallurgy:autoclave",
+  "input": [
+    "industrialmetallurgy:crushed_pyrolusite_ore",
+    "industrialmetallurgy:sulfuric_acid_bottle"
+  ],
+  "output": {
+    "id": "industrialmetallurgy:manganese_sulfate_bottle"
+  }
+}

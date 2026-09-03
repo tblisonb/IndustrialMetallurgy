@@ -171,6 +171,39 @@ arsenic, and more depending on the ore), oily sand into bitumen, sand, and clay.
 The Reactor does the opposite: it synthesizes reagents into acids, plastics, and other processed
 chemicals. Between the two, this is the mod's actual chemistry set.
 
+### Autoclave & Leaching
+
+Every ore so far has one path: crush it, smelt it. The Autoclave adds a second path — leaching —
+for ores that respond better to chemistry than heat.
+<!-- page -->
+Leaching dissolves the metal out of crushed ore using a **lixiviant**: an acid, a base, or a
+cyanide solution, chosen to match that ore's real chemistry. Real mining calls this
+hydrometallurgy.
+<!-- page -->
+Nickel, zinc, cobalt, manganese, and titanium ore all dissolve in sulfuric acid — the same
+Sulfuric Acid Bottle the Chemical Reactor already produces.
+<!-- page -->
+Bauxite doesn't. Aluminum ore needs a base — Sodium Hydroxide — the same reagent real refineries
+use in the Bayer process to pull alumina out of bauxite.
+<!-- page -->
+Argentite doesn't dissolve in either. Silver ore needs Sodium Cyanide — the same reagent real
+silver and gold mines use, for the same reason: nothing else touches it.
+<!-- page -->
+Feed the Autoclave a crushed ore plus its matching lixiviant bottle and FE. It outputs a pregnant
+leach solution — the metal, now dissolved, still trapped in the bottle.
+<!-- page -->
+A leach solution alone is inert. The Chemical Reactor precipitates it: add Calcium Oxide, and the
+dissolved metal drops back out as a concentrate.
+<!-- page -->
+Concentrate smelts into ingots at double the crushed ore's usual yield — the whole reason to run
+the longer chain instead of a straight smelt.
+<!-- page -->
+Precipitating a sulfate solution (everything but aluminum and silver) also leaves behind Calcium
+Sulfate — real gypsum, the same mineral behind plaster and drywall.
+<!-- page -->
+The Autoclave itself needs a Controller Board, Refractory Composite, and a Heat Sink — this is
+late-game, gated well behind the Crusher and first forges.
+
 ---
 
 ## Power

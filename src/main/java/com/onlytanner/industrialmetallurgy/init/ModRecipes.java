@@ -1,6 +1,7 @@
 package com.onlytanner.industrialmetallurgy.init;
 
 import com.onlytanner.industrialmetallurgy.IndustrialMetallurgy;
+import com.onlytanner.industrialmetallurgy.recipes.AutoclaveRecipe;
 import com.onlytanner.industrialmetallurgy.recipes.ChemicalCentrifugeRecipe;
 import com.onlytanner.industrialmetallurgy.recipes.ChemicalReactorRecipe;
 import com.onlytanner.industrialmetallurgy.recipes.CokeOvenRecipe;
@@ -163,6 +164,27 @@ public class ModRecipes {
 
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<ChemicalReactorRecipe>> CHEMICAL_REACTOR_SERIALIZER =
             RECIPE_SERIALIZERS.register("chemical_reactor", () -> new RecipeSerializer<>(CHEMICAL_REACTOR_MAP_CODEC, CHEMICAL_REACTOR_STREAM_CODEC));
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<AutoclaveRecipe>> AUTOCLAVE_TYPE =
+            RECIPE_TYPES.register("autoclave", () -> new RecipeType<AutoclaveRecipe>() {
+                @Override
+                public String toString() {
+                    return IndustrialMetallurgy.MODID + ":autoclave";
+                }
+            });
+
+    private static final MapCodec<AutoclaveRecipe> AUTOCLAVE_MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Ingredient.CODEC.listOf().fieldOf("input").forGetter(AutoclaveRecipe::input),
+            ItemStackTemplate.CODEC.fieldOf("output").forGetter(AutoclaveRecipe::output)
+    ).apply(instance, AutoclaveRecipe::new));
+
+    private static final StreamCodec<RegistryFriendlyByteBuf, AutoclaveRecipe> AUTOCLAVE_STREAM_CODEC = StreamCodec.composite(
+            Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()), AutoclaveRecipe::input,
+            ItemStackTemplate.STREAM_CODEC, AutoclaveRecipe::output,
+            AutoclaveRecipe::new);
+
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<AutoclaveRecipe>> AUTOCLAVE_SERIALIZER =
+            RECIPE_SERIALIZERS.register("autoclave", () -> new RecipeSerializer<>(AUTOCLAVE_MAP_CODEC, AUTOCLAVE_STREAM_CODEC));
 
     public static void init(IEventBus modEventBus) {
         RECIPE_TYPES.register(modEventBus);

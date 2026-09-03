@@ -1,0 +1,10 @@
+{
+  "type": "industrialmetallurgy:autoclave",
+  "input": [
+    "industrialmetallurgy:crushed_sphalerite_ore",
+    "industrialmetallurgy:sulfuric_acid_bottle"
+  ],
+  "output": {
+    "id": "industrialmetallurgy:zinc_sulfate_bottle"
+  }
+}
