@@ -13,8 +13,16 @@ import jeresources.api.IWorldGenRegistry;
 import jeresources.api.restrictions.BiomeRestriction;
 import jeresources.api.restrictions.DimensionRestriction;
 import jeresources.api.restrictions.Restriction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.registries.VanillaRegistries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.BiomeTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 
@@ -23,7 +31,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 /**
@@ -81,10 +91,12 @@ public class IndustrialMetallurgyJerPlugin implements IJERPlugin {
 
     // Matches each ore's real data/industrialmetallurgy/neoforge/biome_modifier/*.json rather
     // than leaving everything at JER's default "no restriction" (which reads as "Overworld,
-    // anywhere"). Where the actual restriction is a biome tag (e.g. #minecraft:is_forest,
-    // #minecraft:is_jungle) rather than one specific biome, this uses BiomeRestriction's closest
-    // named preset as a representative example instead of every biome the tag covers -- JER has
-    // no tag-based restriction type to match those exactly.
+    // anywhere"). Where the actual restriction is a biome tag (#minecraft:is_forest,
+    // #minecraft:is_jungle), this expands to the tag's real, full biome membership via
+    // biomesInTag() below rather than a single representative preset -- JER has no tag-based
+    // restriction type of its own, but its BiomeRestriction constructor happily takes a whole
+    // list. Pyrolusite's real restriction (swamp_ores.json) is an explicit two-biome list, not a
+    // tag, so that's spelled out directly the same way.
     //
     // Every biome-restricted entry also pairs an explicit DimensionRestriction alongside it via
     // the 2-arg Restriction constructor -- passing BiomeRestriction alone leaves JER's own
@@ -92,23 +104,49 @@ public class IndustrialMetallurgyJerPlugin implements IJERPlugin {
     // dimension from the biome. Chromite/Cobaltite/Lepidolite/Scheelite need no biome at all,
     // since their real restriction (#minecraft:is_nether / #minecraft:is_end) already covers
     // every biome in that dimension -- a plain DimensionRestriction is the exact match there.
+    //
+    // Known JER-side bug (confirmed by decompiling BiomeRestriction#toStringList in
+    // JustEnoughResources-NeoForge-26.2-1.11.0.43.jar): its per-biome tooltip line calls
+    // Biome#toString() -- the plain, unoverridden Object identity string -- instead of the
+    // biome's own ResourceKey, so every biome name in that tooltip renders as
+    // "biome.net.minecraft.world.level.biome.Biome@<hash>" no matter what's registered here.
+    // Nothing in the IWorldGenRegistry API offers a way to supply the display string ourselves or
+    // work around it; it's purely a formatting bug on JER's end.
     private static final Map<String, Restriction> RESTRICTIONS = new LinkedHashMap<>();
 
     static {
         RESTRICTIONS.put("argentite", new Restriction(BiomeRestriction.PLAINS, DimensionRestriction.OVERWORLD));
         RESTRICTIONS.put("sphalerite", new Restriction(BiomeRestriction.PLAINS, DimensionRestriction.OVERWORLD));
-        RESTRICTIONS.put("galena", new Restriction(BiomeRestriction.FOREST, DimensionRestriction.OVERWORLD));
-        RESTRICTIONS.put("garnierite", new Restriction(BiomeRestriction.FOREST, DimensionRestriction.OVERWORLD));
-        RESTRICTIONS.put("bauxite", new Restriction(BiomeRestriction.JUNGLE, DimensionRestriction.OVERWORLD));
-        RESTRICTIONS.put("cassiterite", new Restriction(BiomeRestriction.JUNGLE, DimensionRestriction.OVERWORLD));
+        RESTRICTIONS.put("galena", biomeTagRestriction(BiomeTags.IS_FOREST, DimensionRestriction.OVERWORLD));
+        RESTRICTIONS.put("garnierite", biomeTagRestriction(BiomeTags.IS_FOREST, DimensionRestriction.OVERWORLD));
+        RESTRICTIONS.put("bauxite", biomeTagRestriction(BiomeTags.IS_JUNGLE, DimensionRestriction.OVERWORLD));
+        RESTRICTIONS.put("cassiterite", biomeTagRestriction(BiomeTags.IS_JUNGLE, DimensionRestriction.OVERWORLD));
         RESTRICTIONS.put("rutile", new Restriction(BiomeRestriction.DESERT, DimensionRestriction.OVERWORLD));
-        RESTRICTIONS.put("pyrolusite", new Restriction(BiomeRestriction.SWAMP, DimensionRestriction.OVERWORLD));
+        RESTRICTIONS.put("pyrolusite", new Restriction(new BiomeRestriction(Biomes.SWAMP, Biomes.MANGROVE_SWAMP), DimensionRestriction.OVERWORLD));
         RESTRICTIONS.put("chromite", new Restriction(DimensionRestriction.NETHER));
         RESTRICTIONS.put("cobaltite", new Restriction(DimensionRestriction.NETHER));
         RESTRICTIONS.put("lepidolite", new Restriction(DimensionRestriction.END));
         RESTRICTIONS.put("scheelite", new Restriction(DimensionRestriction.END));
         // Basalt Deltas specifically, not the whole Nether.
         RESTRICTIONS.put("rheniite", new Restriction(new BiomeRestriction(Biomes.BASALT_DELTAS), DimensionRestriction.NETHER));
+    }
+
+    // Resolves every biome actually in `tag` and builds a Restriction listing all of them, rather
+    // than one representative preset. Uses the same offline vanilla registry snapshot
+    // (VanillaRegistries.createLookup) JER's own BiomeHelper#getBiome relies on internally --
+    // the real dynamic biome registry isn't populated yet at the point JER calls this plugin's
+    // receive(), so this is the only registry access that actually works this early.
+    @SuppressWarnings("unchecked")
+    private static Restriction biomeTagRestriction(TagKey<Biome> tag, DimensionRestriction dimension) {
+        HolderLookup.Provider registries = VanillaRegistries.createLookup();
+        List<ResourceKey<Biome>> keys = registries.lookupOrThrow(Registries.BIOME).get(tag)
+                .map(named -> named.stream().map(Holder::unwrapKey).filter(Optional::isPresent).map(Optional::get).toList())
+                .orElse(List.of());
+        if (keys.isEmpty()) {
+            return new Restriction(dimension);
+        }
+        ResourceKey<Biome>[] rest = keys.subList(1, keys.size()).toArray(new ResourceKey[0]);
+        return new Restriction(new BiomeRestriction(keys.get(0), rest), dimension);
     }
 
     private record OreGenInfo(int minY, int maxY, int count, int size) {

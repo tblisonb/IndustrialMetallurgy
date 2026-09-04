@@ -121,9 +121,16 @@ public class IOPortBlock extends Block implements EntityBlock {
         BlockPos pos = context.getClickedPos();
         // Faces outward, away from whatever surface was clicked to place it -- context.getClickedFace()
         // is exactly that outward direction (same convention a Dropper's FACING uses).
-        BlockState state = this.defaultBlockState().setValue(FACING, context.getClickedFace());
+        Direction facing = context.getClickedFace();
+        BlockState state = this.defaultBlockState().setValue(FACING, facing);
+        Direction hostDirection = facing.getOpposite();
         for (Direction direction : Direction.values()) {
-            state = state.setValue(PIPE_PROPERTIES.get(direction), connectsToPipe(level, pos.relative(direction)));
+            // The host direction always shows the slab model (see blockstates/io_port.json's
+            // facing=... entries), regardless of what's actually there -- force its own pipe-arm
+            // boolean false so a Conduit placed in that exact spot (unusual, but possible) doesn't
+            // also draw an overlapping arm on top of it.
+            boolean pipe = direction != hostDirection && connectsToPipe(level, pos.relative(direction));
+            state = state.setValue(PIPE_PROPERTIES.get(direction), pipe);
         }
         return state;
     }
@@ -131,7 +138,7 @@ public class IOPortBlock extends Block implements EntityBlock {
     @Override
     protected BlockState updateShape(BlockState state, LevelReader level, ScheduledTickAccess ticks, BlockPos pos,
                                       Direction direction, BlockPos neighborPos, BlockState neighborState, RandomSource random) {
-        if (!(level instanceof Level realLevel)) {
+        if (!(level instanceof Level realLevel) || direction == state.getValue(FACING).getOpposite()) {
             return state;
         }
         return state.setValue(PIPE_PROPERTIES.get(direction), connectsToPipe(realLevel, neighborPos));

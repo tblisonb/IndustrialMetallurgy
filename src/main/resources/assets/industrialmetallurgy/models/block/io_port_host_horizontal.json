@@ -18,7 +18,7 @@
             }
         },
         {
-            "__comment": "Slab: flush against whatever this port is mounted on.",
+            "__comment": "Slab: flush against whatever this port is mounted on. Unrotated, the slab sits at the SOUTH boundary (host is south of the port) -- see blockstates/io_port.json's facing=... rotation table, which is keyed off that, not off which way the port's own front faces.",
             "from": [ 1, 1, 13 ],
             "to": [ 15, 15, 16 ],
             "faces": {
