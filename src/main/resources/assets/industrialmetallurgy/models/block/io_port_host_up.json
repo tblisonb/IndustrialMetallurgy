@@ -1,0 +1,34 @@
+{
+    "textures": {
+        "particle": "#texture",
+        "texture": "industrialmetallurgy:block/conduit"
+    },
+    "elements": [
+        {
+            "__comment": "Neck: connects the small mode-colored core to the slab above.",
+            "from": [ 5, 11, 5 ],
+            "to": [ 11, 13, 11 ],
+            "faces": {
+                "north": { "uv": [ 5, 3, 11, 5 ], "texture": "#texture" },
+                "south": { "uv": [ 5, 3, 11, 5 ], "texture": "#texture" },
+                "west":  { "uv": [ 5, 3, 11, 5 ], "texture": "#texture" },
+                "east":  { "uv": [ 5, 3, 11, 5 ], "texture": "#texture" },
+                "up":    { "uv": [ 5, 5, 11, 11 ], "texture": "#texture" },
+                "down":  { "uv": [ 5, 5, 11, 11 ], "texture": "#texture" }
+            }
+        },
+        {
+            "__comment": "Slab: flush against whatever this port is mounted on, above it.",
+            "from": [ 1, 13, 1 ],
+            "to": [ 15, 16, 15 ],
+            "faces": {
+                "north": { "uv": [ 1, 13, 15, 16 ], "texture": "#texture" },
+                "south": { "uv": [ 1, 13, 15, 16 ], "texture": "#texture" },
+                "west":  { "uv": [ 1, 13, 15, 16 ], "texture": "#texture" },
+                "east":  { "uv": [ 1, 13, 15, 16 ], "texture": "#texture" },
+                "up":    { "uv": [ 1, 1, 15, 15 ], "texture": "#texture", "cullface": "up" },
+                "down":  { "uv": [ 1, 1, 15, 15 ], "texture": "#texture" }
+            }
+        }
+    ]
+}
