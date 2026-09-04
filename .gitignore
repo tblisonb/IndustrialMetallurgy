@@ -37,6 +37,10 @@ run/
 !**/src/**/run/
 **/src/generated/**/.cache/
 repo/
+
+# NeoForge's FML-managed unitTest environment (./gradlew test) writes its log here instead of
+# run/logs/, since it doesn't run with the project directory as its working directory.
+/logs/
 !**/src/**/repo/
 
 ### Other ###

@@ -33,6 +33,7 @@ repositories {
         name = "BlameJared"
         url = "https://maven.blamejared.com"
     }
+    mavenCentral()
 }
 
 base {
@@ -105,6 +106,15 @@ neoForge {
             sourceSet(sourceSets.main)
         }
     }
+
+    // Blackbox tests (src/test/java) reference RegistryHandler and other mod/Minecraft/NeoForge
+    // classes directly -- this runs them inside FML's own managed test classloader (not a plain
+    // Gradle `test` classpath hack), which is what actually lets Bootstrap.bootStrap() and vanilla
+    // registry class-init succeed. See docs.neoforged.net/toolchain/docs/plugins/mdg/.
+    unitTest {
+        enable()
+        testedMod = mods.industrialmetallurgy
+    }
 }
 
 // Sets up a dependency configuration called 'localRuntime'.
@@ -158,6 +168,23 @@ dependencies {
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+
+    // Blackbox registry/asset consistency tests (src/test/java) -- plain JUnit, no game instance:
+    // these load RegistryHandler (which just populates DeferredRegister entry maps at class-init
+    // time, no FML bootstrap needed) and cross-check its entries against the checked-in JSON under
+    // src/main/resources, catching things like a missing item model definition or lang key without
+    // ever launching Minecraft. See src/test/java/.../datatest/.
+    testImplementation platform('org.junit:junit-bom:5.11.4')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+    useJUnitPlatform()
+    // The FML-managed unit test environment doesn't run with the project directory as its
+    // working directory (unlike a plain Gradle `test` task would) -- give the tests an explicit
+    // path to src/main/resources instead of assuming the CWD.
+    systemProperty 'industrialmetallurgy.projectDir', project.projectDir.absolutePath
 }
 
 // Keeps a checkout without JER's jar buildable: without it, IndustrialMetallurgyJerPlugin.java
