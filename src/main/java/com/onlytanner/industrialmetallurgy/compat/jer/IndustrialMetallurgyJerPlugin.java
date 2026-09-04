@@ -154,20 +154,26 @@ public class IndustrialMetallurgyJerPlugin implements IJERPlugin {
 
     @Override
     public void receive(IJERAPI api) {
+        IndustrialMetallurgy.LOGGER.info("IndustrialMetallurgyJerPlugin: receive() called, registering {} ores with JER", ORE_BLOCKS.size());
         IWorldGenRegistry worldGen = api.getWorldGenRegistry();
+        int registered = 0;
         for (String ore : ORE_BLOCKS.keySet()) {
             try {
-                registerOre(worldGen, ore);
+                if (registerOre(worldGen, ore)) {
+                    registered++;
+                }
             } catch (Exception e) {
                 IndustrialMetallurgy.LOGGER.warn("Failed to register {} ore with JER", ore, e);
             }
         }
+        IndustrialMetallurgy.LOGGER.info("IndustrialMetallurgyJerPlugin: registered {}/{} ores with JER", registered, ORE_BLOCKS.size());
     }
 
-    private void registerOre(IWorldGenRegistry worldGen, String ore) {
+    private boolean registerOre(IWorldGenRegistry worldGen, String ore) {
         OreGenInfo info = readOreGenInfo(ore);
         if (info == null) {
-            return;
+            IndustrialMetallurgy.LOGGER.warn("IndustrialMetallurgyJerPlugin: no configured_feature/placed_feature JSON found for {} ore, skipping", ore);
+            return false;
         }
         Block block = ORE_BLOCKS.get(ore).get();
         Item drop = ORE_DROPS.get(ore).get();
@@ -182,6 +188,7 @@ public class IndustrialMetallurgyJerPlugin implements IJERPlugin {
                 new DistributionTriangular(info.minY(), info.maxY(), chance),
                 restriction,
                 new LootDrop(new ItemStack(drop)));
+        return true;
     }
 
     private static OreGenInfo readOreGenInfo(String ore) {
