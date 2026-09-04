@@ -1,3 +1,3 @@
 {
-    "parent": "industrialmetallurgy:block/io_port_input"
+    "parent": "industrialmetallurgy:block/io_port_input_core"
 }

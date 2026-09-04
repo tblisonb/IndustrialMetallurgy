@@ -109,9 +109,10 @@ public final class GuideBookData {
                     "It's also where a Power Tool's Battery Pack recharges — set a drained pack in its charging slot and it tops back up at the same rate the box feeds neighboring machines."
             )),
             new GuideEntry("Conduits & I/O Ports", List.of(
-                    "A Conduit is a plain pipe: it links two neighboring FE or item capabilities together and moves nothing on its own otherwise.",
+                    "A Conduit is a plain pipe: it links two neighboring FE or item capabilities together and moves nothing on its own otherwise. It only ever shows a pipe arm toward something it actually connects to, not a full block, so a run of them reads like real plumbing.",
                     "An I/O Port does the same job but adds a filter: right-click it with a Wrench to cycle Input, Output, Both, or Disabled. New ports default to Input, not Both, so nothing starts pulling out of a machine until you deliberately point it that way.",
-                    "Its texture's center light changes color with the mode — blue for Input, orange for Output, green for Both, dark for Disabled — so you can read a port's setting without opening anything.",
+                    "A port itself is a small node, not a full block, with the same pipe arms as a Conduit on whichever side actually touches one — the side against the machine just shows its small colored core.",
+                    "That core's color changes with the mode — blue for Input, orange for Output, green for Both, dark for Disabled — so you can read a port's setting without opening anything.",
                     "Right-clicking with anything else, even an empty hand, only reports the current mode — you can't bump a port's setting by accident while just checking on it."
             ))
         )),
