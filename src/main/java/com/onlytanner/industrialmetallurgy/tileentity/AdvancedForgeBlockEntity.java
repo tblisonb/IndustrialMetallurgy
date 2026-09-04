@@ -48,7 +48,7 @@ public abstract class AdvancedForgeBlockEntity extends BlockEntity implements Me
     private static final RecipeManager.CachedCheck<ForgeRecipeInput, ForgeRecipe> QUICK_CHECK =
             RecipeManager.createCheck(ModRecipes.FORGE_TYPE.get());
 
-    protected final ModItemHandler inventory = new ModItemHandler(5);
+    protected final ModItemHandler inventory = new ModItemHandler(5, Set.of(OUTPUT_ID));
     protected Component customName;
     public int currentSmeltTime;
     public int currentTemperature;

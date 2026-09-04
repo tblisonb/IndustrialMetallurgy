@@ -86,34 +86,43 @@ public class IndustrialMetallurgy {
         event.registerBlockEntity(Capabilities.Energy.BLOCK, ModTileEntityTypes.IO_PORT.get(),
                 (blockEntity, side) -> blockEntity.getEnergyDelegate());
 
+        // .asExternalHandler() (not the raw .getInventory()) for every machine: a Conduit/I-O
+        // Port is external automation, and should only ever be able to pull from a designated
+        // output slot and push into everything else -- never reach into a machine's own
+        // in-progress input/raw-material slot the way the bare handler would let it. The player's
+        // own GUI is unaffected, since Container/ResourceHandlerSlot talk to getInventory() directly.
         event.registerBlockEntity(Capabilities.Item.BLOCK, ModTileEntityTypes.CRUSHER.get(),
-                (blockEntity, side) -> blockEntity.getInventory());
+                (blockEntity, side) -> blockEntity.getInventory().asExternalHandler());
         event.registerBlockEntity(Capabilities.Item.BLOCK, ModTileEntityTypes.COKE_OVEN.get(),
-                (blockEntity, side) -> blockEntity.getInventory());
+                (blockEntity, side) -> blockEntity.getInventory().asExternalHandler());
         event.registerBlockEntity(Capabilities.Item.BLOCK, ModTileEntityTypes.THERMOELECTRIC_GENERATOR.get(),
-                (blockEntity, side) -> blockEntity.getInventory());
+                (blockEntity, side) -> blockEntity.getInventory().asExternalHandler());
         event.registerBlockEntity(Capabilities.Item.BLOCK, ModTileEntityTypes.FORGE_TIER1.get(),
-                (blockEntity, side) -> blockEntity.getInventory());
+                (blockEntity, side) -> blockEntity.getInventory().asExternalHandler());
         event.registerBlockEntity(Capabilities.Item.BLOCK, ModTileEntityTypes.FORGE_TIER2.get(),
-                (blockEntity, side) -> blockEntity.getInventory());
+                (blockEntity, side) -> blockEntity.getInventory().asExternalHandler());
         event.registerBlockEntity(Capabilities.Item.BLOCK, ModTileEntityTypes.FORGE_TIER3.get(),
-                (blockEntity, side) -> blockEntity.getInventory());
+                (blockEntity, side) -> blockEntity.getInventory().asExternalHandler());
         event.registerBlockEntity(Capabilities.Item.BLOCK, ModTileEntityTypes.FORGE_TIER4.get(),
-                (blockEntity, side) -> blockEntity.getInventory());
+                (blockEntity, side) -> blockEntity.getInventory().asExternalHandler());
         event.registerBlockEntity(Capabilities.Item.BLOCK, ModTileEntityTypes.ARC_FURNACE.get(),
-                (blockEntity, side) -> blockEntity.getInventory());
+                (blockEntity, side) -> blockEntity.getInventory().asExternalHandler());
         event.registerBlockEntity(Capabilities.Item.BLOCK, ModTileEntityTypes.EXTRUDER.get(),
-                (blockEntity, side) -> blockEntity.getInventory());
+                (blockEntity, side) -> blockEntity.getInventory().asExternalHandler());
         event.registerBlockEntity(Capabilities.Item.BLOCK, ModTileEntityTypes.SOLDERING_STATION.get(),
-                (blockEntity, side) -> blockEntity.getInventory());
+                (blockEntity, side) -> blockEntity.getInventory().asExternalHandler());
         event.registerBlockEntity(Capabilities.Item.BLOCK, ModTileEntityTypes.CHEMICAL_CENTRIFUGE.get(),
-                (blockEntity, side) -> blockEntity.getInventory());
+                (blockEntity, side) -> blockEntity.getInventory().asExternalHandler());
         event.registerBlockEntity(Capabilities.Item.BLOCK, ModTileEntityTypes.CHEMICAL_REACTOR.get(),
-                (blockEntity, side) -> blockEntity.getInventory());
+                (blockEntity, side) -> blockEntity.getInventory().asExternalHandler());
         event.registerBlockEntity(Capabilities.Item.BLOCK, ModTileEntityTypes.BATTERY_BOX.get(),
-                (blockEntity, side) -> blockEntity.getInventory());
+                (blockEntity, side) -> blockEntity.getInventory().asExternalHandler());
         event.registerBlockEntity(Capabilities.Item.BLOCK, ModTileEntityTypes.ELECTRIC_FURNACE.get(),
-                (blockEntity, side) -> blockEntity.getInventory());
+                (blockEntity, side) -> blockEntity.getInventory().asExternalHandler());
+        // Was missing entirely -- the Autoclave's items have never been reachable by a Conduit,
+        // I/O Port, or hopper at all, through no version of this method ever registering it.
+        event.registerBlockEntity(Capabilities.Item.BLOCK, ModTileEntityTypes.AUTOCLAVE.get(),
+                (blockEntity, side) -> blockEntity.getInventory().asExternalHandler());
         event.registerBlockEntity(Capabilities.Item.BLOCK, ModTileEntityTypes.IO_PORT.get(),
                 (blockEntity, side) -> blockEntity.getItemDelegate());
     }

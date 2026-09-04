@@ -35,6 +35,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.capabilities.Capabilities;
 
 import javax.annotation.Nullable;
 import java.util.EnumMap;
@@ -142,6 +143,28 @@ public class IOPortBlock extends Block implements EntityBlock {
     private static boolean connectsToPipe(Level level, BlockPos neighborPos) {
         BlockEntity neighbor = level.getBlockEntity(neighborPos);
         return neighbor instanceof ConduitBlockEntity || neighbor instanceof IOPortBlockEntity;
+    }
+
+    // A port with nothing real to talk to is pointless clutter, and looked actively wrong reaching
+    // an arm at, say, plain dirt -- require the face it's mounted against to be a genuine host
+    // (something with an Energy/Item capability of its own) or another Conduit/Port to extend an
+    // existing network, same set of neighbor types ConduitBlock's own connectsTo checks.
+    @Override
+    protected boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+        if (!(level instanceof Level realLevel)) {
+            return true;
+        }
+        Direction facing = state.getValue(FACING);
+        BlockPos hostPos = pos.relative(facing.getOpposite());
+        BlockEntity host = realLevel.getBlockEntity(hostPos);
+        if (host instanceof ConduitBlockEntity || host instanceof IOPortBlockEntity) {
+            return true;
+        }
+        // facing is the direction from the host back toward this port -- the face of the host a
+        // capability query needs to ask about, same "side touching us" convention findHostEnergyHandler
+        // uses via direction.getOpposite().
+        return Capabilities.Energy.BLOCK.getCapability(realLevel, hostPos, null, null, facing) != null
+                || Capabilities.Item.BLOCK.getCapability(realLevel, hostPos, null, null, facing) != null;
     }
 
     @Override

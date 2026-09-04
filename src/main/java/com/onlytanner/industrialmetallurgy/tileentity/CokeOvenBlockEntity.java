@@ -26,6 +26,7 @@ import net.minecraft.world.level.storage.ValueOutput;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
+import java.util.Set;
 
 public class CokeOvenBlockEntity extends BlockEntity implements MenuProvider {
 
@@ -39,7 +40,7 @@ public class CokeOvenBlockEntity extends BlockEntity implements MenuProvider {
     private Component customName;
     public int burnTimeRemaining;
     public int currentSmeltTime;
-    private final ModItemHandler inventory = new ModItemHandler(2);
+    private final ModItemHandler inventory = new ModItemHandler(2, Set.of(OUTPUT_ID));
 
     public CokeOvenBlockEntity(BlockPos pos, BlockState state) {
         super(ModTileEntityTypes.COKE_OVEN.get(), pos, state);

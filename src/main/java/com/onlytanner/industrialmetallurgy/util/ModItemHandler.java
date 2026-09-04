@@ -3,9 +3,12 @@ package com.onlytanner.industrialmetallurgy.util;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.ValueInput;
+import net.neoforged.neoforge.transfer.ResourceHandler;
 import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
+
+import java.util.Set;
 
 // A machine's ground-truth inventory, backed by the new net.neoforged.neoforge.transfer
 // resource-handler API (the real ResourceHandler<ItemResource> exposed as Capabilities.Item.BLOCK)
@@ -16,10 +19,21 @@ import net.neoforged.neoforge.transfer.transaction.Transaction;
 public class ModItemHandler extends ItemStacksResourceHandler {
 
     private final int fixedSize;
+    private final Set<Integer> outputSlots;
 
     public ModItemHandler(int size) {
+        this(size, Set.of());
+    }
+
+    /**
+     * @param outputSlots Which of this handler's slots are actually a finished-product output --
+     *                     see {@link #asExternalHandler()}. Empty for a machine with no output
+     *                     concept at all (e.g. Battery Box, Thermoelectric Generator).
+     */
+    public ModItemHandler(int size, Set<Integer> outputSlots) {
         super(size);
         this.fixedSize = size;
+        this.outputSlots = outputSlots;
     }
 
     @Override
@@ -89,6 +103,18 @@ public class ModItemHandler extends ItemStacksResourceHandler {
 
     public int getSlotLimit(int index) {
         return this.getCapacityAsInt(index, ItemResource.EMPTY);
+    }
+
+    /**
+     * The view exposed as this block's Capabilities.Item.BLOCK capability -- i.e. everything a
+     * Conduit or I/O Port can actually see and touch. Restricted to output slots only extract,
+     * everything else only insert, so external automation can feed a machine raw material but
+     * can't reach in and drain a slot mid-process the way a bare ModItemHandler would let it.
+     * The player's own GUI is unaffected: Container/ResourceHandlerSlot talk to this handler
+     * directly, never through this wrapper.
+     */
+    public ResourceHandler<ItemResource> asExternalHandler() {
+        return new ExternalAccessItemHandler(this, this.outputSlots);
     }
 
 }

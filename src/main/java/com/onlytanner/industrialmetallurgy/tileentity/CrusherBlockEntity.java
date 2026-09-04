@@ -29,6 +29,7 @@ import net.neoforged.neoforge.transfer.energy.SimpleEnergyHandler;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
+import java.util.Set;
 
 public class CrusherBlockEntity extends BlockEntity implements MenuProvider {
 
@@ -47,7 +48,7 @@ public class CrusherBlockEntity extends BlockEntity implements MenuProvider {
     private Component customName;
     public int currentSmeltTime;
     public int acidLevel;
-    private final ModItemHandler inventory = new ModItemHandler(4);
+    private final ModItemHandler inventory = new ModItemHandler(4, Set.of(OUTPUT_ID));
     private final SimpleEnergyHandler energyHandler = new SimpleEnergyHandler(MAX_ENERGY) {
         @Override
         protected void onEnergyChanged(int previousAmount) {

@@ -29,6 +29,7 @@ import net.neoforged.neoforge.transfer.energy.SimpleEnergyHandler;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * A late-game pressure vessel: leaches a crushed ore with a lixiviant bottle (an acid, base, or
@@ -51,7 +52,7 @@ public class AutoclaveBlockEntity extends BlockEntity implements MenuProvider {
 
     private Component customName;
     public int currentProcessTime;
-    private final ModItemHandler inventory = new ModItemHandler(4);
+    private final ModItemHandler inventory = new ModItemHandler(4, Set.of(OUTPUT_ID));
     private final SimpleEnergyHandler energyHandler = new SimpleEnergyHandler(MAX_ENERGY) {
         @Override
         protected void onEnergyChanged(int previousAmount) {

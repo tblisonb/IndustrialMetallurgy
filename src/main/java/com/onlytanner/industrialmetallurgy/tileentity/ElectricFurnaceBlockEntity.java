@@ -29,6 +29,7 @@ import net.neoforged.neoforge.transfer.energy.SimpleEnergyHandler;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
+import java.util.Set;
 
 // Processes vanilla minecraft:smelting recipes directly (same JSON every ore already has) instead
 // of a custom recipe type -- FE and a wearing heating_element slot stand in for a fuel slot.
@@ -47,7 +48,7 @@ public class ElectricFurnaceBlockEntity extends BlockEntity implements MenuProvi
     private Component customName;
     public int currentSmeltTime;
     private int heatingElementUses = MAX_HEATING_ELEMENT_USES;
-    private final ModItemHandler inventory = new ModItemHandler(3);
+    private final ModItemHandler inventory = new ModItemHandler(3, Set.of(OUTPUT_ID));
     private final SimpleEnergyHandler energyHandler = new SimpleEnergyHandler(MAX_ENERGY) {
         @Override
         protected void onEnergyChanged(int previousAmount) {

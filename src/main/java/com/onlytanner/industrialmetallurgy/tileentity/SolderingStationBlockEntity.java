@@ -30,6 +30,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class SolderingStationBlockEntity extends BlockEntity implements MenuProvider {
 
@@ -45,7 +46,7 @@ public class SolderingStationBlockEntity extends BlockEntity implements MenuProv
 
     private Component customName;
     public int currentSmeltTime;
-    private final ModItemHandler inventory = new ModItemHandler(11);
+    private final ModItemHandler inventory = new ModItemHandler(11, Set.of(OUTPUT_ID));
     private final SimpleEnergyHandler energyHandler = new SimpleEnergyHandler(MAX_ENERGY) {
         @Override
         protected void onEnergyChanged(int previousAmount) {

@@ -44,7 +44,7 @@ public abstract class BasicForgeBlockEntity extends BlockEntity implements MenuP
     private static final RecipeManager.CachedCheck<ForgeRecipeInput, ForgeRecipe> QUICK_CHECK =
             RecipeManager.createCheck(ModRecipes.FORGE_TYPE.get());
 
-    protected final ModItemHandler inventory = new ModItemHandler(6);
+    protected final ModItemHandler inventory = new ModItemHandler(6, Set.of(OUTPUT_ID));
     protected Component customName;
     public int currentSmeltTime;
     public int burnTimeRemaining;

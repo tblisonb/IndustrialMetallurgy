@@ -29,6 +29,7 @@ import net.neoforged.neoforge.transfer.energy.SimpleEnergyHandler;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class ChemicalCentrifugeBlockEntity extends BlockEntity implements MenuProvider {
 
@@ -45,7 +46,7 @@ public class ChemicalCentrifugeBlockEntity extends BlockEntity implements MenuPr
 
     private Component customName;
     public int currentSmeltTime;
-    private final ModItemHandler inventory = new ModItemHandler(5);
+    private final ModItemHandler inventory = new ModItemHandler(5, Set.of(OUTPUT_ID, OUTPUT_ID + 1, OUTPUT_ID + 2));
     private final SimpleEnergyHandler energyHandler = new SimpleEnergyHandler(MAX_ENERGY) {
         @Override
         protected void onEnergyChanged(int previousAmount) {

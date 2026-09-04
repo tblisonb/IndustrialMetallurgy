@@ -84,27 +84,31 @@ public class IndustrialMetallurgyJerPlugin implements IJERPlugin {
     // anywhere"). Where the actual restriction is a biome tag (e.g. #minecraft:is_forest,
     // #minecraft:is_jungle) rather than one specific biome, this uses BiomeRestriction's closest
     // named preset as a representative example instead of every biome the tag covers -- JER has
-    // no tag-based restriction type to match those exactly. Chromite/Cobaltite/Lepidolite/
-    // Scheelite are dimension-wide tags (#minecraft:is_nether / #minecraft:is_end), so those get
-    // an exact DimensionRestriction instead.
+    // no tag-based restriction type to match those exactly.
+    //
+    // Every biome-restricted entry also pairs an explicit DimensionRestriction alongside it via
+    // the 2-arg Restriction constructor -- passing BiomeRestriction alone leaves JER's own
+    // dimension field unset, which its world-gen tab displays as "All" rather than inferring the
+    // dimension from the biome. Chromite/Cobaltite/Lepidolite/Scheelite need no biome at all,
+    // since their real restriction (#minecraft:is_nether / #minecraft:is_end) already covers
+    // every biome in that dimension -- a plain DimensionRestriction is the exact match there.
     private static final Map<String, Restriction> RESTRICTIONS = new LinkedHashMap<>();
 
     static {
-        RESTRICTIONS.put("argentite", new Restriction(BiomeRestriction.PLAINS));
-        RESTRICTIONS.put("sphalerite", new Restriction(BiomeRestriction.PLAINS));
-        RESTRICTIONS.put("galena", new Restriction(BiomeRestriction.FOREST));
-        RESTRICTIONS.put("garnierite", new Restriction(BiomeRestriction.FOREST));
-        RESTRICTIONS.put("bauxite", new Restriction(BiomeRestriction.JUNGLE));
-        RESTRICTIONS.put("cassiterite", new Restriction(BiomeRestriction.JUNGLE));
-        RESTRICTIONS.put("rutile", new Restriction(BiomeRestriction.DESERT));
-        RESTRICTIONS.put("pyrolusite", new Restriction(BiomeRestriction.SWAMP));
+        RESTRICTIONS.put("argentite", new Restriction(BiomeRestriction.PLAINS, DimensionRestriction.OVERWORLD));
+        RESTRICTIONS.put("sphalerite", new Restriction(BiomeRestriction.PLAINS, DimensionRestriction.OVERWORLD));
+        RESTRICTIONS.put("galena", new Restriction(BiomeRestriction.FOREST, DimensionRestriction.OVERWORLD));
+        RESTRICTIONS.put("garnierite", new Restriction(BiomeRestriction.FOREST, DimensionRestriction.OVERWORLD));
+        RESTRICTIONS.put("bauxite", new Restriction(BiomeRestriction.JUNGLE, DimensionRestriction.OVERWORLD));
+        RESTRICTIONS.put("cassiterite", new Restriction(BiomeRestriction.JUNGLE, DimensionRestriction.OVERWORLD));
+        RESTRICTIONS.put("rutile", new Restriction(BiomeRestriction.DESERT, DimensionRestriction.OVERWORLD));
+        RESTRICTIONS.put("pyrolusite", new Restriction(BiomeRestriction.SWAMP, DimensionRestriction.OVERWORLD));
         RESTRICTIONS.put("chromite", new Restriction(DimensionRestriction.NETHER));
         RESTRICTIONS.put("cobaltite", new Restriction(DimensionRestriction.NETHER));
         RESTRICTIONS.put("lepidolite", new Restriction(DimensionRestriction.END));
         RESTRICTIONS.put("scheelite", new Restriction(DimensionRestriction.END));
-        // Basalt Deltas specifically, not the whole Nether -- no named preset for it, unlike the
-        // others above.
-        RESTRICTIONS.put("rheniite", new Restriction(new BiomeRestriction(Biomes.BASALT_DELTAS)));
+        // Basalt Deltas specifically, not the whole Nether.
+        RESTRICTIONS.put("rheniite", new Restriction(new BiomeRestriction(Biomes.BASALT_DELTAS), DimensionRestriction.NETHER));
     }
 
     private record OreGenInfo(int minY, int maxY, int count, int size) {
