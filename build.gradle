@@ -33,6 +33,12 @@ repositories {
         name = "BlameJared"
         url = "https://maven.blamejared.com"
     }
+    // Registrate (registration + datagen wrapper library, MC26.2-1.6.0 confirmed to target this
+    // exact NeoForge version -- see tterrag1098/Registrate's 26.2/dev branch).
+    maven {
+        name = "Gegy"
+        url = "https://maven.gegy.dev/releases"
+    }
     mavenCentral()
 }
 
@@ -152,6 +158,16 @@ dependencies {
     // sourceSets block below) instead of breaking the whole build for a checkout without it.
     if (jerJarFile != null) {
         compileOnly files(jerJarFile)
+    }
+
+    // Registrate: fluent registration + automatic datagen wrapper (see Create's own use of it).
+    // It ships no mod of its own ("shadeable, contains no mod"), so it's embedded via jarJar
+    // rather than left as a separate runtime-only dependency players would need to install.
+    jarJar(implementation("com.tterrag.registrate:Registrate")) {
+        version {
+            strictly '[MC26.2,MC26.3)'
+            prefer 'MC26.2-1.6.0'
+        }
     }
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
