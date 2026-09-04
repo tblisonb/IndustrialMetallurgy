@@ -1,8 +1,12 @@
 {
   "values": [
     "industrialmetallurgy:bauxite_ore",
+    "industrialmetallurgy:deepslate_bauxite_ore",
     "industrialmetallurgy:cassiterite_ore",
+    "industrialmetallurgy:deepslate_cassiterite_ore",
     "industrialmetallurgy:garnierite_ore",
-    "industrialmetallurgy:sphalerite_ore"
+    "industrialmetallurgy:deepslate_garnierite_ore",
+    "industrialmetallurgy:sphalerite_ore",
+    "industrialmetallurgy:deepslate_sphalerite_ore"
   ]
 }

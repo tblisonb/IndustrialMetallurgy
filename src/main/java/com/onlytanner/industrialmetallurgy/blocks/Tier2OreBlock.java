@@ -20,4 +20,14 @@ public class Tier2OreBlock extends DropExperienceBlock {
                 .requiresCorrectToolForDrops();
     }
 
+    // Matches vanilla's stone-ore/deepslate-ore pairing (e.g. iron_ore/deepslate_iron_ore):
+    // +1.5 hardness, same blast resistance, deepslate map color/sound.
+    public static BlockBehaviour.Properties newDeepslateProperties() {
+        return BlockBehaviour.Properties.of()
+                .mapColor(MapColor.DEEPSLATE)
+                .strength(6.5f, 6.0f)
+                .sound(SoundType.DEEPSLATE)
+                .requiresCorrectToolForDrops();
+    }
+
 }

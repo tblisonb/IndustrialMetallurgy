@@ -51,14 +51,13 @@ public class RegistryHandler {
     public static final DeferredItem<Item> KANTHAL_INGOT = ITEMS.registerSimpleItem("kanthal_ingot");
     public static final DeferredItem<Item> LEAD_INGOT = ITEMS.registerSimpleItem("lead_ingot");
     public static final DeferredItem<Item> MANGANESE_INGOT = ITEMS.registerSimpleItem("manganese_ingot");
+    public static final DeferredItem<Item> NICHROME_INGOT = ITEMS.registerSimpleItem("nichrome_ingot");
+    public static final DeferredItem<Item> NICKEL_INGOT = ITEMS.registerSimpleItem("nickel_ingot");
+    public static final DeferredItem<Item> NIKROTHAL_INGOT = ITEMS.registerSimpleItem("nikrothal_ingot");
+    public static final DeferredItem<Item> NITINOL_INGOT = ITEMS.registerSimpleItem("nitinol_ingot");
     // Rhenium is only smeltable in the Arc Furnace (real rhenium has the 2nd-highest melting
     // point of any element) -- see forge/rhenium_ingot.json.
     public static final DeferredItem<Item> RHENIUM_INGOT = ITEMS.registerSimpleItem("rhenium_ingot");
-    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_INGOT = ITEMS.registerSimpleItem("tungsten_rhenium_ingot");
-    public static final DeferredItem<Item> NICKEL_INGOT = ITEMS.registerSimpleItem("nickel_ingot");
-    public static final DeferredItem<Item> NICHROME_INGOT = ITEMS.registerSimpleItem("nichrome_ingot");
-    public static final DeferredItem<Item> NIKROTHAL_INGOT = ITEMS.registerSimpleItem("nikrothal_ingot");
-    public static final DeferredItem<Item> NITINOL_INGOT = ITEMS.registerSimpleItem("nitinol_ingot");
     public static final DeferredItem<Item> SILVER_INGOT = ITEMS.registerSimpleItem("silver_ingot");
     public static final DeferredItem<Item> SOLDER_INGOT = ITEMS.registerSimpleItem("solder_ingot");
     public static final DeferredItem<Item> STEEL_INGOT = ITEMS.registerSimpleItem("steel_ingot");
@@ -66,6 +65,7 @@ public class RegistryHandler {
     public static final DeferredItem<Item> TIN_INGOT = ITEMS.registerSimpleItem("tin_ingot");
     public static final DeferredItem<Item> TITANIUM_INGOT = ITEMS.registerSimpleItem("titanium_ingot");
     public static final DeferredItem<Item> TUNGSTEN_INGOT = ITEMS.registerSimpleItem("tungsten_ingot");
+    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_INGOT = ITEMS.registerSimpleItem("tungsten_rhenium_ingot");
     public static final DeferredItem<Item> TUNGSTEN_STEEL_INGOT = ITEMS.registerSimpleItem("tungsten_steel_ingot");
     public static final DeferredItem<Item> ZINC_INGOT = ITEMS.registerSimpleItem("zinc_ingot");
     // Metal Nuggets
@@ -83,12 +83,11 @@ public class RegistryHandler {
     public static final DeferredItem<Item> KANTHAL_NUGGET = ITEMS.registerSimpleItem("kanthal_nugget");
     public static final DeferredItem<Item> LEAD_NUGGET = ITEMS.registerSimpleItem("lead_nugget");
     public static final DeferredItem<Item> MANGANESE_NUGGET = ITEMS.registerSimpleItem("manganese_nugget");
-    public static final DeferredItem<Item> RHENIUM_NUGGET = ITEMS.registerSimpleItem("rhenium_nugget");
-    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_NUGGET = ITEMS.registerSimpleItem("tungsten_rhenium_nugget");
     public static final DeferredItem<Item> NICHROME_NUGGET = ITEMS.registerSimpleItem("nichrome_nugget");
     public static final DeferredItem<Item> NICKEL_NUGGET = ITEMS.registerSimpleItem("nickel_nugget");
     public static final DeferredItem<Item> NIKROTHAL_NUGGET = ITEMS.registerSimpleItem("nikrothal_nugget");
     public static final DeferredItem<Item> NITINOL_NUGGET = ITEMS.registerSimpleItem("nitinol_nugget");
+    public static final DeferredItem<Item> RHENIUM_NUGGET = ITEMS.registerSimpleItem("rhenium_nugget");
     public static final DeferredItem<Item> SILVER_NUGGET = ITEMS.registerSimpleItem("silver_nugget");
     public static final DeferredItem<Item> SOLDER_NUGGET = ITEMS.registerSimpleItem("solder_nugget");
     public static final DeferredItem<Item> STEEL_NUGGET = ITEMS.registerSimpleItem("steel_nugget");
@@ -96,6 +95,7 @@ public class RegistryHandler {
     public static final DeferredItem<Item> TIN_NUGGET = ITEMS.registerSimpleItem("tin_nugget");
     public static final DeferredItem<Item> TITANIUM_NUGGET = ITEMS.registerSimpleItem("titanium_nugget");
     public static final DeferredItem<Item> TUNGSTEN_NUGGET = ITEMS.registerSimpleItem("tungsten_nugget");
+    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_NUGGET = ITEMS.registerSimpleItem("tungsten_rhenium_nugget");
     public static final DeferredItem<Item> TUNGSTEN_STEEL_NUGGET = ITEMS.registerSimpleItem("tungsten_steel_nugget");
     public static final DeferredItem<Item> ZINC_NUGGET = ITEMS.registerSimpleItem("zinc_nugget");
     // Raw Ores -- dropped by mining the ore block directly (silk touch gets the block instead),
@@ -110,10 +110,10 @@ public class RegistryHandler {
     public static final DeferredItem<Item> RAW_GALENA_ORE = ITEMS.registerSimpleItem("raw_galena_ore");
     public static final DeferredItem<Item> RAW_GARNIERITE_ORE = ITEMS.registerSimpleItem("raw_garnierite_ore");
     public static final DeferredItem<Item> RAW_PYROLUSITE_ORE = ITEMS.registerSimpleItem("raw_pyrolusite_ore");
+    public static final DeferredItem<Item> RAW_RHENIITE_ORE = ITEMS.registerSimpleItem("raw_rheniite_ore");
     public static final DeferredItem<Item> RAW_RUTILE_ORE = ITEMS.registerSimpleItem("raw_rutile_ore");
     public static final DeferredItem<Item> RAW_SCHEELITE_ORE = ITEMS.registerSimpleItem("raw_scheelite_ore");
     public static final DeferredItem<Item> RAW_SPHALERITE_ORE = ITEMS.registerSimpleItem("raw_sphalerite_ore");
-    public static final DeferredItem<Item> RAW_RHENIITE_ORE = ITEMS.registerSimpleItem("raw_rheniite_ore");
     // Crushed Ores
     public static final DeferredItem<Item> CRUSHED_ARGENTITE_ORE = ITEMS.registerSimpleItem("crushed_argentite_ore");
     public static final DeferredItem<Item> CRUSHED_BAUXITE_ORE = ITEMS.registerSimpleItem("crushed_bauxite_ore");
@@ -127,8 +127,8 @@ public class RegistryHandler {
     public static final DeferredItem<Item> CRUSHED_PYROLUSITE_ORE = ITEMS.registerSimpleItem("crushed_pyrolusite_ore");
     public static final DeferredItem<Item> CRUSHED_RHENIITE_ORE = ITEMS.registerSimpleItem("crushed_rheniite_ore");
     public static final DeferredItem<Item> CRUSHED_RUTILE_ORE = ITEMS.registerSimpleItem("crushed_rutile_ore");
-    public static final DeferredItem<Item> CRUSHED_SPHALERITE_ORE = ITEMS.registerSimpleItem("crushed_sphalerite_ore");
     public static final DeferredItem<Item> CRUSHED_SCHEELITE_ORE = ITEMS.registerSimpleItem("crushed_scheelite_ore");
+    public static final DeferredItem<Item> CRUSHED_SPHALERITE_ORE = ITEMS.registerSimpleItem("crushed_sphalerite_ore");
     // Misc Resources
     public static final DeferredItem<Item> LEPIDOLITE = ITEMS.registerSimpleItem("lepidolite");
     public static final DeferredItem<Item> LITHIUM_DUST = ITEMS.registerSimpleItem("lithium_dust");
@@ -347,12 +347,11 @@ public class RegistryHandler {
     public static final DeferredBlock<Block> KANTHAL_BLOCK = BLOCKS.registerBlock("kanthal_block", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> LEAD_BLOCK = BLOCKS.registerBlock("lead_block", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> MANGANESE_BLOCK = BLOCKS.registerBlock("manganese_block", MetalBlock::new, MetalBlock::newProperties);
-    public static final DeferredBlock<Block> RHENIUM_BLOCK = BLOCKS.registerBlock("rhenium_block", MetalBlock::new, MetalBlock::newProperties);
-    public static final DeferredBlock<Block> TUNGSTEN_RHENIUM_BLOCK = BLOCKS.registerBlock("tungsten_rhenium_block", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> NICHROME_BLOCK = BLOCKS.registerBlock("nichrome_block", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> NICKEL_BLOCK = BLOCKS.registerBlock("nickel_block", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> NIKROTHAL_BLOCK = BLOCKS.registerBlock("nikrothal_block", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> NITINOL_BLOCK = BLOCKS.registerBlock("nitinol_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> RHENIUM_BLOCK = BLOCKS.registerBlock("rhenium_block", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> SILVER_BLOCK = BLOCKS.registerBlock("silver_block", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> SOLDER_BLOCK = BLOCKS.registerBlock("solder_block", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> STEEL_BLOCK = BLOCKS.registerBlock("steel_block", MetalBlock::new, MetalBlock::newProperties);
@@ -360,24 +359,37 @@ public class RegistryHandler {
     public static final DeferredBlock<Block> TIN_BLOCK = BLOCKS.registerBlock("tin_block", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> TITANIUM_BLOCK = BLOCKS.registerBlock("titanium_block", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> TUNGSTEN_BLOCK = BLOCKS.registerBlock("tungsten_block", MetalBlock::new, MetalBlock::newProperties);
+    public static final DeferredBlock<Block> TUNGSTEN_RHENIUM_BLOCK = BLOCKS.registerBlock("tungsten_rhenium_block", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> TUNGSTEN_STEEL_BLOCK = BLOCKS.registerBlock("tungsten_steel_block", MetalBlock::new, MetalBlock::newProperties);
     public static final DeferredBlock<Block> ZINC_BLOCK = BLOCKS.registerBlock("zinc_block", MetalBlock::new, MetalBlock::newProperties);
-    // Ores
+    // Ores -- each overworld ore's height range (-48 to 48) crosses the deepslate transition, so
+    // it gets a deepslate variant sitting right next to it here, matching vanilla's iron_ore/
+    // deepslate_iron_ore pairing (see the configured_feature JSON for the actual dual-target
+    // world-gen wiring). Nether/End ores (chromite/cobaltite/rheniite/lepidolite/scheelite) never
+    // generate in stone at all, so they have no deepslate counterpart.
     public static final DeferredBlock<Block> ARGENTITE_ORE = BLOCKS.registerBlock("argentite_ore", Tier2OreBlock::new, Tier2OreBlock::newProperties);
+    public static final DeferredBlock<Block> DEEPSLATE_ARGENTITE_ORE = BLOCKS.registerBlock("deepslate_argentite_ore", Tier2OreBlock::new, Tier2OreBlock::newDeepslateProperties);
     public static final DeferredBlock<Block> BAUXITE_ORE = BLOCKS.registerBlock("bauxite_ore", Tier1OreBlock::new, Tier1OreBlock::newProperties);
+    public static final DeferredBlock<Block> DEEPSLATE_BAUXITE_ORE = BLOCKS.registerBlock("deepslate_bauxite_ore", Tier1OreBlock::new, Tier1OreBlock::newDeepslateProperties);
     public static final DeferredBlock<Block> CASSITERITE_ORE = BLOCKS.registerBlock("cassiterite_ore", Tier1OreBlock::new, Tier1OreBlock::newProperties);
+    public static final DeferredBlock<Block> DEEPSLATE_CASSITERITE_ORE = BLOCKS.registerBlock("deepslate_cassiterite_ore", Tier1OreBlock::new, Tier1OreBlock::newDeepslateProperties);
     public static final DeferredBlock<Block> CHROMITE_ORE = BLOCKS.registerBlock("chromite_ore", Tier3OreBlock::new, Tier3OreBlock::newProperties);
     public static final DeferredBlock<Block> COBALTITE_ORE = BLOCKS.registerBlock("cobaltite_ore", Tier3OreBlock::new, Tier3OreBlock::newProperties);
     public static final DeferredBlock<Block> GALENA_ORE = BLOCKS.registerBlock("galena_ore", Tier2OreBlock::new, Tier2OreBlock::newProperties);
+    public static final DeferredBlock<Block> DEEPSLATE_GALENA_ORE = BLOCKS.registerBlock("deepslate_galena_ore", Tier2OreBlock::new, Tier2OreBlock::newDeepslateProperties);
     public static final DeferredBlock<Block> GARNIERITE_ORE = BLOCKS.registerBlock("garnierite_ore", Tier1OreBlock::new, Tier1OreBlock::newProperties);
+    public static final DeferredBlock<Block> DEEPSLATE_GARNIERITE_ORE = BLOCKS.registerBlock("deepslate_garnierite_ore", Tier1OreBlock::new, Tier1OreBlock::newDeepslateProperties);
     public static final DeferredBlock<Block> LEPIDOLITE_ORE = BLOCKS.registerBlock("lepidolite_ore", Tier4OreBlock::new, Tier4OreBlock::newProperties);
     public static final DeferredBlock<Block> PYROLUSITE_ORE = BLOCKS.registerBlock("pyrolusite_ore", Tier2OreBlock::new, Tier2OreBlock::newProperties);
-    public static final DeferredBlock<Block> RUTILE_ORE = BLOCKS.registerBlock("rutile_ore", Tier2OreBlock::new, Tier2OreBlock::newProperties);
-    public static final DeferredBlock<Block> SPHALERITE_ORE = BLOCKS.registerBlock("sphalerite_ore", Tier1OreBlock::new, Tier1OreBlock::newProperties);
-    public static final DeferredBlock<Block> SCHEELITE_ORE = BLOCKS.registerBlock("scheelite_ore", Tier4OreBlock::new, Tier4OreBlock::newProperties);
+    public static final DeferredBlock<Block> DEEPSLATE_PYROLUSITE_ORE = BLOCKS.registerBlock("deepslate_pyrolusite_ore", Tier2OreBlock::new, Tier2OreBlock::newDeepslateProperties);
     // Rheniite is a real, and genuinely extremely rare, rhenium mineral -- discovered in 1994 in
     // a single volcanic fumarole. Restricted rarity is the point, not a placeholder.
     public static final DeferredBlock<Block> RHENIITE_ORE = BLOCKS.registerBlock("rheniite_ore", Tier4OreBlock::new, Tier4OreBlock::newProperties);
+    public static final DeferredBlock<Block> RUTILE_ORE = BLOCKS.registerBlock("rutile_ore", Tier2OreBlock::new, Tier2OreBlock::newProperties);
+    public static final DeferredBlock<Block> DEEPSLATE_RUTILE_ORE = BLOCKS.registerBlock("deepslate_rutile_ore", Tier2OreBlock::new, Tier2OreBlock::newDeepslateProperties);
+    public static final DeferredBlock<Block> SCHEELITE_ORE = BLOCKS.registerBlock("scheelite_ore", Tier4OreBlock::new, Tier4OreBlock::newProperties);
+    public static final DeferredBlock<Block> SPHALERITE_ORE = BLOCKS.registerBlock("sphalerite_ore", Tier1OreBlock::new, Tier1OreBlock::newProperties);
+    public static final DeferredBlock<Block> DEEPSLATE_SPHALERITE_ORE = BLOCKS.registerBlock("deepslate_sphalerite_ore", Tier1OreBlock::new, Tier1OreBlock::newDeepslateProperties);
     // Other Resources
     public static final DeferredBlock<Block> OIL_SAND = BLOCKS.registerBlock("oil_sand", OilSandBlock::new, OilSandBlock::newProperties);
     public static final DeferredBlock<Block> REFRACTORY_BRICKS = BLOCKS.registerBlock("refractory_bricks", Block::new, () -> BlockBehaviour.Properties.ofFullCopy(Blocks.BRICKS));
@@ -442,12 +454,11 @@ public class RegistryHandler {
     public static final DeferredItem<BlockItem> KANTHAL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("kanthal_block", KANTHAL_BLOCK);
     public static final DeferredItem<BlockItem> LEAD_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("lead_block", LEAD_BLOCK);
     public static final DeferredItem<BlockItem> MANGANESE_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("manganese_block", MANGANESE_BLOCK);
-    public static final DeferredItem<BlockItem> RHENIUM_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("rhenium_block", RHENIUM_BLOCK);
-    public static final DeferredItem<BlockItem> TUNGSTEN_RHENIUM_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("tungsten_rhenium_block", TUNGSTEN_RHENIUM_BLOCK);
     public static final DeferredItem<BlockItem> NICHROME_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("nichrome_block", NICHROME_BLOCK);
     public static final DeferredItem<BlockItem> NICKEL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("nickel_block", NICKEL_BLOCK);
     public static final DeferredItem<BlockItem> NIKROTHAL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("nikrothal_block", NIKROTHAL_BLOCK);
     public static final DeferredItem<BlockItem> NITINOL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("nitinol_block", NITINOL_BLOCK);
+    public static final DeferredItem<BlockItem> RHENIUM_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("rhenium_block", RHENIUM_BLOCK);
     public static final DeferredItem<BlockItem> SILVER_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("silver_block", SILVER_BLOCK);
     public static final DeferredItem<BlockItem> SOLDER_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("solder_block", SOLDER_BLOCK);
     public static final DeferredItem<BlockItem> STEEL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("steel_block", STEEL_BLOCK);
@@ -455,22 +466,31 @@ public class RegistryHandler {
     public static final DeferredItem<BlockItem> TIN_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("tin_block", TIN_BLOCK);
     public static final DeferredItem<BlockItem> TITANIUM_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("titanium_block", TITANIUM_BLOCK);
     public static final DeferredItem<BlockItem> TUNGSTEN_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("tungsten_block", TUNGSTEN_BLOCK);
+    public static final DeferredItem<BlockItem> TUNGSTEN_RHENIUM_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("tungsten_rhenium_block", TUNGSTEN_RHENIUM_BLOCK);
     public static final DeferredItem<BlockItem> TUNGSTEN_STEEL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("tungsten_steel_block", TUNGSTEN_STEEL_BLOCK);
     public static final DeferredItem<BlockItem> ZINC_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("zinc_block", ZINC_BLOCK);
     // Ores
     public static final DeferredItem<BlockItem> ARGENTITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("argentite_ore", ARGENTITE_ORE);
+    public static final DeferredItem<BlockItem> DEEPSLATE_ARGENTITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("deepslate_argentite_ore", DEEPSLATE_ARGENTITE_ORE);
     public static final DeferredItem<BlockItem> BAUXITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("bauxite_ore", BAUXITE_ORE);
+    public static final DeferredItem<BlockItem> DEEPSLATE_BAUXITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("deepslate_bauxite_ore", DEEPSLATE_BAUXITE_ORE);
     public static final DeferredItem<BlockItem> CASSITERITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("cassiterite_ore", CASSITERITE_ORE);
+    public static final DeferredItem<BlockItem> DEEPSLATE_CASSITERITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("deepslate_cassiterite_ore", DEEPSLATE_CASSITERITE_ORE);
     public static final DeferredItem<BlockItem> CHROMITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("chromite_ore", CHROMITE_ORE);
     public static final DeferredItem<BlockItem> COBALTITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("cobaltite_ore", COBALTITE_ORE);
     public static final DeferredItem<BlockItem> GALENA_ORE_ITEM = ITEMS.registerSimpleBlockItem("galena_ore", GALENA_ORE);
+    public static final DeferredItem<BlockItem> DEEPSLATE_GALENA_ORE_ITEM = ITEMS.registerSimpleBlockItem("deepslate_galena_ore", DEEPSLATE_GALENA_ORE);
     public static final DeferredItem<BlockItem> GARNIERITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("garnierite_ore", GARNIERITE_ORE);
+    public static final DeferredItem<BlockItem> DEEPSLATE_GARNIERITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("deepslate_garnierite_ore", DEEPSLATE_GARNIERITE_ORE);
     public static final DeferredItem<BlockItem> LEPIDOLITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("lepidolite_ore", LEPIDOLITE_ORE);
     public static final DeferredItem<BlockItem> PYROLUSITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("pyrolusite_ore", PYROLUSITE_ORE);
-    public static final DeferredItem<BlockItem> RUTILE_ORE_ITEM = ITEMS.registerSimpleBlockItem("rutile_ore", RUTILE_ORE);
-    public static final DeferredItem<BlockItem> SPHALERITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("sphalerite_ore", SPHALERITE_ORE);
-    public static final DeferredItem<BlockItem> SCHEELITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("scheelite_ore", SCHEELITE_ORE);
+    public static final DeferredItem<BlockItem> DEEPSLATE_PYROLUSITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("deepslate_pyrolusite_ore", DEEPSLATE_PYROLUSITE_ORE);
     public static final DeferredItem<BlockItem> RHENIITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("rheniite_ore", RHENIITE_ORE);
+    public static final DeferredItem<BlockItem> RUTILE_ORE_ITEM = ITEMS.registerSimpleBlockItem("rutile_ore", RUTILE_ORE);
+    public static final DeferredItem<BlockItem> DEEPSLATE_RUTILE_ORE_ITEM = ITEMS.registerSimpleBlockItem("deepslate_rutile_ore", DEEPSLATE_RUTILE_ORE);
+    public static final DeferredItem<BlockItem> SCHEELITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("scheelite_ore", SCHEELITE_ORE);
+    public static final DeferredItem<BlockItem> SPHALERITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("sphalerite_ore", SPHALERITE_ORE);
+    public static final DeferredItem<BlockItem> DEEPSLATE_SPHALERITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("deepslate_sphalerite_ore", DEEPSLATE_SPHALERITE_ORE);
     // Other Resources
     public static final DeferredItem<BlockItem> OIL_SAND_ITEM = ITEMS.registerSimpleBlockItem("oil_sand", OIL_SAND);
     public static final DeferredItem<BlockItem> REFRACTORY_BRICKS_ITEM = ITEMS.registerSimpleBlockItem("refractory_bricks", REFRACTORY_BRICKS);
@@ -496,8 +516,8 @@ public class RegistryHandler {
     public static final DeferredItem<BlockItem> ELECTRIC_FURNACE_ITEM = ITEMS.registerSimpleBlockItem("electric_furnace", ELECTRIC_FURNACE);
     public static final DeferredItem<BlockItem> SOLAR_PANEL_ITEM = ITEMS.registerSimpleBlockItem("solar_panel", SOLAR_PANEL);
     public static final DeferredItem<BlockItem> IO_PORT_ITEM = ITEMS.registerSimpleBlockItem("io_port", IO_PORT);
-    public static final DeferredItem<BlockItem> AUTOCLAVE_ITEM = ITEMS.registerSimpleBlockItem("autoclave", AUTOCLAVE);
     public static final DeferredItem<BlockItem> CONDUIT_ITEM = ITEMS.registerSimpleBlockItem("conduit", CONDUIT);
+    public static final DeferredItem<BlockItem> AUTOCLAVE_ITEM = ITEMS.registerSimpleBlockItem("autoclave", AUTOCLAVE);
 
     public static void init(IEventBus modEventBus) {
         ITEMS.register(modEventBus);
