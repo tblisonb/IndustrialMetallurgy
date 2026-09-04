@@ -4,7 +4,6 @@ import com.onlytanner.industrialmetallurgy.init.ModContainerTypes;
 import com.onlytanner.industrialmetallurgy.init.ModTileEntityTypes;
 import com.onlytanner.industrialmetallurgy.multiblock.MultiblockPattern;
 import com.onlytanner.industrialmetallurgy.multiblock.MultiblockPatternBuilder;
-import com.onlytanner.industrialmetallurgy.multiblock.MultiblockPredicates;
 import com.onlytanner.industrialmetallurgy.util.RegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -63,8 +62,8 @@ public class ArcFurnaceBlockEntity extends AdvancedForgeBlockEntity {
                             "SSS",
                             "SSS",
                             "SSS")
-                    .where('S', MultiblockPredicates.of(RegistryHandler.TUNGSTEN_STEEL_BLOCK.get()))
-                    .where('K', MultiblockPredicates.of(RegistryHandler.TUNGSTEN_RHENIUM_BLOCK.get()))
+                    .where('S', RegistryHandler.TUNGSTEN_STEEL_BLOCK.get())
+                    .where('K', RegistryHandler.TUNGSTEN_RHENIUM_BLOCK.get())
                     .build();
         }
         return shellPattern;

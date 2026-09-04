@@ -1,5 +1,6 @@
 package com.onlytanner.industrialmetallurgy.blocks;
 
+import com.onlytanner.industrialmetallurgy.tileentity.AdvancedForgeBlockEntity;
 import com.onlytanner.industrialmetallurgy.tileentity.ForgeBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -124,6 +125,13 @@ public class ForgeBlock extends Block implements EntityBlock {
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
         if (!level.isClientSide()) {
             BlockEntity tile = level.getBlockEntity(pos);
+            // Sneak + right-click never opens the GUI -- it's freed up for a diagnostic instead,
+            // pointing at exactly which multiblock cell is wrong rather than leaving the player to
+            // guess from a bare "Structure Incomplete" label. A no-op for a tier with no pattern.
+            if (player.isCrouching() && tile instanceof AdvancedForgeBlockEntity advanced) {
+                advanced.reportStructureMismatch(player);
+                return InteractionResult.CONSUME;
+            }
             if (tile instanceof MenuProvider menuProvider) {
                 player.openMenu(menuProvider, pos);
                 return InteractionResult.CONSUME;

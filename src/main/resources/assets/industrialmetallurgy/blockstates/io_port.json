@@ -1,5 +1,7 @@
 {
     "variants": {
-        "": { "model": "industrialmetallurgy:block/io_port" }
+        "mode=input":  { "model": "industrialmetallurgy:block/io_port_input" },
+        "mode=output": { "model": "industrialmetallurgy:block/io_port_output" },
+        "mode=both":   { "model": "industrialmetallurgy:block/io_port_both" }
     }
 }

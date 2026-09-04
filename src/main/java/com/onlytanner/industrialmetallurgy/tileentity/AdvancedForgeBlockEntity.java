@@ -7,10 +7,12 @@ import com.onlytanner.industrialmetallurgy.multiblock.MultiblockPattern;
 import com.onlytanner.industrialmetallurgy.recipes.ForgeRecipe;
 import com.onlytanner.industrialmetallurgy.recipes.ForgeRecipeInput;
 import com.onlytanner.industrialmetallurgy.util.ModItemHandler;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -125,6 +127,50 @@ public abstract class AdvancedForgeBlockEntity extends BlockEntity implements Me
     /** For the menu's synced formed-state DataSlot; see FunctionalIntReferenceHolder. */
     public void setFormed(boolean formed) {
         this.formed = formed;
+    }
+
+    /**
+     * Sneak + right-click diagnostic (see {@link ForgeBlock#useWithoutItem}): rather than leaving
+     * a player to guess why a multiblock won't form, point at the first cell that's wrong,
+     * described relative to the player the same way the Prospector reports a find. A no-op for a
+     * tier with no pattern at all.
+     */
+    public void reportStructureMismatch(Player player) {
+        MultiblockPattern pattern = getMultiblockPattern();
+        if (pattern == null || this.level == null || !(player instanceof ServerPlayer serverPlayer)) {
+            return;
+        }
+        Optional<MultiblockPattern.Mismatch> mismatch = pattern.findFirstMismatch(
+                this.level, this.worldPosition, this.getBlockState().getValue(ForgeBlock.FACING));
+        if (mismatch.isEmpty()) {
+            serverPlayer.sendOverlayMessage(Component.translatable("message.industrialmetallurgy.structure_complete")
+                    .withStyle(ChatFormatting.GREEN));
+            return;
+        }
+        BlockPos pos = mismatch.get().pos();
+        BlockPos origin = player.blockPosition();
+        Component expected = mismatch.get().expectedName() != null
+                ? mismatch.get().expectedName()
+                : Component.translatable("message.industrialmetallurgy.structure_mismatch_generic_block");
+        String location = locationDescription(pos.getX() - origin.getX(), pos.getY() - origin.getY(), pos.getZ() - origin.getZ());
+        serverPlayer.sendOverlayMessage(Component.translatable("message.industrialmetallurgy.structure_mismatch", expected, location)
+                .withStyle(ChatFormatting.YELLOW));
+    }
+
+    private static String locationDescription(int dx, int dy, int dz) {
+        String vertical = dy > 0 ? "above you" : dy < 0 ? "below you" : "at your level";
+        if (dx == 0 && dz == 0) {
+            return dy > 0 ? "directly above you" : dy < 0 ? "directly below you" : "right where you're standing";
+        }
+        return bearing(dx, dz) + ", " + vertical;
+    }
+
+    private static String bearing(int dx, int dz) {
+        double degrees = Math.toDegrees(Math.atan2(dx, -dz));
+        degrees = (degrees + 360.0) % 360.0;
+        String[] names = {"north", "north-east", "east", "south-east", "south", "south-west", "west", "north-west"};
+        int index = (int) Math.round(degrees / 45.0) % 8;
+        return names[index];
     }
 
     @Override

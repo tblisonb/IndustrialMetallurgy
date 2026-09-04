@@ -1,8 +1,8 @@
 {
     "parent": "block/orientable",
     "textures": {
-      "top": "industrialmetallurgy:block/crusher_top_off",
-      "front": "industrialmetallurgy:block/autoclave",
-      "side": "industrialmetallurgy:block/crusher_side"
+        "top": "industrialmetallurgy:block/autoclave_top",
+        "front": "industrialmetallurgy:block/autoclave",
+        "side": "industrialmetallurgy:block/autoclave_side"
     }
 }

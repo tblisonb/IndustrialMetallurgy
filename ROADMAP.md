@@ -38,12 +38,7 @@ When an item below gets built, move what's genuinely still worth knowing into `R
    consumed by anything yet. Two ideas on the table: decorative blocks (real gypsum is the basis
    of plaster/drywall), or a future Cultivator fertilizer input.
 
-4. **Dedicated machine housing art.** Crusher, Extruder, Soldering Station, Chemical Centrifuge,
-   and Chemical Reactor all borrow Crusher's side/top textures rather than having their own —
-   true in both eras of the mod, not a porting regression. Worth 4 more machine housing textures
-   at some point, or fine to leave as a shared "housing family" look.
-
-5. **Convert Forge Tiers 1-4 to the multiblock framework.** The Arc Furnace is converted — a
+4. **Convert Forge Tiers 1-4 to the multiblock framework.** The Arc Furnace is converted — a
    3x3x3 Tungsten Steel Block shell around a Tungsten-Rhenium Block core, with the existing
    single-block Arc Furnace as the controller on the front face. Tiers 1-4 are still plain
    single-block machines. Extending the same idea to them means real per-tier design work —
@@ -51,11 +46,11 @@ When an item below gets built, move what's genuinely still worth knowing into `R
    share one — deliberately left open rather than decided as a side effect of doing the Arc
    Furnace first.
 
-6. **More energy-generating machines.** Currently just the Solar Panel and Thermoelectric
+5. **More energy-generating machines.** Currently just the Solar Panel and Thermoelectric
    Generator. Intentionally left fuzzy — worth a real research/brainstorm pass on what's actually
    missing before designing anything.
 
-7. **Powered armor (exoskeleton).** A follow-up to the power tool line (Power Drill/Chainsaw/
+6. **Powered armor (exoskeleton).** A follow-up to the power tool line (Power Drill/Chainsaw/
    Cultivator/Prospector) — an FE-powered armor set, distinct from Tungsten-Rhenium's passive set
    bonus. Its own design surface (per-slot effects, FE drain rates, what makes it meaningfully
    different from just another armor tier) — not started.

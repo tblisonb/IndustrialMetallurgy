@@ -3,6 +3,7 @@ package com.onlytanner.industrialmetallurgy.containers;
 import com.onlytanner.industrialmetallurgy.tileentity.BasicForgeBlockEntity;
 import com.onlytanner.industrialmetallurgy.util.FunctionalIntReferenceHolder;
 import com.onlytanner.industrialmetallurgy.util.ModItemHandler;
+import com.onlytanner.industrialmetallurgy.util.RegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -31,7 +32,13 @@ public class BasicForgeContainer extends AbstractContainerMenu {
         this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, 1, 73, 22));
         this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, 2, 47, 48));
         this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, 3, 73, 48));
-        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, BasicForgeBlockEntity.FUEL_ID, 17, 35));
+        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, BasicForgeBlockEntity.FUEL_ID, 17, 35) {
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return (blockEntity.getLevel() != null && blockEntity.getLevel().fuelValues().burnDuration(stack) > 0)
+                        || stack.getItem().equals(RegistryHandler.COAL_COKE.get());
+            }
+        });
         this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, BasicForgeBlockEntity.OUTPUT_ID, 127, 35) {
             @Override
             public boolean mayPlace(ItemStack stack) {
@@ -86,7 +93,11 @@ public class BasicForgeContainer extends AbstractContainerMenu {
                 if (!this.moveItemStackTo(slotStack, machineSlots, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.moveItemStackTo(slotStack, 0, machineSlots, false)) {
+            // Reverse iteration order: specialized slots (fuel, bottle, solder wire, etc.) are
+            // always registered after general-purpose slots, so trying them first here means a
+            // shift-clicked item lands in its dedicated slot instead of getting stuck in the
+            // first unrestricted slot it happens to pass.
+            } else if (!this.moveItemStackTo(slotStack, 0, machineSlots, true)) {
                 return ItemStack.EMPTY;
             }
             if (slotStack.isEmpty()) {

@@ -322,6 +322,10 @@ public class RegistryHandler {
     // cooldown between sweeps rather than spammable every tick.
     public static final DeferredItem<ProspectorItem> PROSPECTOR = ITEMS.registerItem("prospector", props -> new ProspectorItem(props.stacksTo(1).useCooldown(1.5F)), UnaryOperator.identity());
 
+    // Wrench -- toggles the I/O Port's Input/Output/Both mode (see IOPortBlock); a plain
+    // right-click with anything else just reports the port's current mode instead of changing it.
+    public static final DeferredItem<Item> WRENCH = ITEMS.registerItem("wrench", props -> new Item(props.stacksTo(1)), UnaryOperator.identity());
+
     // Guide book -- opens a static, vanilla-styled book UI (GuideBookContent, client package)
     // explaining the mod. Content is authored in GUIDE.md and generated into GuideBookData.java;
     // see tools/guide_book/gen_guide_data.py.

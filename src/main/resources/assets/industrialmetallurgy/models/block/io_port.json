@@ -1,6 +1,3 @@
 {
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "industrialmetallurgy:block/io_port"
-    }
+    "parent": "industrialmetallurgy:block/io_port_both"
 }

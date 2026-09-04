@@ -102,7 +102,11 @@ public class ChemicalCentrifugeContainer extends AbstractContainerMenu {
                 if (!this.moveItemStackTo(slotStack, machineSlots, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.moveItemStackTo(slotStack, 0, machineSlots, false)) {
+            // Reverse iteration order: specialized slots (fuel, bottle, solder wire, etc.) are
+            // always registered after general-purpose slots, so trying them first here means a
+            // shift-clicked item lands in its dedicated slot instead of getting stuck in the
+            // first unrestricted slot it happens to pass.
+            } else if (!this.moveItemStackTo(slotStack, 0, machineSlots, true)) {
                 return ItemStack.EMPTY;
             }
             if (slotStack.isEmpty()) {

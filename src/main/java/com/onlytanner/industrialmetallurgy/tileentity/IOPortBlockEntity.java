@@ -1,9 +1,11 @@
 package com.onlytanner.industrialmetallurgy.tileentity;
 
+import com.onlytanner.industrialmetallurgy.blocks.IOPortBlock;
 import com.onlytanner.industrialmetallurgy.init.ModTileEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -25,7 +27,10 @@ import javax.annotation.Nullable;
 // directional control on top of that.
 public class IOPortBlockEntity extends BlockEntity {
 
-    public enum Mode {
+    // Implements StringRepresentable so it can double as the block's own IOPortBlock.MODE
+    // blockstate property -- the mode isn't just save data, it drives which of the three
+    // io_port_<mode> textures renders (see blockstates/io_port.json).
+    public enum Mode implements StringRepresentable {
         INPUT, OUTPUT, BOTH;
 
         public Mode next() {
@@ -34,6 +39,11 @@ public class IOPortBlockEntity extends BlockEntity {
 
         public Component label() {
             return Component.translatable("message.industrialmetallurgy.io_port_mode_" + this.name().toLowerCase());
+        }
+
+        @Override
+        public String getSerializedName() {
+            return this.name().toLowerCase();
         }
     }
 
@@ -52,6 +62,9 @@ public class IOPortBlockEntity extends BlockEntity {
     public void cycleMode() {
         this.mode = this.mode.next();
         this.setChanged();
+        if (this.level != null) {
+            this.level.setBlockAndUpdate(this.worldPosition, this.getBlockState().setValue(IOPortBlock.MODE, this.mode));
+        }
     }
 
     @Nullable

@@ -226,6 +226,20 @@ battery bank fills off-grid.
 It's also where a Power Tool's Battery Pack recharges — set a drained pack in its charging slot
 and it tops back up at the same rate the box feeds neighboring machines.
 
+### Conduits & I/O Ports
+
+A Conduit is a plain pipe: it links two neighboring FE or item capabilities together and moves
+nothing on its own otherwise.
+<!-- page -->
+An I/O Port does the same job but adds a filter: right-click it with a Wrench to cycle Input,
+Output, or Both, restricting which way resources are allowed to flow through it.
+<!-- page -->
+Its texture's center light changes color with the mode — blue for Input, orange for Output, green
+for Both — so you can read a port's setting without opening anything.
+<!-- page -->
+Right-clicking with anything else, even an empty hand, only reports the current mode — you can't
+bump a port's setting by accident while just checking on it.
+
 ---
 
 ## Tools, Armor & Power Tools
@@ -259,11 +273,20 @@ real rhenium has the second-highest melting point of any element.
 Rheniite, its ore, was discovered in a single volcanic fumarole in 1994 — also why it's the
 rarest, most narrowly-gated ore in the mod.
 <!-- page -->
-Unlike every other machine, the Arc Furnace is a multiblock: place it, then build a 3×3×3 shell
-of Tungsten Steel Blocks around it with a Tungsten-Rhenium Block hidden at the true center.
+Unlike every other machine, the Arc Furnace is a multiblock, and it's picky about the shape: it
+does NOT sit at the center of a ring, the way a lot of other mods' reactors do.
 <!-- page -->
-Its GUI still opens with the shell incomplete, but says so, and won't run until the structure is
-whole — the mod's first real multiblock machine, real arc furnaces are built, not just placed.
+The furnace block itself stays exactly where you place it, on a face of a 3×3×3 cube of Tungsten
+Steel Blocks — same spot a single Arc Furnace already occupies.
+<!-- page -->
+The Tungsten-Rhenium Block goes one cell straight in from the furnace's lit mouth — not beside it,
+not above it, directly behind the face you're looking at when the GUI opens.
+<!-- page -->
+Every other one of the 27 cells is Tungsten Steel Block, including the 8 that fill out the layer
+the furnace sits on. Its GUI opens either way, but says so if the shell's wrong or incomplete.
+<!-- page -->
+Sneak + right-click an unformed Arc Furnace instead of opening its GUI, and it'll call out exactly
+which of the 27 cells is wrong and which direction to find it in.
 
 ### Tungsten-Rhenium
 

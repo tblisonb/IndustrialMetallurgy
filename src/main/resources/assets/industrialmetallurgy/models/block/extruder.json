@@ -1,8 +1,8 @@
 {
     "parent": "block/orientable",
     "textures": {
-      "top": "industrialmetallurgy:block/crusher_top_off",
-      "front": "industrialmetallurgy:block/extruder",
-      "side": "industrialmetallurgy:block/crusher_side"
+        "top": "industrialmetallurgy:block/extruder_top",
+        "front": "industrialmetallurgy:block/extruder",
+        "side": "industrialmetallurgy:block/extruder_side"
     }
 }

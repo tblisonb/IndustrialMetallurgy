@@ -1,6 +1,8 @@
 package com.onlytanner.industrialmetallurgy.multiblock;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.ArrayList;
@@ -23,14 +25,14 @@ import java.util.function.Predicate;
  *         .aisle("###", "#C#", "###")   // floor layer, controller in the middle
  *         .aisle("# #", "# #", "# #")   // walls, open front/back
  *         .aisle("###", "###", "###")   // roof
- *         .where('#', MultiblockPredicates.of(Blocks.BRICKS))
+ *         .where('#', Blocks.BRICKS)
  *         .build();
  * }</pre>
  */
 public final class MultiblockPatternBuilder {
 
     private final List<String[]> aisles = new ArrayList<>();
-    private final Map<Character, Predicate<BlockState>> symbols = new HashMap<>();
+    private final Map<Character, MultiblockPattern.Cell> symbols = new HashMap<>();
     private char controllerSymbol = 'C';
 
     public MultiblockPatternBuilder aisle(String... rows) {
@@ -47,8 +49,18 @@ public final class MultiblockPatternBuilder {
         return this;
     }
 
+    /** Binds a symbol to a single required block, using that block's own name in mismatch diagnostics (see {@link MultiblockPattern#findFirstMismatch}). */
+    public MultiblockPatternBuilder where(char symbol, Block block) {
+        return where(symbol, MultiblockPredicates.of(block), block.getName());
+    }
+
+    /** Binds a symbol to an arbitrary predicate, with no name available for mismatch diagnostics. */
     public MultiblockPatternBuilder where(char symbol, Predicate<BlockState> predicate) {
-        this.symbols.put(symbol, predicate);
+        return where(symbol, predicate, null);
+    }
+
+    public MultiblockPatternBuilder where(char symbol, Predicate<BlockState> predicate, Component name) {
+        this.symbols.put(symbol, new MultiblockPattern.Cell(predicate, name));
         return this;
     }
 
@@ -64,7 +76,7 @@ public final class MultiblockPatternBuilder {
 
         BlockPos controllerOffset = findController();
 
-        Map<BlockPos, Predicate<BlockState>> cells = new HashMap<>();
+        Map<BlockPos, MultiblockPattern.Cell> cells = new HashMap<>();
         for (int y = 0; y < this.aisles.size(); y++) {
             String[] rows = this.aisles.get(y);
             for (int z = 0; z < rows.length; z++) {
@@ -74,13 +86,13 @@ public final class MultiblockPatternBuilder {
                     if (symbol == ' ') {
                         continue;
                     }
-                    Predicate<BlockState> predicate = symbol == this.controllerSymbol
-                            ? this.symbols.getOrDefault(symbol, MultiblockPredicates.any())
+                    MultiblockPattern.Cell cell = symbol == this.controllerSymbol
+                            ? this.symbols.getOrDefault(symbol, new MultiblockPattern.Cell(MultiblockPredicates.any(), null))
                             : this.symbols.get(symbol);
-                    if (predicate == null) {
+                    if (cell == null) {
                         throw new IllegalStateException("No predicate registered for symbol '" + symbol + "' -- call where('" + symbol + "', ...)");
                     }
-                    cells.put(new BlockPos(x, y, z).subtract(controllerOffset), predicate);
+                    cells.put(new BlockPos(x, y, z).subtract(controllerOffset), cell);
                 }
             }
         }
