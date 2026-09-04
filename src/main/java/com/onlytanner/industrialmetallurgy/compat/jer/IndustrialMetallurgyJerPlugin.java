@@ -10,8 +10,12 @@ import jeresources.api.distributions.DistributionTriangular;
 import jeresources.api.drop.LootDrop;
 import jeresources.api.IJERAPI;
 import jeresources.api.IWorldGenRegistry;
+import jeresources.api.restrictions.BiomeRestriction;
+import jeresources.api.restrictions.DimensionRestriction;
+import jeresources.api.restrictions.Restriction;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 
 import java.io.IOException;
@@ -75,6 +79,34 @@ public class IndustrialMetallurgyJerPlugin implements IJERPlugin {
         ORE_DROPS.put("rheniite", RegistryHandler.RAW_RHENIITE_ORE::get);
     }
 
+    // Matches each ore's real data/industrialmetallurgy/neoforge/biome_modifier/*.json rather
+    // than leaving everything at JER's default "no restriction" (which reads as "Overworld,
+    // anywhere"). Where the actual restriction is a biome tag (e.g. #minecraft:is_forest,
+    // #minecraft:is_jungle) rather than one specific biome, this uses BiomeRestriction's closest
+    // named preset as a representative example instead of every biome the tag covers -- JER has
+    // no tag-based restriction type to match those exactly. Chromite/Cobaltite/Lepidolite/
+    // Scheelite are dimension-wide tags (#minecraft:is_nether / #minecraft:is_end), so those get
+    // an exact DimensionRestriction instead.
+    private static final Map<String, Restriction> RESTRICTIONS = new LinkedHashMap<>();
+
+    static {
+        RESTRICTIONS.put("argentite", new Restriction(BiomeRestriction.PLAINS));
+        RESTRICTIONS.put("sphalerite", new Restriction(BiomeRestriction.PLAINS));
+        RESTRICTIONS.put("galena", new Restriction(BiomeRestriction.FOREST));
+        RESTRICTIONS.put("garnierite", new Restriction(BiomeRestriction.FOREST));
+        RESTRICTIONS.put("bauxite", new Restriction(BiomeRestriction.JUNGLE));
+        RESTRICTIONS.put("cassiterite", new Restriction(BiomeRestriction.JUNGLE));
+        RESTRICTIONS.put("rutile", new Restriction(BiomeRestriction.DESERT));
+        RESTRICTIONS.put("pyrolusite", new Restriction(BiomeRestriction.SWAMP));
+        RESTRICTIONS.put("chromite", new Restriction(DimensionRestriction.NETHER));
+        RESTRICTIONS.put("cobaltite", new Restriction(DimensionRestriction.NETHER));
+        RESTRICTIONS.put("lepidolite", new Restriction(DimensionRestriction.END));
+        RESTRICTIONS.put("scheelite", new Restriction(DimensionRestriction.END));
+        // Basalt Deltas specifically, not the whole Nether -- no named preset for it, unlike the
+        // others above.
+        RESTRICTIONS.put("rheniite", new Restriction(new BiomeRestriction(Biomes.BASALT_DELTAS)));
+    }
+
     private record OreGenInfo(int minY, int maxY, int count, int size) {
     }
 
@@ -102,9 +134,11 @@ public class IndustrialMetallurgyJerPlugin implements IJERPlugin {
         // on the world-gen tab, not as an exact real-world probability.
         int heightSpan = info.maxY() - info.minY() + 1;
         float chance = (info.count() * info.size()) / (16f * 16f * heightSpan);
+        Restriction restriction = RESTRICTIONS.getOrDefault(ore, Restriction.NONE);
         worldGen.register(
                 new ItemStack(block),
                 new DistributionTriangular(info.minY(), info.maxY(), chance),
+                restriction,
                 new LootDrop(new ItemStack(drop)));
     }
 

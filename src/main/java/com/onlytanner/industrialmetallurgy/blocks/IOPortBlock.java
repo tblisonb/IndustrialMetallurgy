@@ -56,6 +56,12 @@ import java.util.Map;
 public class IOPortBlock extends Block implements EntityBlock {
 
     public static final EnumProperty<IOPortBlockEntity.Mode> MODE = EnumProperty.create("mode", IOPortBlockEntity.Mode.class);
+    // The direction this port's mode-colored core faces, away from whatever it's mounted against
+    // -- set once at placement from the clicked face, same idea as a Dropper/Observer's FACING.
+    // Purely which way the always-shown "host" connector arm points (see the unconditional
+    // facing=... entries in blockstates/io_port.json); IOPortBlockEntity's real host search is
+    // still a full 6-direction scan, completely unaffected by this.
+    public static final EnumProperty<Direction> FACING = BlockStateProperties.FACING;
 
     private static final Map<Direction, BooleanProperty> PIPE_PROPERTIES = new EnumMap<>(Direction.class);
     private static final Map<Direction, VoxelShape> ARM_SHAPES = new EnumMap<>(Direction.class);
@@ -81,7 +87,9 @@ public class IOPortBlock extends Block implements EntityBlock {
 
     public IOPortBlock(Properties properties) {
         super(properties);
-        BlockState state = this.stateDefinition.any().setValue(MODE, IOPortBlockEntity.Mode.INPUT);
+        BlockState state = this.stateDefinition.any()
+                .setValue(MODE, IOPortBlockEntity.Mode.INPUT)
+                .setValue(FACING, Direction.NORTH);
         for (BooleanProperty property : PIPE_PROPERTIES.values()) {
             state = state.setValue(property, false);
         }
@@ -100,6 +108,7 @@ public class IOPortBlock extends Block implements EntityBlock {
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(MODE);
+        builder.add(FACING);
         for (BooleanProperty property : PIPE_PROPERTIES.values()) {
             builder.add(property);
         }
@@ -109,7 +118,9 @@ public class IOPortBlock extends Block implements EntityBlock {
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
-        BlockState state = this.defaultBlockState();
+        // Faces outward, away from whatever surface was clicked to place it -- context.getClickedFace()
+        // is exactly that outward direction (same convention a Dropper's FACING uses).
+        BlockState state = this.defaultBlockState().setValue(FACING, context.getClickedFace());
         for (Direction direction : Direction.values()) {
             state = state.setValue(PIPE_PROPERTIES.get(direction), connectsToPipe(level, pos.relative(direction)));
         }
@@ -142,6 +153,9 @@ public class IOPortBlock extends Block implements EntityBlock {
                 mask |= 1 << i;
             }
         }
+        // The host connector arm (see blockstates/io_port.json's unconditional facing=... entries)
+        // always renders regardless of the pipe booleans, so its collision needs to be included too.
+        mask |= 1 << state.getValue(FACING).getOpposite().ordinal();
         VoxelShape cached = SHAPE_CACHE[mask];
         if (cached != null) {
             return cached;
