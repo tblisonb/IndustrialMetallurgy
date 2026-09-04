@@ -17,6 +17,11 @@ public class AdvancedForgeContainer extends AbstractContainerMenu {
 
     public final AdvancedForgeBlockEntity blockEntity;
     private final ContainerLevelAccess canInteractWithCallable;
+    // The real number of this container's own slots -- NOT derivable from
+    // player.getInventory().getContainerSize(), which in this MC version also counts the
+    // offhand/body-armor/saddle equipment slots and is nowhere near 36, silently making every
+    // quickMoveStack's machineSlots computation negative if it's used for that subtraction.
+    private final int machineSlotCount;
     public FunctionalIntReferenceHolder currentSmeltTime;
     public FunctionalIntReferenceHolder currentEnergy;
     public FunctionalIntReferenceHolder currentTemperature;
@@ -38,6 +43,8 @@ public class AdvancedForgeContainer extends AbstractContainerMenu {
                 return false;
             }
         });
+
+        this.machineSlotCount = this.slots.size();
 
         // Player Inventory
         for (int i = 0; i < 3; i++) {
@@ -83,7 +90,7 @@ public class AdvancedForgeContainer extends AbstractContainerMenu {
             final ItemStack slotStack = slot.getItem();
             returnStack = slotStack.copy();
 
-            final int machineSlots = this.slots.size() - player.getInventory().getContainerSize();
+            final int machineSlots = this.machineSlotCount;
             if (index < machineSlots) {
                 if (!this.moveItemStackTo(slotStack, machineSlots, this.slots.size(), true)) {
                     return ItemStack.EMPTY;

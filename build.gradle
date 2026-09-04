@@ -115,6 +115,11 @@ configurations {
     runtimeClasspath.extendsFrom localRuntime
 }
 
+def jerJarCandidates = file("run/mods").exists()
+        ? file("run/mods").listFiles({ f -> f.name.startsWith("JustEnoughResources") } as FileFilter)
+        : null
+def jerJarFile = (jerJarCandidates != null && jerJarCandidates.length > 0) ? jerJarCandidates[0] : null
+
 dependencies {
     // JEI: API is compile-time only (our IModPlugin implements against it); the full mod is
     // localRuntime so it's present in dev runs without being a hard dependency for players.
@@ -127,6 +132,17 @@ dependencies {
     compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
     compileOnly "mezz.jei:jei-${minecraft_version}-common:${jei_version}"
     localRuntime "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+
+    // JER (Just Enough Resources): genuinely optional, both at compile and at runtime --
+    // IndustrialMetallurgyJerPlugin is discovered and loaded by JER's own classloader scan for
+    // @JERPlugin (see NeoForgePlatformHelper#injectApi), never referenced from our own code, so
+    // nothing breaks if JER isn't present. There's no known public maven for it on this MC
+    // version, so this looks for a copy of the jar wherever a normal dev run already keeps one
+    // (run/mods/) -- if it's missing, the plugin source is excluded from compilation (see the
+    // sourceSets block below) instead of breaking the whole build for a checkout without it.
+    if (jerJarFile != null) {
+        compileOnly files(jerJarFile)
+    }
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
@@ -142,6 +158,15 @@ dependencies {
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+}
+
+// Keeps a checkout without JER's jar buildable: without it, IndustrialMetallurgyJerPlugin.java
+// can't compile (it imports JER's actual types directly, not via reflection), so exclude just
+// that one file from the build rather than failing the whole project over an optional plugin.
+if (jerJarFile == null) {
+    sourceSets.main.java {
+        exclude "com/onlytanner/industrialmetallurgy/compat/jer/**"
+    }
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.

@@ -12,12 +12,18 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
 
 public class CokeOvenContainer extends AbstractContainerMenu {
 
     public final CokeOvenBlockEntity blockEntity;
     private final ContainerLevelAccess canInteractWithCallable;
+    // The real number of this container's own slots -- NOT derivable from
+    // player.getInventory().getContainerSize(), which in this MC version also counts the
+    // offhand/body-armor/saddle equipment slots and is nowhere near 36, silently making every
+    // quickMoveStack's machineSlots computation negative if it's used for that subtraction.
+    private final int machineSlotCount;
     public FunctionalIntReferenceHolder burnTimeRemaining;
 
     public CokeOvenContainer(final int id, final Inventory player, final CokeOvenBlockEntity blockEntity) {
@@ -26,13 +32,20 @@ public class CokeOvenContainer extends AbstractContainerMenu {
         this.canInteractWithCallable = ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos());
 
         ModItemHandler inventory = blockEntity.getInventory();
-        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, CokeOvenBlockEntity.INPUT_ID, 56, 35));
+        this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, CokeOvenBlockEntity.INPUT_ID, 56, 35) {
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return stack.is(Items.COAL) || stack.is(Items.CHARCOAL);
+            }
+        });
         this.addSlot(new ResourceHandlerSlot(inventory, inventory::set, CokeOvenBlockEntity.OUTPUT_ID, 116, 35) {
             @Override
             public boolean mayPlace(ItemStack stack) {
                 return false;
             }
         });
+
+        this.machineSlotCount = this.slots.size();
 
         // Player Inventory
         for (int i = 0; i < 3; i++) {
@@ -74,7 +87,7 @@ public class CokeOvenContainer extends AbstractContainerMenu {
             final ItemStack slotStack = slot.getItem();
             returnStack = slotStack.copy();
 
-            final int machineSlots = this.slots.size() - player.getInventory().getContainerSize();
+            final int machineSlots = this.machineSlotCount;
             if (index < machineSlots) {
                 if (!this.moveItemStackTo(slotStack, machineSlots, this.slots.size(), true)) {
                     return ItemStack.EMPTY;

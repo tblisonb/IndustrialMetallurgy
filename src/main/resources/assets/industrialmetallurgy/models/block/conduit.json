@@ -1,6 +1,3 @@
 {
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "industrialmetallurgy:block/conduit"
-    }
+    "parent": "industrialmetallurgy:block/conduit_core"
 }

@@ -19,6 +19,11 @@ public class BatteryBoxContainer extends AbstractContainerMenu {
 
     public final BatteryBoxBlockEntity blockEntity;
     private final ContainerLevelAccess canInteractWithCallable;
+    // The real number of this container's own slots -- NOT derivable from
+    // player.getInventory().getContainerSize(), which in this MC version also counts the
+    // offhand/body-armor/saddle equipment slots and is nowhere near 36, silently making every
+    // quickMoveStack's machineSlots computation negative if it's used for that subtraction.
+    private final int machineSlotCount;
     public FunctionalIntReferenceHolder burnTimeRemaining;
     public FunctionalIntReferenceHolder currentEnergy;
     public FunctionalIntReferenceHolder currentMaxBurnTime;
@@ -35,6 +40,8 @@ public class BatteryBoxContainer extends AbstractContainerMenu {
         this.addSlot(new BatterySlot(inventory, 3, 8, 44));
         this.addSlot(new BatterySlot(inventory, 4, 8, 62));
         this.addSlot(new ChargeSlot(inventory, BatteryBoxBlockEntity.CHARGE_SLOT_ID, 134, 35));
+
+        this.machineSlotCount = this.slots.size();
 
         // Player Inventory
         for (int i = 0; i < 3; i++) {
@@ -78,7 +85,7 @@ public class BatteryBoxContainer extends AbstractContainerMenu {
             final ItemStack slotStack = slot.getItem();
             returnStack = slotStack.copy();
 
-            final int machineSlots = this.slots.size() - player.getInventory().getContainerSize();
+            final int machineSlots = this.machineSlotCount;
             if (index < machineSlots) {
                 if (!this.moveItemStackTo(slotStack, machineSlots, this.slots.size(), true)) {
                     return ItemStack.EMPTY;
