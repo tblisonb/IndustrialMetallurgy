@@ -36,7 +36,7 @@ public class IOPortBlock extends Block implements EntityBlock {
 
     public IOPortBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(MODE, IOPortBlockEntity.Mode.BOTH));
+        this.registerDefaultState(this.stateDefinition.any().setValue(MODE, IOPortBlockEntity.Mode.INPUT));
     }
 
     public static BlockBehaviour.Properties newProperties() {

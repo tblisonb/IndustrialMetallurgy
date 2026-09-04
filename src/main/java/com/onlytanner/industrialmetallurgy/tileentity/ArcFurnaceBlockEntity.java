@@ -1,5 +1,6 @@
 package com.onlytanner.industrialmetallurgy.tileentity;
 
+import com.onlytanner.industrialmetallurgy.blocks.ForgeBlock;
 import com.onlytanner.industrialmetallurgy.init.ModContainerTypes;
 import com.onlytanner.industrialmetallurgy.init.ModTileEntityTypes;
 import com.onlytanner.industrialmetallurgy.multiblock.MultiblockPattern;
@@ -7,6 +8,9 @@ import com.onlytanner.industrialmetallurgy.multiblock.MultiblockPatternBuilder;
 import com.onlytanner.industrialmetallurgy.util.RegistryHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
@@ -40,6 +44,30 @@ public class ArcFurnaceBlockEntity extends AdvancedForgeBlockEntity {
     @Override
     protected MultiblockPattern getMultiblockPattern() {
         return shellPattern();
+    }
+
+    /**
+     * Called from {@link com.onlytanner.industrialmetallurgy.blocks.MetalBlock#useWithoutItem} when
+     * a Tungsten Steel or Tungsten-Rhenium Block is right-clicked -- searches the small volume
+     * around it for a formed Arc Furnace whose shell actually includes this position, and opens
+     * that furnace's GUI if one's found. A bounded, click-triggered scan (5x5x5 positions, only
+     * for these two block types), not a per-tick or world-wide search, and player-triggered
+     * one-off cost is fine even though most clicks on these blocks (used all over the mod as
+     * plain decorative/storage blocks) will find nothing.
+     */
+    public static InteractionResult tryOpenFromShellClick(Level level, BlockPos clickedPos, Player player) {
+        if (level.isClientSide()) {
+            return InteractionResult.SUCCESS;
+        }
+        for (BlockPos candidate : BlockPos.betweenClosed(clickedPos.offset(-2, -2, -2), clickedPos.offset(2, 2, 2))) {
+            if (level.getBlockEntity(candidate) instanceof ArcFurnaceBlockEntity furnace
+                    && furnace.isFormed()
+                    && shellPattern().containsWorldPos(candidate, furnace.getBlockState().getValue(ForgeBlock.FACING), clickedPos)) {
+                player.openMenu(furnace, candidate);
+                return InteractionResult.CONSUME;
+            }
+        }
+        return InteractionResult.PASS;
     }
 
     private static MultiblockPattern shellPattern() {

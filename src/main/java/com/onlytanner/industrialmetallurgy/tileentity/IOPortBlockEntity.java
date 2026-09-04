@@ -31,10 +31,21 @@ public class IOPortBlockEntity extends BlockEntity {
     // blockstate property -- the mode isn't just save data, it drives which of the three
     // io_port_<mode> textures renders (see blockstates/io_port.json).
     public enum Mode implements StringRepresentable {
-        INPUT, OUTPUT, BOTH;
+        // Appended, not reordered -- DISABLED's ordinal (3) must stay after the original three so
+        // a world saved before it existed still loads its ports' modes correctly (see
+        // loadAdditional, which stores this ordinal directly as an int).
+        INPUT, OUTPUT, BOTH, DISABLED;
 
         public Mode next() {
             return values()[(this.ordinal() + 1) % values().length];
+        }
+
+        public boolean allowsInsert() {
+            return this == INPUT || this == BOTH;
+        }
+
+        public boolean allowsExtract() {
+            return this == OUTPUT || this == BOTH;
         }
 
         public Component label() {
@@ -47,7 +58,9 @@ public class IOPortBlockEntity extends BlockEntity {
         }
     }
 
-    private Mode mode = Mode.BOTH;
+    // Input, not Both: a freshly-placed port shouldn't silently start pulling resources out of
+    // whatever it's attached to until a player deliberately points it that way.
+    private Mode mode = Mode.INPUT;
     private final EnergyHandler energyDelegate = new PortEnergyHandler();
     private final ResourceHandler<ItemResource> itemDelegate = new PortItemHandler();
 
@@ -116,7 +129,7 @@ public class IOPortBlockEntity extends BlockEntity {
     @Override
     protected void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
-        this.mode = Mode.values()[input.getIntOr("Mode", Mode.BOTH.ordinal())];
+        this.mode = Mode.values()[input.getIntOr("Mode", Mode.INPUT.ordinal())];
     }
 
     @Override
@@ -141,7 +154,7 @@ public class IOPortBlockEntity extends BlockEntity {
 
         @Override
         public int insert(int amount, TransactionContext transaction) {
-            if (mode == Mode.OUTPUT) {
+            if (!mode.allowsInsert()) {
                 return 0;
             }
             EnergyHandler host = findHostEnergyHandler();
@@ -150,7 +163,7 @@ public class IOPortBlockEntity extends BlockEntity {
 
         @Override
         public int extract(int amount, TransactionContext transaction) {
-            if (mode == Mode.INPUT) {
+            if (!mode.allowsExtract()) {
                 return 0;
             }
             EnergyHandler host = findHostEnergyHandler();
@@ -193,7 +206,7 @@ public class IOPortBlockEntity extends BlockEntity {
 
         @Override
         public int insert(int index, ItemResource resource, int amount, TransactionContext transaction) {
-            if (mode == Mode.OUTPUT) {
+            if (!mode.allowsInsert()) {
                 return 0;
             }
             ResourceHandler<ItemResource> host = findHostItemHandler();
@@ -202,7 +215,7 @@ public class IOPortBlockEntity extends BlockEntity {
 
         @Override
         public int extract(int index, ItemResource resource, int amount, TransactionContext transaction) {
-            if (mode == Mode.INPUT) {
+            if (!mode.allowsExtract()) {
                 return 0;
             }
             ResourceHandler<ItemResource> host = findHostItemHandler();

@@ -232,10 +232,11 @@ A Conduit is a plain pipe: it links two neighboring FE or item capabilities toge
 nothing on its own otherwise.
 <!-- page -->
 An I/O Port does the same job but adds a filter: right-click it with a Wrench to cycle Input,
-Output, or Both, restricting which way resources are allowed to flow through it.
+Output, Both, or Disabled. New ports default to Input, not Both, so nothing starts pulling out of
+a machine until you deliberately point it that way.
 <!-- page -->
 Its texture's center light changes color with the mode — blue for Input, orange for Output, green
-for Both — so you can read a port's setting without opening anything.
+for Both, dark for Disabled — so you can read a port's setting without opening anything.
 <!-- page -->
 Right-clicking with anything else, even an empty hand, only reports the current mode — you can't
 bump a port's setting by accident while just checking on it.
@@ -287,6 +288,9 @@ the furnace sits on. Its GUI opens either way, but says so if the shell's wrong 
 <!-- page -->
 Sneak + right-click an unformed Arc Furnace instead of opening its GUI, and it'll call out exactly
 which of the 27 cells is wrong and which direction to find it in.
+<!-- page -->
+Once it's formed, right-clicking any Tungsten Steel or Tungsten-Rhenium Block in the shell opens
+the same GUI — you don't have to walk around to the furnace's own face every time.
 
 ### Tungsten-Rhenium
 

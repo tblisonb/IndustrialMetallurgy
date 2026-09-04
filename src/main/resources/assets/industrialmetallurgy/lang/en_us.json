@@ -280,6 +280,7 @@
   "message.industrialmetallurgy.io_port_mode_input": "Input",
   "message.industrialmetallurgy.io_port_mode_output": "Output",
   "message.industrialmetallurgy.io_port_mode_both": "Both",
+  "message.industrialmetallurgy.io_port_mode_disabled": "Disabled",
 
   "block.industrialmetallurgy.alnico_block": "Block of Alnico",
   "block.industrialmetallurgy.aluminum_block": "Block of Aluminum",

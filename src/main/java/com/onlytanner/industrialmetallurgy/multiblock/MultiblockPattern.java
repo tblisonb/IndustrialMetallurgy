@@ -60,6 +60,18 @@ public final class MultiblockPattern {
         return this.cells.size();
     }
 
+    /**
+     * True if {@code worldPos} is one of this pattern's cells around a controller at
+     * {@code controllerPos} facing {@code facing} -- doesn't check whether the world state there
+     * actually matches, just whether the position is part of the shape at all. Lets a shell block
+     * (see {@link com.onlytanner.industrialmetallurgy.blocks.MetalBlock}) ask "am I part of a
+     * structure here" without the controller having to expose its raw cell map.
+     */
+    public boolean containsWorldPos(BlockPos controllerPos, Direction facing, BlockPos worldPos) {
+        BlockPos relative = worldPos.subtract(controllerPos).rotate(inverseOf(rotationFor(facing)));
+        return this.cells.containsKey(relative);
+    }
+
     private static Rotation rotationFor(Direction facing) {
         return switch (facing) {
             case NORTH -> Rotation.NONE;
@@ -67,6 +79,15 @@ public final class MultiblockPattern {
             case SOUTH -> Rotation.CLOCKWISE_180;
             case WEST -> Rotation.COUNTERCLOCKWISE_90;
             default -> throw new IllegalArgumentException("Multiblock controller facing must be horizontal, was " + facing);
+        };
+    }
+
+    private static Rotation inverseOf(Rotation rotation) {
+        return switch (rotation) {
+            case NONE -> Rotation.NONE;
+            case CLOCKWISE_90 -> Rotation.COUNTERCLOCKWISE_90;
+            case CLOCKWISE_180 -> Rotation.CLOCKWISE_180;
+            case COUNTERCLOCKWISE_90 -> Rotation.CLOCKWISE_90;
         };
     }
 }
