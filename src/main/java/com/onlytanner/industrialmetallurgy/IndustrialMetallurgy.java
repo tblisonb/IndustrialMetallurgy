@@ -53,7 +53,14 @@ public class IndustrialMetallurgy {
             .title(Component.translatable("itemGroup.industrialmetallurgy"))
             .withTabsBefore(CreativeModeTabs.COMBAT)
             .icon(() -> RegistryHandler.TUNGSTEN_INGOT.get().getDefaultInstance())
-            .displayItems((parameters, output) -> RegistryHandler.ITEMS.getEntries().forEach(entry -> output.accept(entry.get())))
+            .displayItems((parameters, output) -> {
+                RegistryHandler.ITEMS.getEntries().forEach(entry -> output.accept(entry.get()));
+                // Block items now register through Registrate (see RegistryHandler.BLOCK_ITEMS_IN_ORDER's
+                // own comment) rather than RegistryHandler.ITEMS, but still belong right after it in the
+                // creative tab/JEI -- same relative position as when they were ITEMS' own trailing
+                // "Block Items" section.
+                RegistryHandler.BLOCK_ITEMS_IN_ORDER.forEach(item -> output.accept(item.get()));
+            })
             .build());
 
     // The constructor for the mod class is the first code that is run when your mod is loaded.

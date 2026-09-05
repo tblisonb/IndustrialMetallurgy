@@ -141,6 +141,20 @@ class RegistryAssetConsistencyTest {
     }
 
     @Test
+    void everyBlockHasExactlyOneCreativeTabBlockItemEntry() {
+        // RegistryHandler.BLOCK_ITEMS_IN_ORDER exists solely to keep block items in the creative
+        // tab/JEI at the same relative position they held before migrating off ITEMS (see its own
+        // comment) -- one entry per Registrate-registered block, no more, no less. A wrong count
+        // here means a block's trackBlockItem() call was skipped, duplicated, or the field was
+        // read before being populated (both real bugs caught during this migration).
+        long registrateBlockCount = IndustrialMetallurgy.REGISTRATE.getAll(Registries.BLOCK).size();
+        assertTrue(registrateBlockCount > 0, "No blocks registered through Registrate -- did RegistryHandler fail to load?");
+        assertTrue(RegistryHandler.BLOCK_ITEMS_IN_ORDER.size() == registrateBlockCount,
+                () -> "BLOCK_ITEMS_IN_ORDER has " + RegistryHandler.BLOCK_ITEMS_IN_ORDER.size()
+                        + " entries but " + registrateBlockCount + " blocks are registered through Registrate");
+    }
+
+    @Test
     void everyBlockstateModelReferenceExists() throws IOException {
         List<String> problems = new ArrayList<>();
         for (String name : blockNames()) {

@@ -28,7 +28,6 @@ import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.renderer.block.dispatch.VariantMutator;
 import net.minecraft.world.item.AxeItem;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ShovelItem;
@@ -42,6 +41,8 @@ import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
@@ -49,6 +50,18 @@ public class RegistryHandler {
 
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(IndustrialMetallurgy.MODID);
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(IndustrialMetallurgy.MODID);
+
+    // Every block's BlockItem is registered inline (see .simpleItem() in registerBlock/etc. below)
+    // rather than in a separate "Block Items" section like the rest of RegistryHandler's items --
+    // Registrate's BlockBuilder#simpleItem() ties item creation directly to the block, and already
+    // suppresses the item's own duplicate-of-the-block's-name lang entry (see BlockBuilder.java:
+    // "The item will have no lang entry, since it would duplicate the block's"). Since these items
+    // no longer show up in ITEMS.getEntries() (the DeferredRegister IndustrialMetallurgy.TAB's
+    // displayItems iterates), this list preserves their creative-tab/JEI position -- same relative
+    // order as the old "Block Items" section, appended right after ITEMS' own entries. Must be
+    // declared before any block field below (registerBlock/etc. populate it as a side effect of
+    // each block's own field initializer, and static fields initialize in textual order).
+    public static final List<Supplier<Item>> BLOCK_ITEMS_IN_ORDER = new ArrayList<>();
 
     // Items
     // Metal Ingots
@@ -464,95 +477,21 @@ public class RegistryHandler {
     // Chemical Reactor then precipitates into a metal concentrate. See GUIDE.md.
     public static final BlockEntry<Block> AUTOCLAVE = registerFacingBlock("autoclave", p -> new AutoclaveBlock(p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
 
-    // Block Items
-    // Metal Blocks
-    public static final DeferredItem<BlockItem> ALNICO_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("alnico_block", ALNICO_BLOCK);
-    public static final DeferredItem<BlockItem> ALUMINUM_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("aluminum_block", ALUMINUM_BLOCK);
-    public static final DeferredItem<BlockItem> BRASS_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("brass_block", BRASS_BLOCK);
-    public static final DeferredItem<BlockItem> BRONZE_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("bronze_block", BRONZE_BLOCK);
-    public static final DeferredItem<BlockItem> CHROMIUM_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("chromium_block", CHROMIUM_BLOCK);
-    public static final DeferredItem<BlockItem> COBALT_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("cobalt_block", COBALT_BLOCK);
-    public static final DeferredItem<BlockItem> COBALT_STEEL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("cobalt_steel_block", COBALT_STEEL_BLOCK);
-    public static final DeferredItem<BlockItem> CONSTANTAN_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("constantan_block", CONSTANTAN_BLOCK);
-    public static final DeferredItem<BlockItem> COPPER_TUNGSTEN_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("copper_tungsten_block", COPPER_TUNSTEN_BLOCK);
-    public static final DeferredItem<BlockItem> ELECTRUM_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("electrum_block", ELECTRUM_BLOCK);
-    public static final DeferredItem<BlockItem> INVAR_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("invar_block", INVAR_BLOCK);
-    public static final DeferredItem<BlockItem> KANTHAL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("kanthal_block", KANTHAL_BLOCK);
-    public static final DeferredItem<BlockItem> LEAD_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("lead_block", LEAD_BLOCK);
-    public static final DeferredItem<BlockItem> MANGANESE_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("manganese_block", MANGANESE_BLOCK);
-    public static final DeferredItem<BlockItem> NICHROME_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("nichrome_block", NICHROME_BLOCK);
-    public static final DeferredItem<BlockItem> NICKEL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("nickel_block", NICKEL_BLOCK);
-    public static final DeferredItem<BlockItem> NIKROTHAL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("nikrothal_block", NIKROTHAL_BLOCK);
-    public static final DeferredItem<BlockItem> NITINOL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("nitinol_block", NITINOL_BLOCK);
-    public static final DeferredItem<BlockItem> RHENIUM_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("rhenium_block", RHENIUM_BLOCK);
-    public static final DeferredItem<BlockItem> SILVER_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("silver_block", SILVER_BLOCK);
-    public static final DeferredItem<BlockItem> SOLDER_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("solder_block", SOLDER_BLOCK);
-    public static final DeferredItem<BlockItem> STEEL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("steel_block", STEEL_BLOCK);
-    public static final DeferredItem<BlockItem> STELLITE_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("stellite_block", STELLITE_BLOCK);
-    public static final DeferredItem<BlockItem> TIN_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("tin_block", TIN_BLOCK);
-    public static final DeferredItem<BlockItem> TITANIUM_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("titanium_block", TITANIUM_BLOCK);
-    public static final DeferredItem<BlockItem> TUNGSTEN_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("tungsten_block", TUNGSTEN_BLOCK);
-    public static final DeferredItem<BlockItem> TUNGSTEN_RHENIUM_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("tungsten_rhenium_block", TUNGSTEN_RHENIUM_BLOCK);
-    public static final DeferredItem<BlockItem> TUNGSTEN_STEEL_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("tungsten_steel_block", TUNGSTEN_STEEL_BLOCK);
-    public static final DeferredItem<BlockItem> ZINC_BLOCK_ITEM = ITEMS.registerSimpleBlockItem("zinc_block", ZINC_BLOCK);
-    // Ores
-    public static final DeferredItem<BlockItem> ARGENTITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("argentite_ore", ARGENTITE_ORE);
-    public static final DeferredItem<BlockItem> DEEPSLATE_ARGENTITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("deepslate_argentite_ore", DEEPSLATE_ARGENTITE_ORE);
-    public static final DeferredItem<BlockItem> BAUXITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("bauxite_ore", BAUXITE_ORE);
-    public static final DeferredItem<BlockItem> DEEPSLATE_BAUXITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("deepslate_bauxite_ore", DEEPSLATE_BAUXITE_ORE);
-    public static final DeferredItem<BlockItem> CASSITERITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("cassiterite_ore", CASSITERITE_ORE);
-    public static final DeferredItem<BlockItem> DEEPSLATE_CASSITERITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("deepslate_cassiterite_ore", DEEPSLATE_CASSITERITE_ORE);
-    public static final DeferredItem<BlockItem> CHROMITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("chromite_ore", CHROMITE_ORE);
-    public static final DeferredItem<BlockItem> COBALTITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("cobaltite_ore", COBALTITE_ORE);
-    public static final DeferredItem<BlockItem> GALENA_ORE_ITEM = ITEMS.registerSimpleBlockItem("galena_ore", GALENA_ORE);
-    public static final DeferredItem<BlockItem> DEEPSLATE_GALENA_ORE_ITEM = ITEMS.registerSimpleBlockItem("deepslate_galena_ore", DEEPSLATE_GALENA_ORE);
-    public static final DeferredItem<BlockItem> GARNIERITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("garnierite_ore", GARNIERITE_ORE);
-    public static final DeferredItem<BlockItem> DEEPSLATE_GARNIERITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("deepslate_garnierite_ore", DEEPSLATE_GARNIERITE_ORE);
-    public static final DeferredItem<BlockItem> LEPIDOLITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("lepidolite_ore", LEPIDOLITE_ORE);
-    public static final DeferredItem<BlockItem> PYROLUSITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("pyrolusite_ore", PYROLUSITE_ORE);
-    public static final DeferredItem<BlockItem> DEEPSLATE_PYROLUSITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("deepslate_pyrolusite_ore", DEEPSLATE_PYROLUSITE_ORE);
-    public static final DeferredItem<BlockItem> RHENIITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("rheniite_ore", RHENIITE_ORE);
-    public static final DeferredItem<BlockItem> RUTILE_ORE_ITEM = ITEMS.registerSimpleBlockItem("rutile_ore", RUTILE_ORE);
-    public static final DeferredItem<BlockItem> DEEPSLATE_RUTILE_ORE_ITEM = ITEMS.registerSimpleBlockItem("deepslate_rutile_ore", DEEPSLATE_RUTILE_ORE);
-    public static final DeferredItem<BlockItem> SCHEELITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("scheelite_ore", SCHEELITE_ORE);
-    public static final DeferredItem<BlockItem> SPHALERITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("sphalerite_ore", SPHALERITE_ORE);
-    public static final DeferredItem<BlockItem> DEEPSLATE_SPHALERITE_ORE_ITEM = ITEMS.registerSimpleBlockItem("deepslate_sphalerite_ore", DEEPSLATE_SPHALERITE_ORE);
-    // Other Resources
-    public static final DeferredItem<BlockItem> OIL_SAND_ITEM = ITEMS.registerSimpleBlockItem("oil_sand", OIL_SAND);
-    public static final DeferredItem<BlockItem> REFRACTORY_BRICKS_ITEM = ITEMS.registerSimpleBlockItem("refractory_bricks", REFRACTORY_BRICKS);
-    // Machines
-    public static final DeferredItem<BlockItem> IRON_FORGE_CORE_ITEM = ITEMS.registerSimpleBlockItem("iron_forge_core", IRON_FORGE_CORE);
-    public static final DeferredItem<BlockItem> STEEL_FORGE_CORE_ITEM = ITEMS.registerSimpleBlockItem("steel_forge_core", STEEL_FORGE_CORE);
-    public static final DeferredItem<BlockItem> COBALT_FORGE_CORE_ITEM = ITEMS.registerSimpleBlockItem("cobalt_forge_core", COBALT_FORGE_CORE);
-    public static final DeferredItem<BlockItem> TUNGSTEN_FORGE_CORE_ITEM = ITEMS.registerSimpleBlockItem("tungsten_forge_core", TUNGSTEN_FORGE_CORE);
-    public static final DeferredItem<BlockItem> ARC_FURNACE_CORE_ITEM = ITEMS.registerSimpleBlockItem("arc_furnace_core", ARC_FURNACE_CORE);
-    public static final DeferredItem<BlockItem> CRUSHER_ITEM = ITEMS.registerSimpleBlockItem("crusher", CRUSHER);
-    public static final DeferredItem<BlockItem> COKE_OVEN_ITEM = ITEMS.registerSimpleBlockItem("coke_oven", COKE_OVEN);
-    public static final DeferredItem<BlockItem> THERMOELECTRIC_GENERATOR_ITEM = ITEMS.registerSimpleBlockItem("thermoelectric_generator", THERMOELECTRIC_GENERATOR);
-    public static final DeferredItem<BlockItem> FORGE_TIER1_ITEM = ITEMS.registerSimpleBlockItem("forge_tier1", FORGE_TIER1);
-    public static final DeferredItem<BlockItem> FORGE_TIER2_ITEM = ITEMS.registerSimpleBlockItem("forge_tier2", FORGE_TIER2);
-    public static final DeferredItem<BlockItem> FORGE_TIER3_ITEM = ITEMS.registerSimpleBlockItem("forge_tier3", FORGE_TIER3);
-    public static final DeferredItem<BlockItem> FORGE_TIER4_ITEM = ITEMS.registerSimpleBlockItem("forge_tier4", FORGE_TIER4);
-    public static final DeferredItem<BlockItem> ARC_FURNACE_ITEM = ITEMS.registerSimpleBlockItem("arc_furnace", ARC_FURNACE);
-    public static final DeferredItem<BlockItem> EXTRUDER_ITEM = ITEMS.registerSimpleBlockItem("extruder", EXTRUDER);
-    public static final DeferredItem<BlockItem> SOLDERING_STATION_ITEM = ITEMS.registerSimpleBlockItem("soldering_station", SOLDERING_STATION);
-    public static final DeferredItem<BlockItem> CHEMICAL_CENTRIFUGE_ITEM = ITEMS.registerSimpleBlockItem("chemical_centrifuge", CHEMICAL_CENTRIFUGE);
-    public static final DeferredItem<BlockItem> CHEMICAL_REACTOR_ITEM = ITEMS.registerSimpleBlockItem("chemical_reactor", CHEMICAL_REACTOR);
-    public static final DeferredItem<BlockItem> BATTERY_BOX_ITEM = ITEMS.registerSimpleBlockItem("battery_box", BATTERY_BOX);
-    public static final DeferredItem<BlockItem> ELECTRIC_FURNACE_ITEM = ITEMS.registerSimpleBlockItem("electric_furnace", ELECTRIC_FURNACE);
-    public static final DeferredItem<BlockItem> SOLAR_PANEL_ITEM = ITEMS.registerSimpleBlockItem("solar_panel", SOLAR_PANEL);
-    public static final DeferredItem<BlockItem> IO_PORT_ITEM = ITEMS.registerSimpleBlockItem("io_port", IO_PORT);
-    public static final DeferredItem<BlockItem> CONDUIT_ITEM = ITEMS.registerSimpleBlockItem("conduit", CONDUIT);
-    public static final DeferredItem<BlockItem> AUTOCLAVE_ITEM = ITEMS.registerSimpleBlockItem("autoclave", AUTOCLAVE);
+    private static void trackBlockItem(BlockEntry<Block> block) {
+        BLOCK_ITEMS_IN_ORDER.add(() -> block.get().asItem());
+    }
 
     // Registers a block through Registrate with its default cube_all blockstate and drop-self
     // loot (both from BlockBuilder.create()'s own defaults -- see Registrate's BlockBuilder.java),
     // suppressing the also-defaulted lang generation (see the Blocks section header comment).
     private static BlockEntry<Block> registerBlock(String name, NonNullFunction<BlockBehaviour.Properties, Block> factory, Supplier<BlockBehaviour.Properties> properties) {
-        return IndustrialMetallurgy.REGISTRATE.<Block>block(name, factory)
+        BlockEntry<Block> block = IndustrialMetallurgy.REGISTRATE.<Block>block(name, factory)
                 .properties(p -> properties.get())
+                .simpleItem()
                 .setData(ProviderType.LANG, (ctx, prov) -> {})
                 .register();
+        trackBlockItem(block);
+        return block;
     }
 
     // Registers an ore-drop-pattern block (silk touch keeps the block, otherwise a fortune-boosted
@@ -560,11 +499,14 @@ public class RegistryHandler {
     // cube_all blockstate. Used for ore blocks and oil_sand (whose "raw drop" is oily_sand).
     private static BlockEntry<Block> registerOreBlock(String name, NonNullFunction<BlockBehaviour.Properties, Block> factory,
             Supplier<BlockBehaviour.Properties> properties, DeferredItem<Item> drop) {
-        return IndustrialMetallurgy.REGISTRATE.<Block>block(name, factory)
+        BlockEntry<Block> block = IndustrialMetallurgy.REGISTRATE.<Block>block(name, factory)
                 .properties(p -> properties.get())
-                .loot((prov, block) -> prov.add(block, prov.createOreDrop(block, drop.get())))
+                .simpleItem()
+                .loot((prov, b) -> prov.add(b, prov.createOreDrop(b, drop.get())))
                 .setData(ProviderType.LANG, (ctx, prov) -> {})
                 .register();
+        trackBlockItem(block);
+        return block;
     }
 
     // Registers a furnace-like block whose blockstate is just 4 horizontal-facing rotations of a
@@ -572,11 +514,14 @@ public class RegistryHandler {
     // station, chemical centrifuge/reactor, autoclave. Reuses the existing hand-authored model
     // file rather than regenerating one, so only the blockstate JSON moves to datagen.
     private static BlockEntry<Block> registerFacingBlock(String name, NonNullFunction<BlockBehaviour.Properties, Block> factory, Supplier<BlockBehaviour.Properties> properties) {
-        return IndustrialMetallurgy.REGISTRATE.<Block>block(name, factory)
+        BlockEntry<Block> block = IndustrialMetallurgy.REGISTRATE.<Block>block(name, factory)
                 .properties(p -> properties.get())
+                .simpleItem()
                 .blockstate(() -> (ctx, prov) -> prov.generateHorizontalBlock(ctx.getEntry(), BlockModelGenerators.plainVariant(prov.modLoc("block/" + name))))
                 .setData(ProviderType.LANG, (ctx, prov) -> {})
                 .register();
+        trackBlockItem(block);
+        return block;
     }
 
     // Registers a furnace-like block whose blockstate is LIT (selects between the existing
@@ -585,8 +530,9 @@ public class RegistryHandler {
     // (BlockModelGenerators#createFurnace), but references the existing hand-authored models
     // instead of regenerating new ones from a texture mapping.
     private static BlockEntry<Block> registerFacingLitBlock(String name, NonNullFunction<BlockBehaviour.Properties, Block> factory, Supplier<BlockBehaviour.Properties> properties) {
-        return IndustrialMetallurgy.REGISTRATE.<Block>block(name, factory)
+        BlockEntry<Block> block = IndustrialMetallurgy.REGISTRATE.<Block>block(name, factory)
                 .properties(p -> properties.get())
+                .simpleItem()
                 .blockstate(() -> (ctx, prov) -> prov.blockStateOutput.accept(
                         MultiVariantGenerator.dispatch(ctx.getEntry())
                                 .with(BlockModelGenerators.createBooleanModelDispatch(BlockStateProperties.LIT,
@@ -595,6 +541,8 @@ public class RegistryHandler {
                                 .with(BlockModelGenerators.ROTATION_HORIZONTAL_FACING)))
                 .setData(ProviderType.LANG, (ctx, prov) -> {})
                 .register();
+        trackBlockItem(block);
+        return block;
     }
 
     // Adds the 6 direction-arm multipart entries shared by Conduit and I/O Port (see both blocks'
@@ -614,8 +562,9 @@ public class RegistryHandler {
     }
 
     private static BlockEntry<Block> registerConduit() {
-        return IndustrialMetallurgy.REGISTRATE.<Block>block("conduit", p -> new ConduitBlock(p))
+        BlockEntry<Block> block = IndustrialMetallurgy.REGISTRATE.<Block>block("conduit", p -> new ConduitBlock(p))
                 .properties(p -> ConduitBlock.newProperties())
+                .simpleItem()
                 .blockstate(() -> (ctx, prov) -> prov.blockStateOutput.accept(
                         addConduitArms(
                                 MultiPartGenerator.multiPart(ctx.getEntry())
@@ -623,11 +572,14 @@ public class RegistryHandler {
                                 prov)))
                 .setData(ProviderType.LANG, (ctx, prov) -> {})
                 .register();
+        trackBlockItem(block);
+        return block;
     }
 
     private static BlockEntry<Block> registerIoPort() {
-        return IndustrialMetallurgy.REGISTRATE.<Block>block("io_port", p -> new IOPortBlock(p))
+        BlockEntry<Block> block = IndustrialMetallurgy.REGISTRATE.<Block>block("io_port", p -> new IOPortBlock(p))
                 .properties(p -> IOPortBlock.newProperties())
+                .simpleItem()
                 .blockstate(() -> (ctx, prov) -> {
                     MultiPartGenerator generator = MultiPartGenerator.multiPart(ctx.getEntry())
                             .with(new ConditionBuilder().term(IOPortBlock.MODE, IOPortBlockEntity.Mode.INPUT), BlockModelGenerators.plainVariant(prov.modLoc("block/io_port_input_core")))
@@ -647,6 +599,8 @@ public class RegistryHandler {
                 })
                 .setData(ProviderType.LANG, (ctx, prov) -> {})
                 .register();
+        trackBlockItem(block);
+        return block;
     }
 
     public static void init(IEventBus modEventBus) {
