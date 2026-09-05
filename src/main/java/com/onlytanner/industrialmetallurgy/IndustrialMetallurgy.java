@@ -53,13 +53,11 @@ public class IndustrialMetallurgy {
             .title(Component.translatable("itemGroup.industrialmetallurgy"))
             .withTabsBefore(CreativeModeTabs.COMBAT)
             .icon(() -> RegistryHandler.TUNGSTEN_INGOT.get().getDefaultInstance())
-            .displayItems((parameters, output) -> {
-                RegistryHandler.ITEMS.getEntries().forEach(entry -> output.accept(entry.get()));
-                // Items/blocks migrated to Registrate (see RegistryHandler.REGISTRATE_ITEMS_IN_ORDER's
-                // own comment) no longer show up in RegistryHandler.ITEMS, but still belong in the
-                // same relative creative-tab/JEI position they held before migrating off it.
-                RegistryHandler.REGISTRATE_ITEMS_IN_ORDER.forEach(item -> output.accept(item.get()));
-            })
+            // Every block/item now registers through Registrate rather than a DeferredRegister
+            // (see RegistryHandler.REGISTRATE_ITEMS_IN_ORDER's own comment), which preserves the
+            // same creative-tab/JEI ordering RegistryHandler.ITEMS' own declaration order used to
+            // drive.
+            .displayItems((parameters, output) -> RegistryHandler.REGISTRATE_ITEMS_IN_ORDER.forEach(item -> output.accept(item.get())))
             .build());
 
     // The constructor for the mod class is the first code that is run when your mod is loaded.

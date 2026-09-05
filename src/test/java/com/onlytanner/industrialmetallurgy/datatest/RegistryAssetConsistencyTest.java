@@ -39,9 +39,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * second (now adopted for blocks -- see the registrate-migration branch), since this suite
  * intentionally doesn't police *ordering*.
  *
- * Blocks (and their block items' models) are migrating from RegistryHandler.BLOCKS to Registrate
- * family-by-family; blockNames()/itemNames() merge both sources so migrated and not-yet-migrated
- * entries are covered by the same checks throughout the migration.
+ * Every block/item registers through Registrate (RegistryHandler no longer holds any
+ * DeferredRegister entries of its own); blockNames()/itemNames() read straight from
+ * IndustrialMetallurgy.REGISTRATE.
  */
 class RegistryAssetConsistencyTest {
 
@@ -64,19 +64,15 @@ class RegistryAssetConsistencyTest {
     }
 
     private static List<String> blockNames() {
-        return Stream.concat(
-                        RegistryHandler.BLOCKS.getEntries().stream().map(entry -> entry.getId().getPath()),
-                        IndustrialMetallurgy.REGISTRATE.getAll(Registries.BLOCK).stream().map(entry -> entry.getId().getPath()))
-                .distinct()
+        return IndustrialMetallurgy.REGISTRATE.getAll(Registries.BLOCK).stream()
+                .map(entry -> entry.getId().getPath())
                 .sorted()
                 .toList();
     }
 
     private static List<String> itemNames() {
-        return Stream.concat(
-                        RegistryHandler.ITEMS.getEntries().stream().map(entry -> entry.getId().getPath()),
-                        IndustrialMetallurgy.REGISTRATE.getAll(Registries.ITEM).stream().map(entry -> entry.getId().getPath()))
-                .distinct()
+        return IndustrialMetallurgy.REGISTRATE.getAll(Registries.ITEM).stream()
+                .map(entry -> entry.getId().getPath())
                 .sorted()
                 .toList();
     }

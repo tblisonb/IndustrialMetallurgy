@@ -40,26 +40,20 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.registries.DeferredBlock;
-import net.neoforged.neoforge.registries.DeferredItem;
-import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
 
 public class RegistryHandler {
 
-    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(IndustrialMetallurgy.MODID);
-    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(IndustrialMetallurgy.MODID);
-
-    // Every item/block registered through Registrate (rather than ITEMS/BLOCKS directly) tracks
-    // its item here, in field-declaration order -- IndustrialMetallurgy.TAB's displayItems
-    // callback iterates ITEMS.getEntries() (still-unmigrated entries) then this list, to keep
-    // creative-tab/JEI ordering the same as when every item lived on ITEMS. Must be declared
-    // before any block/item field below (registerBlock/registerItem/etc. populate it as a side
-    // effect of each field's own initializer, and static fields initialize in textual order).
+    // Every block/item in the mod registers through Registrate (see IndustrialMetallurgy.
+    // REGISTRATE); this list tracks each one's item, in field-declaration order, so
+    // IndustrialMetallurgy.TAB's displayItems callback can reproduce the exact creative-tab/JEI
+    // ordering that RegistryHandler.ITEMS' own declaration order used to drive back when
+    // everything registered through a plain DeferredRegister. Must be declared before any block/
+    // item field below (registerBlock/registerItem/etc. populate it as a side effect of each
+    // field's own initializer, and static fields initialize in textual order).
     public static final List<Supplier<Item>> REGISTRATE_ITEMS_IN_ORDER = new ArrayList<>();
 
     // Items
@@ -260,33 +254,33 @@ public class RegistryHandler {
     // sword; axe/hoe/shovel keep their dedicated classes for their unique right-click behavior.
     public static final ItemEntry<Item> STEEL_PICKAXE = registerHandheldItem("steel_pickaxe", props -> props.pickaxe(ModToolMaterials.STEEL, 1.0F, -2.8F));
     public static final ItemEntry<Item> STEEL_SWORD = registerHandheldItem("steel_sword", props -> props.sword(ModToolMaterials.STEEL, 3.0F, -2.4F));
-    public static final DeferredItem<AxeItem> STEEL_AXE = ITEMS.registerItem("steel_axe", props -> new AxeItem(ModToolMaterials.STEEL, 5.0F, -3.0F, props), UnaryOperator.identity());
-    public static final DeferredItem<HoeItem> STEEL_HOE = ITEMS.registerItem("steel_hoe", props -> new HoeItem(ModToolMaterials.STEEL, -3.0F, 0.0F, props), UnaryOperator.identity());
-    public static final DeferredItem<ShovelItem> STEEL_SHOVEL = ITEMS.registerItem("steel_shovel", props -> new ShovelItem(ModToolMaterials.STEEL, 1.5F, -3.0F, props), UnaryOperator.identity());
+    public static final ItemEntry<AxeItem> STEEL_AXE = registerHandheldCustomItem("steel_axe", props -> new AxeItem(ModToolMaterials.STEEL, 5.0F, -3.0F, props));
+    public static final ItemEntry<HoeItem> STEEL_HOE = registerHandheldCustomItem("steel_hoe", props -> new HoeItem(ModToolMaterials.STEEL, -3.0F, 0.0F, props));
+    public static final ItemEntry<ShovelItem> STEEL_SHOVEL = registerHandheldCustomItem("steel_shovel", props -> new ShovelItem(ModToolMaterials.STEEL, 1.5F, -3.0F, props));
 
     public static final ItemEntry<Item> COBALT_STEEL_PICKAXE = registerHandheldItem("cobalt_steel_pickaxe", props -> props.pickaxe(ModToolMaterials.COBALT_STEEL, 1.0F, -2.8F));
     public static final ItemEntry<Item> COBALT_STEEL_SWORD = registerHandheldItem("cobalt_steel_sword", props -> props.sword(ModToolMaterials.COBALT_STEEL, 3.0F, -2.4F));
-    public static final DeferredItem<AxeItem> COBALT_STEEL_AXE = ITEMS.registerItem("cobalt_steel_axe", props -> new AxeItem(ModToolMaterials.COBALT_STEEL, 5.0F, -3.0F, props), UnaryOperator.identity());
-    public static final DeferredItem<HoeItem> COBALT_STEEL_HOE = ITEMS.registerItem("cobalt_steel_hoe", props -> new HoeItem(ModToolMaterials.COBALT_STEEL, -3.0F, 0.0F, props), UnaryOperator.identity());
-    public static final DeferredItem<ShovelItem> COBALT_STEEL_SHOVEL = ITEMS.registerItem("cobalt_steel_shovel", props -> new ShovelItem(ModToolMaterials.COBALT_STEEL, 1.5F, -3.0F, props), UnaryOperator.identity());
+    public static final ItemEntry<AxeItem> COBALT_STEEL_AXE = registerHandheldCustomItem("cobalt_steel_axe", props -> new AxeItem(ModToolMaterials.COBALT_STEEL, 5.0F, -3.0F, props));
+    public static final ItemEntry<HoeItem> COBALT_STEEL_HOE = registerHandheldCustomItem("cobalt_steel_hoe", props -> new HoeItem(ModToolMaterials.COBALT_STEEL, -3.0F, 0.0F, props));
+    public static final ItemEntry<ShovelItem> COBALT_STEEL_SHOVEL = registerHandheldCustomItem("cobalt_steel_shovel", props -> new ShovelItem(ModToolMaterials.COBALT_STEEL, 1.5F, -3.0F, props));
 
     public static final ItemEntry<Item> STELLITE_PICKAXE = registerHandheldItem("stellite_pickaxe", props -> props.pickaxe(ModToolMaterials.STELLITE, 1.0F, -2.8F));
     public static final ItemEntry<Item> STELLITE_SWORD = registerHandheldItem("stellite_sword", props -> props.sword(ModToolMaterials.STELLITE, 3.0F, -2.4F));
-    public static final DeferredItem<AxeItem> STELLITE_AXE = ITEMS.registerItem("stellite_axe", props -> new AxeItem(ModToolMaterials.STELLITE, 5.0F, -3.0F, props), UnaryOperator.identity());
-    public static final DeferredItem<HoeItem> STELLITE_HOE = ITEMS.registerItem("stellite_hoe", props -> new HoeItem(ModToolMaterials.STELLITE, -3.0F, 0.0F, props), UnaryOperator.identity());
-    public static final DeferredItem<ShovelItem> STELLITE_SHOVEL = ITEMS.registerItem("stellite_shovel", props -> new ShovelItem(ModToolMaterials.STELLITE, 1.5F, -3.0F, props), UnaryOperator.identity());
+    public static final ItemEntry<AxeItem> STELLITE_AXE = registerHandheldCustomItem("stellite_axe", props -> new AxeItem(ModToolMaterials.STELLITE, 5.0F, -3.0F, props));
+    public static final ItemEntry<HoeItem> STELLITE_HOE = registerHandheldCustomItem("stellite_hoe", props -> new HoeItem(ModToolMaterials.STELLITE, -3.0F, 0.0F, props));
+    public static final ItemEntry<ShovelItem> STELLITE_SHOVEL = registerHandheldCustomItem("stellite_shovel", props -> new ShovelItem(ModToolMaterials.STELLITE, 1.5F, -3.0F, props));
 
     public static final ItemEntry<Item> TUNGSTEN_STEEL_PICKAXE = registerHandheldItem("tungsten_steel_pickaxe", props -> props.pickaxe(ModToolMaterials.TUNGSTEN_STEEL, 1.0F, -2.8F));
     public static final ItemEntry<Item> TUNGSTEN_STEEL_SWORD = registerHandheldItem("tungsten_steel_sword", props -> props.sword(ModToolMaterials.TUNGSTEN_STEEL, 3.0F, -2.4F));
-    public static final DeferredItem<AxeItem> TUNGSTEN_STEEL_AXE = ITEMS.registerItem("tungsten_steel_axe", props -> new AxeItem(ModToolMaterials.TUNGSTEN_STEEL, 5.0F, -3.0F, props), UnaryOperator.identity());
-    public static final DeferredItem<HoeItem> TUNGSTEN_STEEL_HOE = ITEMS.registerItem("tungsten_steel_hoe", props -> new HoeItem(ModToolMaterials.TUNGSTEN_STEEL, -3.0F, 0.0F, props), UnaryOperator.identity());
-    public static final DeferredItem<ShovelItem> TUNGSTEN_STEEL_SHOVEL = ITEMS.registerItem("tungsten_steel_shovel", props -> new ShovelItem(ModToolMaterials.TUNGSTEN_STEEL, 1.5F, -3.0F, props), UnaryOperator.identity());
+    public static final ItemEntry<AxeItem> TUNGSTEN_STEEL_AXE = registerHandheldCustomItem("tungsten_steel_axe", props -> new AxeItem(ModToolMaterials.TUNGSTEN_STEEL, 5.0F, -3.0F, props));
+    public static final ItemEntry<HoeItem> TUNGSTEN_STEEL_HOE = registerHandheldCustomItem("tungsten_steel_hoe", props -> new HoeItem(ModToolMaterials.TUNGSTEN_STEEL, -3.0F, 0.0F, props));
+    public static final ItemEntry<ShovelItem> TUNGSTEN_STEEL_SHOVEL = registerHandheldCustomItem("tungsten_steel_shovel", props -> new ShovelItem(ModToolMaterials.TUNGSTEN_STEEL, 1.5F, -3.0F, props));
 
     public static final ItemEntry<Item> TUNGSTEN_RHENIUM_PICKAXE = registerHandheldItem("tungsten_rhenium_pickaxe", props -> props.pickaxe(ModToolMaterials.TUNGSTEN_RHENIUM, 1.0F, -2.8F));
     public static final ItemEntry<Item> TUNGSTEN_RHENIUM_SWORD = registerHandheldItem("tungsten_rhenium_sword", props -> props.sword(ModToolMaterials.TUNGSTEN_RHENIUM, 3.0F, -2.4F));
-    public static final DeferredItem<AxeItem> TUNGSTEN_RHENIUM_AXE = ITEMS.registerItem("tungsten_rhenium_axe", props -> new AxeItem(ModToolMaterials.TUNGSTEN_RHENIUM, 5.0F, -3.0F, props), UnaryOperator.identity());
-    public static final DeferredItem<HoeItem> TUNGSTEN_RHENIUM_HOE = ITEMS.registerItem("tungsten_rhenium_hoe", props -> new HoeItem(ModToolMaterials.TUNGSTEN_RHENIUM, -3.0F, 0.0F, props), UnaryOperator.identity());
-    public static final DeferredItem<ShovelItem> TUNGSTEN_RHENIUM_SHOVEL = ITEMS.registerItem("tungsten_rhenium_shovel", props -> new ShovelItem(ModToolMaterials.TUNGSTEN_RHENIUM, 1.5F, -3.0F, props), UnaryOperator.identity());
+    public static final ItemEntry<AxeItem> TUNGSTEN_RHENIUM_AXE = registerHandheldCustomItem("tungsten_rhenium_axe", props -> new AxeItem(ModToolMaterials.TUNGSTEN_RHENIUM, 5.0F, -3.0F, props));
+    public static final ItemEntry<HoeItem> TUNGSTEN_RHENIUM_HOE = registerHandheldCustomItem("tungsten_rhenium_hoe", props -> new HoeItem(ModToolMaterials.TUNGSTEN_RHENIUM, -3.0F, 0.0F, props));
+    public static final ItemEntry<ShovelItem> TUNGSTEN_RHENIUM_SHOVEL = registerHandheldCustomItem("tungsten_rhenium_shovel", props -> new ShovelItem(ModToolMaterials.TUNGSTEN_RHENIUM, 1.5F, -3.0F, props));
 
     // Armor -- only 4 of the mod's ~28 metals, see ModArmorMaterials for why. Full-set bonuses for
     // Titanium/Stellite/Tungsten-Rhenium are applied in ArmorSetBonusHandler, not here.
@@ -335,28 +329,28 @@ public class RegistryHandler {
 
     // Battery packs -- rechargeable FE storage for the power tools, crafted from the lithium
     // battery chain (the only chemistry in the mod that's actually right for a cordless tool).
-    public static final DeferredItem<BatteryPackItem> BATTERY_PACK = ITEMS.registerItem("battery_pack", props -> new BatteryPackItem(props, 100_000), UnaryOperator.identity());
-    public static final DeferredItem<BatteryPackItem> ADVANCED_BATTERY_PACK = ITEMS.registerItem("advanced_battery_pack", props -> new BatteryPackItem(props, 300_000), UnaryOperator.identity());
+    public static final ItemEntry<BatteryPackItem> BATTERY_PACK = registerCustomItem("battery_pack", props -> new BatteryPackItem(props, 100_000));
+    public static final ItemEntry<BatteryPackItem> ADVANCED_BATTERY_PACK = registerCustomItem("advanced_battery_pack", props -> new BatteryPackItem(props, 300_000));
 
     // Power tool bodies -- crafted once; the socketed implement and battery pack (Part 7) are
     // what actually determine what the tool can do and how well.
-    public static final DeferredItem<PowerDrillItem> POWER_DRILL = ITEMS.registerItem("power_drill", props -> new PowerDrillItem(props.stacksTo(1)), UnaryOperator.identity());
-    public static final DeferredItem<ChainsawItem> CHAINSAW = ITEMS.registerItem("chainsaw", props -> new ChainsawItem(props.stacksTo(1)), UnaryOperator.identity());
-    public static final DeferredItem<CultivatorItem> CULTIVATOR = ITEMS.registerItem("cultivator", props -> new CultivatorItem(props.stacksTo(1)), UnaryOperator.identity());
+    public static final ItemEntry<PowerDrillItem> POWER_DRILL = registerHandheldCustomItem("power_drill", props -> new PowerDrillItem(props.stacksTo(1)));
+    public static final ItemEntry<ChainsawItem> CHAINSAW = registerHandheldCustomItem("chainsaw", props -> new ChainsawItem(props.stacksTo(1)));
+    public static final ItemEntry<CultivatorItem> CULTIVATOR = registerHandheldCustomItem("cultivator", props -> new CultivatorItem(props.stacksTo(1)));
 
     // Prospector -- a handheld ore magnetometer, not a mining tool. Socket a crushed-ore item (or
     // raw lepidolite) to calibrate the scan, right-click to sweep. Real cordless-scanner-style
     // cooldown between sweeps rather than spammable every tick.
-    public static final DeferredItem<ProspectorItem> PROSPECTOR = ITEMS.registerItem("prospector", props -> new ProspectorItem(props.stacksTo(1).useCooldown(1.5F)), UnaryOperator.identity());
+    public static final ItemEntry<ProspectorItem> PROSPECTOR = registerHandheldCustomItem("prospector", props -> new ProspectorItem(props.stacksTo(1).useCooldown(1.5F)));
 
     // Wrench -- toggles the I/O Port's Input/Output/Both mode (see IOPortBlock); a plain
     // right-click with anything else just reports the port's current mode instead of changing it.
-    public static final DeferredItem<Item> WRENCH = ITEMS.registerItem("wrench", props -> new Item(props.stacksTo(1)), UnaryOperator.identity());
+    public static final ItemEntry<Item> WRENCH = registerHandheldCustomItem("wrench", props -> new Item(props.stacksTo(1)));
 
     // Guide book -- opens a static, vanilla-styled book UI (GuideBookContent, client package)
     // explaining the mod. Content is authored in GUIDE.md and generated into GuideBookData.java;
     // see tools/guide_book/gen_guide_data.py.
-    public static final DeferredItem<GuideBookItem> GUIDE_BOOK = ITEMS.registerItem("guide_book", props -> new GuideBookItem(props.stacksTo(1)), UnaryOperator.identity());
+    public static final ItemEntry<GuideBookItem> GUIDE_BOOK = registerGuideBook();
 
     // Blocks -- registered through Registrate (see IndustrialMetallurgy.REGISTRATE), a full-mod
     // migration in progress (registrate-migration branch): every block below except Conduit/I-O
@@ -480,8 +474,8 @@ public class RegistryHandler {
         REGISTRATE_ITEMS_IN_ORDER.add(() -> block.get().asItem());
     }
 
-    private static void trackItem(ItemEntry<Item> item) {
-        REGISTRATE_ITEMS_IN_ORDER.add(item);
+    private static void trackItem(Supplier<? extends Item> item) {
+        REGISTRATE_ITEMS_IN_ORDER.add(item::get);
     }
 
     // Registers a plain Item through Registrate with its default flat/generated model (from
@@ -510,6 +504,40 @@ public class RegistryHandler {
         ItemEntry<Item> item = IndustrialMetallurgy.REGISTRATE.item(name, Item::new)
                 .properties(properties)
                 .model(() -> (ctx, prov) -> prov.generateFlatItem(ctx.get(), ModelTemplates.FLAT_HANDHELD_ITEM))
+                .setData(ProviderType.LANG, (ctx, prov) -> {})
+                .register();
+        trackItem(item);
+        return item;
+    }
+
+    // Registers a custom Item subclass through Registrate (battery packs -- the only two of these
+    // whose model is the default flat/generated, matching their existing item/generated model).
+    private static <T extends Item> ItemEntry<T> registerCustomItem(String name, NonNullFunction<Item.Properties, T> factory) {
+        ItemEntry<T> item = IndustrialMetallurgy.REGISTRATE.item(name, factory)
+                .setData(ProviderType.LANG, (ctx, prov) -> {})
+                .register();
+        trackItem(item);
+        return item;
+    }
+
+    // Registers a custom Item subclass through Registrate with an item/handheld model instead of
+    // the default item/generated -- the tool-tier axe/hoe/shovel classes, the power tools, the
+    // prospector, and the wrench, all of which are held-in-hand-angled like a vanilla tool.
+    private static <T extends Item> ItemEntry<T> registerHandheldCustomItem(String name, NonNullFunction<Item.Properties, T> factory) {
+        ItemEntry<T> item = IndustrialMetallurgy.REGISTRATE.item(name, factory)
+                .model(() -> (ctx, prov) -> prov.generateFlatItem(ctx.get(), ModelTemplates.FLAT_HANDHELD_ITEM))
+                .setData(ProviderType.LANG, (ctx, prov) -> {})
+                .register();
+        trackItem(item);
+        return item;
+    }
+
+    // The guide book uses vanilla's own book texture (minecraft:item/book) rather than the usual
+    // industrialmetallurgy:item/<name> convention registerCustomItem's default model assumes --
+    // see GUIDE.md/GuideBookData for the book's actual content.
+    private static ItemEntry<GuideBookItem> registerGuideBook() {
+        ItemEntry<GuideBookItem> item = IndustrialMetallurgy.REGISTRATE.item("guide_book", props -> new GuideBookItem(props.stacksTo(1)))
+                .model(() -> (ctx, prov) -> prov.generateFlatItem(ctx.get(), prov.mcItemTexture("book")))
                 .setData(ProviderType.LANG, (ctx, prov) -> {})
                 .register();
         trackItem(item);
@@ -638,9 +666,12 @@ public class RegistryHandler {
         return block;
     }
 
+    // Every block/item in the mod is now registered through Registrate (see IndustrialMetallurgy.
+    // REGISTRATE) rather than a DeferredRegister -- this method's real job is just being *called*:
+    // that reference is what forces RegistryHandler to class-load (and so run all its static field
+    // initializers, which is where the actual Registrate registration happens) at the right point
+    // in IndustrialMetallurgy's constructor, same as it always has.
     public static void init(IEventBus modEventBus) {
-        ITEMS.register(modEventBus);
-        BLOCKS.register(modEventBus);
     }
 
 }
