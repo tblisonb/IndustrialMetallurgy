@@ -113,17 +113,22 @@ public class CrusherBlock extends Block implements EntityBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        if (!level.isClientSide()) {
-            BlockEntity tile = level.getBlockEntity(pos);
-            if (tile instanceof MenuProvider menuProvider) {
-                // CRUSHER's MenuType was registered via IMenuTypeExtension, which reads a BlockPos
-                // out of the open-screen packet client-side (see CrusherContainer's 3-arg ctor) --
-                // openMenu(MenuProvider) alone sends no extra data and the client fails to decode it.
-                player.openMenu(menuProvider, pos);
-                return InteractionResult.CONSUME;
-            }
+        // The result returned here must be identical on both the client and the server -- returning
+        // FAIL (a non-consuming result) client-side, even just for the speculative/predictive call,
+        // makes the client fall through to trying to place whatever block item is in hand, which
+        // then gets corrected away one tick later once the server's real (CONSUME) response arrives.
+        // Only the actual player.openMenu(...) call needs to stay server-only.
+        BlockEntity tile = level.getBlockEntity(pos);
+        if (!(tile instanceof MenuProvider menuProvider)) {
+            return InteractionResult.PASS;
         }
-        return InteractionResult.FAIL;
+        if (!level.isClientSide()) {
+            // CRUSHER's MenuType was registered via IMenuTypeExtension, which reads a BlockPos
+            // out of the open-screen packet client-side (see CrusherContainer's 3-arg ctor) --
+            // openMenu(MenuProvider) alone sends no extra data and the client fails to decode it.
+            player.openMenu(menuProvider, pos);
+        }
+        return InteractionResult.CONSUME;
     }
 
 }

@@ -12,6 +12,7 @@ import com.mojang.logging.LogUtils;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.bus.api.IEventBus;
@@ -45,7 +46,18 @@ public class IndustrialMetallurgy {
     // runServer/runData and reading Registrate's own AbstractRegistrate.java. IMRegistrate (util
     // package) is a minimal subclass working around the same root issue's other symptom: a second
     // GatherDataEvent.Client firing crashing `./gradlew runData` with a duplicate data provider.
-    public static final IMRegistrate REGISTRATE = IMRegistrate.create(MODID).skipErrors(true);
+    //
+    // defaultCreativeTab(null): AbstractRegistrate#item() (which every .item()/.simpleItem() call
+    // ultimately goes through, blocks included) defaults to auto-adding every registered entry to
+    // CreativeModeTabs.SEARCH via its own defaultCreativeModeTab field, UNLESS that field is null
+    // -- it isn't by default (it's CreativeModeTabs.SEARCH out of the box). Since vanilla's search
+    // tab already aggregates every item from every other tab on its own, and we place every item
+    // into our own TAB explicitly below (via REGISTRATE_ITEMS_IN_ORDER), this redundant auto-add
+    // tried to insert the same ItemStack into the search tab a second time and crashed with
+    // "Itemstack 1 industrialmetallurgy:alnico_ingot already exists in the tab's list" the moment
+    // a player opened their inventory. Confirmed by reading AbstractRegistrate.java's item()
+    // method directly.
+    public static final IMRegistrate REGISTRATE = IMRegistrate.create(MODID).skipErrors(true).defaultCreativeTab((ResourceKey<CreativeModeTab>) null);
 
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 

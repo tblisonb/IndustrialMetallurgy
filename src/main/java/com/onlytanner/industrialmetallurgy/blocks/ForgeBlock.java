@@ -123,21 +123,27 @@ public class ForgeBlock extends Block implements EntityBlock {
 
     @Override
     protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        if (!level.isClientSide()) {
-            BlockEntity tile = level.getBlockEntity(pos);
-            // Sneak + right-click never opens the GUI -- it's freed up for a diagnostic instead,
-            // pointing at exactly which multiblock cell is wrong rather than leaving the player to
-            // guess from a bare "Structure Incomplete" label. A no-op for a tier with no pattern.
-            if (player.isCrouching() && tile instanceof AdvancedForgeBlockEntity advanced) {
-                advanced.reportStructureMismatch(player);
-                return InteractionResult.CONSUME;
-            }
-            if (tile instanceof MenuProvider menuProvider) {
-                player.openMenu(menuProvider, pos);
-                return InteractionResult.CONSUME;
-            }
+        // The result returned here must be identical on both the client and the server -- returning
+        // FAIL (a non-consuming result) client-side, even just for the speculative/predictive call,
+        // makes the client fall through to trying to place whatever block item is in hand, which
+        // then gets corrected away one tick later once the server's real (CONSUME) response arrives.
+        // Only the actual player.openMenu(...)/reportStructureMismatch(...) calls need to stay
+        // server-only (reportStructureMismatch already no-ops itself unless given a ServerPlayer).
+        BlockEntity tile = level.getBlockEntity(pos);
+        // Sneak + right-click never opens the GUI -- it's freed up for a diagnostic instead,
+        // pointing at exactly which multiblock cell is wrong rather than leaving the player to
+        // guess from a bare "Structure Incomplete" label. A no-op for a tier with no pattern.
+        if (player.isCrouching() && tile instanceof AdvancedForgeBlockEntity advanced) {
+            advanced.reportStructureMismatch(player);
+            return InteractionResult.CONSUME;
         }
-        return InteractionResult.FAIL;
+        if (!(tile instanceof MenuProvider menuProvider)) {
+            return InteractionResult.PASS;
+        }
+        if (!level.isClientSide()) {
+            player.openMenu(menuProvider, pos);
+        }
+        return InteractionResult.CONSUME;
     }
 
 }
