@@ -55,11 +55,10 @@ public class IndustrialMetallurgy {
             .icon(() -> RegistryHandler.TUNGSTEN_INGOT.get().getDefaultInstance())
             .displayItems((parameters, output) -> {
                 RegistryHandler.ITEMS.getEntries().forEach(entry -> output.accept(entry.get()));
-                // Block items now register through Registrate (see RegistryHandler.BLOCK_ITEMS_IN_ORDER's
-                // own comment) rather than RegistryHandler.ITEMS, but still belong right after it in the
-                // creative tab/JEI -- same relative position as when they were ITEMS' own trailing
-                // "Block Items" section.
-                RegistryHandler.BLOCK_ITEMS_IN_ORDER.forEach(item -> output.accept(item.get()));
+                // Items/blocks migrated to Registrate (see RegistryHandler.REGISTRATE_ITEMS_IN_ORDER's
+                // own comment) no longer show up in RegistryHandler.ITEMS, but still belong in the
+                // same relative creative-tab/JEI position they held before migrating off it.
+                RegistryHandler.REGISTRATE_ITEMS_IN_ORDER.forEach(item -> output.accept(item.get()));
             })
             .build());
 

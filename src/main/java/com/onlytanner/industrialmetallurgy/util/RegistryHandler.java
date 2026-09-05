@@ -19,13 +19,16 @@ import com.mojang.math.Quadrant;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.providers.generators.RegistrateBlockModelGenerator;
 import com.tterrag.registrate.util.entry.BlockEntry;
+import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
+import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
 import net.minecraft.core.Direction;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.ConditionBuilder;
 import net.minecraft.client.data.models.blockstates.MultiPartGenerator;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
+import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.renderer.block.dispatch.VariantMutator;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.HoeItem;
@@ -51,288 +54,284 @@ public class RegistryHandler {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(IndustrialMetallurgy.MODID);
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(IndustrialMetallurgy.MODID);
 
-    // Every block's BlockItem is registered inline (see .simpleItem() in registerBlock/etc. below)
-    // rather than in a separate "Block Items" section like the rest of RegistryHandler's items --
-    // Registrate's BlockBuilder#simpleItem() ties item creation directly to the block, and already
-    // suppresses the item's own duplicate-of-the-block's-name lang entry (see BlockBuilder.java:
-    // "The item will have no lang entry, since it would duplicate the block's"). Since these items
-    // no longer show up in ITEMS.getEntries() (the DeferredRegister IndustrialMetallurgy.TAB's
-    // displayItems iterates), this list preserves their creative-tab/JEI position -- same relative
-    // order as the old "Block Items" section, appended right after ITEMS' own entries. Must be
-    // declared before any block field below (registerBlock/etc. populate it as a side effect of
-    // each block's own field initializer, and static fields initialize in textual order).
-    public static final List<Supplier<Item>> BLOCK_ITEMS_IN_ORDER = new ArrayList<>();
+    // Every item/block registered through Registrate (rather than ITEMS/BLOCKS directly) tracks
+    // its item here, in field-declaration order -- IndustrialMetallurgy.TAB's displayItems
+    // callback iterates ITEMS.getEntries() (still-unmigrated entries) then this list, to keep
+    // creative-tab/JEI ordering the same as when every item lived on ITEMS. Must be declared
+    // before any block/item field below (registerBlock/registerItem/etc. populate it as a side
+    // effect of each field's own initializer, and static fields initialize in textual order).
+    public static final List<Supplier<Item>> REGISTRATE_ITEMS_IN_ORDER = new ArrayList<>();
 
     // Items
     // Metal Ingots
-    public static final DeferredItem<Item> ALNICO_INGOT = ITEMS.registerSimpleItem("alnico_ingot");
-    public static final DeferredItem<Item> ALUMINUM_INGOT = ITEMS.registerSimpleItem("aluminum_ingot");
-    public static final DeferredItem<Item> BRASS_INGOT = ITEMS.registerSimpleItem("brass_ingot");
-    public static final DeferredItem<Item> BRONZE_INGOT = ITEMS.registerSimpleItem("bronze_ingot");
-    public static final DeferredItem<Item> CHROMIUM_INGOT = ITEMS.registerSimpleItem("chromium_ingot");
-    public static final DeferredItem<Item> COBALT_INGOT = ITEMS.registerSimpleItem("cobalt_ingot");
-    public static final DeferredItem<Item> COBALT_STEEL_INGOT = ITEMS.registerSimpleItem("cobalt_steel_ingot");
-    public static final DeferredItem<Item> CONSTANTAN_INGOT = ITEMS.registerSimpleItem("constantan_ingot");
-    public static final DeferredItem<Item> COPPER_TUNGSTEN_INGOT = ITEMS.registerSimpleItem("copper_tungsten_ingot");
-    public static final DeferredItem<Item> ELECTRUM_INGOT = ITEMS.registerSimpleItem("electrum_ingot");
-    public static final DeferredItem<Item> INVAR_INGOT = ITEMS.registerSimpleItem("invar_ingot");
-    public static final DeferredItem<Item> KANTHAL_INGOT = ITEMS.registerSimpleItem("kanthal_ingot");
-    public static final DeferredItem<Item> LEAD_INGOT = ITEMS.registerSimpleItem("lead_ingot");
-    public static final DeferredItem<Item> MANGANESE_INGOT = ITEMS.registerSimpleItem("manganese_ingot");
-    public static final DeferredItem<Item> NICHROME_INGOT = ITEMS.registerSimpleItem("nichrome_ingot");
-    public static final DeferredItem<Item> NICKEL_INGOT = ITEMS.registerSimpleItem("nickel_ingot");
-    public static final DeferredItem<Item> NIKROTHAL_INGOT = ITEMS.registerSimpleItem("nikrothal_ingot");
-    public static final DeferredItem<Item> NITINOL_INGOT = ITEMS.registerSimpleItem("nitinol_ingot");
+    public static final ItemEntry<Item> ALNICO_INGOT = registerItem("alnico_ingot");
+    public static final ItemEntry<Item> ALUMINUM_INGOT = registerItem("aluminum_ingot");
+    public static final ItemEntry<Item> BRASS_INGOT = registerItem("brass_ingot");
+    public static final ItemEntry<Item> BRONZE_INGOT = registerItem("bronze_ingot");
+    public static final ItemEntry<Item> CHROMIUM_INGOT = registerItem("chromium_ingot");
+    public static final ItemEntry<Item> COBALT_INGOT = registerItem("cobalt_ingot");
+    public static final ItemEntry<Item> COBALT_STEEL_INGOT = registerItem("cobalt_steel_ingot");
+    public static final ItemEntry<Item> CONSTANTAN_INGOT = registerItem("constantan_ingot");
+    public static final ItemEntry<Item> COPPER_TUNGSTEN_INGOT = registerItem("copper_tungsten_ingot");
+    public static final ItemEntry<Item> ELECTRUM_INGOT = registerItem("electrum_ingot");
+    public static final ItemEntry<Item> INVAR_INGOT = registerItem("invar_ingot");
+    public static final ItemEntry<Item> KANTHAL_INGOT = registerItem("kanthal_ingot");
+    public static final ItemEntry<Item> LEAD_INGOT = registerItem("lead_ingot");
+    public static final ItemEntry<Item> MANGANESE_INGOT = registerItem("manganese_ingot");
+    public static final ItemEntry<Item> NICHROME_INGOT = registerItem("nichrome_ingot");
+    public static final ItemEntry<Item> NICKEL_INGOT = registerItem("nickel_ingot");
+    public static final ItemEntry<Item> NIKROTHAL_INGOT = registerItem("nikrothal_ingot");
+    public static final ItemEntry<Item> NITINOL_INGOT = registerItem("nitinol_ingot");
     // Rhenium is only smeltable in the Arc Furnace (real rhenium has the 2nd-highest melting
     // point of any element) -- see forge/rhenium_ingot.json.
-    public static final DeferredItem<Item> RHENIUM_INGOT = ITEMS.registerSimpleItem("rhenium_ingot");
-    public static final DeferredItem<Item> SILVER_INGOT = ITEMS.registerSimpleItem("silver_ingot");
-    public static final DeferredItem<Item> SOLDER_INGOT = ITEMS.registerSimpleItem("solder_ingot");
-    public static final DeferredItem<Item> STEEL_INGOT = ITEMS.registerSimpleItem("steel_ingot");
-    public static final DeferredItem<Item> STELLITE_INGOT = ITEMS.registerSimpleItem("stellite_ingot");
-    public static final DeferredItem<Item> TIN_INGOT = ITEMS.registerSimpleItem("tin_ingot");
-    public static final DeferredItem<Item> TITANIUM_INGOT = ITEMS.registerSimpleItem("titanium_ingot");
-    public static final DeferredItem<Item> TUNGSTEN_INGOT = ITEMS.registerSimpleItem("tungsten_ingot");
-    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_INGOT = ITEMS.registerSimpleItem("tungsten_rhenium_ingot");
-    public static final DeferredItem<Item> TUNGSTEN_STEEL_INGOT = ITEMS.registerSimpleItem("tungsten_steel_ingot");
-    public static final DeferredItem<Item> ZINC_INGOT = ITEMS.registerSimpleItem("zinc_ingot");
+    public static final ItemEntry<Item> RHENIUM_INGOT = registerItem("rhenium_ingot");
+    public static final ItemEntry<Item> SILVER_INGOT = registerItem("silver_ingot");
+    public static final ItemEntry<Item> SOLDER_INGOT = registerItem("solder_ingot");
+    public static final ItemEntry<Item> STEEL_INGOT = registerItem("steel_ingot");
+    public static final ItemEntry<Item> STELLITE_INGOT = registerItem("stellite_ingot");
+    public static final ItemEntry<Item> TIN_INGOT = registerItem("tin_ingot");
+    public static final ItemEntry<Item> TITANIUM_INGOT = registerItem("titanium_ingot");
+    public static final ItemEntry<Item> TUNGSTEN_INGOT = registerItem("tungsten_ingot");
+    public static final ItemEntry<Item> TUNGSTEN_RHENIUM_INGOT = registerItem("tungsten_rhenium_ingot");
+    public static final ItemEntry<Item> TUNGSTEN_STEEL_INGOT = registerItem("tungsten_steel_ingot");
+    public static final ItemEntry<Item> ZINC_INGOT = registerItem("zinc_ingot");
     // Metal Nuggets
-    public static final DeferredItem<Item> ALNICO_NUGGET = ITEMS.registerSimpleItem("alnico_nugget");
-    public static final DeferredItem<Item> ALUMINUM_NUGGET = ITEMS.registerSimpleItem("aluminum_nugget");
-    public static final DeferredItem<Item> BRASS_NUGGET = ITEMS.registerSimpleItem("brass_nugget");
-    public static final DeferredItem<Item> BRONZE_NUGGET = ITEMS.registerSimpleItem("bronze_nugget");
-    public static final DeferredItem<Item> CHROMIUM_NUGGET = ITEMS.registerSimpleItem("chromium_nugget");
-    public static final DeferredItem<Item> COBALT_NUGGET = ITEMS.registerSimpleItem("cobalt_nugget");
-    public static final DeferredItem<Item> COBALT_STEEL_NUGGET = ITEMS.registerSimpleItem("cobalt_steel_nugget");
-    public static final DeferredItem<Item> CONSTANTAN_NUGGET = ITEMS.registerSimpleItem("constantan_nugget");
-    public static final DeferredItem<Item> COPPER_TUNGSTEN_NUGGET = ITEMS.registerSimpleItem("copper_tungsten_nugget");
-    public static final DeferredItem<Item> ELECTRUM_NUGGET = ITEMS.registerSimpleItem("electrum_nugget");
-    public static final DeferredItem<Item> INVAR_NUGGET = ITEMS.registerSimpleItem("invar_nugget");
-    public static final DeferredItem<Item> KANTHAL_NUGGET = ITEMS.registerSimpleItem("kanthal_nugget");
-    public static final DeferredItem<Item> LEAD_NUGGET = ITEMS.registerSimpleItem("lead_nugget");
-    public static final DeferredItem<Item> MANGANESE_NUGGET = ITEMS.registerSimpleItem("manganese_nugget");
-    public static final DeferredItem<Item> NICHROME_NUGGET = ITEMS.registerSimpleItem("nichrome_nugget");
-    public static final DeferredItem<Item> NICKEL_NUGGET = ITEMS.registerSimpleItem("nickel_nugget");
-    public static final DeferredItem<Item> NIKROTHAL_NUGGET = ITEMS.registerSimpleItem("nikrothal_nugget");
-    public static final DeferredItem<Item> NITINOL_NUGGET = ITEMS.registerSimpleItem("nitinol_nugget");
-    public static final DeferredItem<Item> RHENIUM_NUGGET = ITEMS.registerSimpleItem("rhenium_nugget");
-    public static final DeferredItem<Item> SILVER_NUGGET = ITEMS.registerSimpleItem("silver_nugget");
-    public static final DeferredItem<Item> SOLDER_NUGGET = ITEMS.registerSimpleItem("solder_nugget");
-    public static final DeferredItem<Item> STEEL_NUGGET = ITEMS.registerSimpleItem("steel_nugget");
-    public static final DeferredItem<Item> STELLITE_NUGGET = ITEMS.registerSimpleItem("stellite_nugget");
-    public static final DeferredItem<Item> TIN_NUGGET = ITEMS.registerSimpleItem("tin_nugget");
-    public static final DeferredItem<Item> TITANIUM_NUGGET = ITEMS.registerSimpleItem("titanium_nugget");
-    public static final DeferredItem<Item> TUNGSTEN_NUGGET = ITEMS.registerSimpleItem("tungsten_nugget");
-    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_NUGGET = ITEMS.registerSimpleItem("tungsten_rhenium_nugget");
-    public static final DeferredItem<Item> TUNGSTEN_STEEL_NUGGET = ITEMS.registerSimpleItem("tungsten_steel_nugget");
-    public static final DeferredItem<Item> ZINC_NUGGET = ITEMS.registerSimpleItem("zinc_nugget");
+    public static final ItemEntry<Item> ALNICO_NUGGET = registerItem("alnico_nugget");
+    public static final ItemEntry<Item> ALUMINUM_NUGGET = registerItem("aluminum_nugget");
+    public static final ItemEntry<Item> BRASS_NUGGET = registerItem("brass_nugget");
+    public static final ItemEntry<Item> BRONZE_NUGGET = registerItem("bronze_nugget");
+    public static final ItemEntry<Item> CHROMIUM_NUGGET = registerItem("chromium_nugget");
+    public static final ItemEntry<Item> COBALT_NUGGET = registerItem("cobalt_nugget");
+    public static final ItemEntry<Item> COBALT_STEEL_NUGGET = registerItem("cobalt_steel_nugget");
+    public static final ItemEntry<Item> CONSTANTAN_NUGGET = registerItem("constantan_nugget");
+    public static final ItemEntry<Item> COPPER_TUNGSTEN_NUGGET = registerItem("copper_tungsten_nugget");
+    public static final ItemEntry<Item> ELECTRUM_NUGGET = registerItem("electrum_nugget");
+    public static final ItemEntry<Item> INVAR_NUGGET = registerItem("invar_nugget");
+    public static final ItemEntry<Item> KANTHAL_NUGGET = registerItem("kanthal_nugget");
+    public static final ItemEntry<Item> LEAD_NUGGET = registerItem("lead_nugget");
+    public static final ItemEntry<Item> MANGANESE_NUGGET = registerItem("manganese_nugget");
+    public static final ItemEntry<Item> NICHROME_NUGGET = registerItem("nichrome_nugget");
+    public static final ItemEntry<Item> NICKEL_NUGGET = registerItem("nickel_nugget");
+    public static final ItemEntry<Item> NIKROTHAL_NUGGET = registerItem("nikrothal_nugget");
+    public static final ItemEntry<Item> NITINOL_NUGGET = registerItem("nitinol_nugget");
+    public static final ItemEntry<Item> RHENIUM_NUGGET = registerItem("rhenium_nugget");
+    public static final ItemEntry<Item> SILVER_NUGGET = registerItem("silver_nugget");
+    public static final ItemEntry<Item> SOLDER_NUGGET = registerItem("solder_nugget");
+    public static final ItemEntry<Item> STEEL_NUGGET = registerItem("steel_nugget");
+    public static final ItemEntry<Item> STELLITE_NUGGET = registerItem("stellite_nugget");
+    public static final ItemEntry<Item> TIN_NUGGET = registerItem("tin_nugget");
+    public static final ItemEntry<Item> TITANIUM_NUGGET = registerItem("titanium_nugget");
+    public static final ItemEntry<Item> TUNGSTEN_NUGGET = registerItem("tungsten_nugget");
+    public static final ItemEntry<Item> TUNGSTEN_RHENIUM_NUGGET = registerItem("tungsten_rhenium_nugget");
+    public static final ItemEntry<Item> TUNGSTEN_STEEL_NUGGET = registerItem("tungsten_steel_nugget");
+    public static final ItemEntry<Item> ZINC_NUGGET = registerItem("zinc_nugget");
     // Raw Ores -- dropped by mining the ore block directly (silk touch gets the block instead),
     // matching vanilla's raw_iron/raw_gold/raw_copper pattern. Feeds the Crusher exactly like the
     // ore block used to; Lepidolite has no entry here since it already skips the Crusher entirely
     // (see LEPIDOLITE below).
-    public static final DeferredItem<Item> RAW_ARGENTITE_ORE = ITEMS.registerSimpleItem("raw_argentite_ore");
-    public static final DeferredItem<Item> RAW_BAUXITE_ORE = ITEMS.registerSimpleItem("raw_bauxite_ore");
-    public static final DeferredItem<Item> RAW_CASSITERITE_ORE = ITEMS.registerSimpleItem("raw_cassiterite_ore");
-    public static final DeferredItem<Item> RAW_CHROMITE_ORE = ITEMS.registerSimpleItem("raw_chromite_ore");
-    public static final DeferredItem<Item> RAW_COBALTITE_ORE = ITEMS.registerSimpleItem("raw_cobaltite_ore");
-    public static final DeferredItem<Item> RAW_GALENA_ORE = ITEMS.registerSimpleItem("raw_galena_ore");
-    public static final DeferredItem<Item> RAW_GARNIERITE_ORE = ITEMS.registerSimpleItem("raw_garnierite_ore");
-    public static final DeferredItem<Item> RAW_PYROLUSITE_ORE = ITEMS.registerSimpleItem("raw_pyrolusite_ore");
-    public static final DeferredItem<Item> RAW_RHENIITE_ORE = ITEMS.registerSimpleItem("raw_rheniite_ore");
-    public static final DeferredItem<Item> RAW_RUTILE_ORE = ITEMS.registerSimpleItem("raw_rutile_ore");
-    public static final DeferredItem<Item> RAW_SCHEELITE_ORE = ITEMS.registerSimpleItem("raw_scheelite_ore");
-    public static final DeferredItem<Item> RAW_SPHALERITE_ORE = ITEMS.registerSimpleItem("raw_sphalerite_ore");
+    public static final ItemEntry<Item> RAW_ARGENTITE_ORE = registerItem("raw_argentite_ore");
+    public static final ItemEntry<Item> RAW_BAUXITE_ORE = registerItem("raw_bauxite_ore");
+    public static final ItemEntry<Item> RAW_CASSITERITE_ORE = registerItem("raw_cassiterite_ore");
+    public static final ItemEntry<Item> RAW_CHROMITE_ORE = registerItem("raw_chromite_ore");
+    public static final ItemEntry<Item> RAW_COBALTITE_ORE = registerItem("raw_cobaltite_ore");
+    public static final ItemEntry<Item> RAW_GALENA_ORE = registerItem("raw_galena_ore");
+    public static final ItemEntry<Item> RAW_GARNIERITE_ORE = registerItem("raw_garnierite_ore");
+    public static final ItemEntry<Item> RAW_PYROLUSITE_ORE = registerItem("raw_pyrolusite_ore");
+    public static final ItemEntry<Item> RAW_RHENIITE_ORE = registerItem("raw_rheniite_ore");
+    public static final ItemEntry<Item> RAW_RUTILE_ORE = registerItem("raw_rutile_ore");
+    public static final ItemEntry<Item> RAW_SCHEELITE_ORE = registerItem("raw_scheelite_ore");
+    public static final ItemEntry<Item> RAW_SPHALERITE_ORE = registerItem("raw_sphalerite_ore");
     // Crushed Ores
-    public static final DeferredItem<Item> CRUSHED_ARGENTITE_ORE = ITEMS.registerSimpleItem("crushed_argentite_ore");
-    public static final DeferredItem<Item> CRUSHED_BAUXITE_ORE = ITEMS.registerSimpleItem("crushed_bauxite_ore");
-    public static final DeferredItem<Item> CRUSHED_CASSITERITE_ORE = ITEMS.registerSimpleItem("crushed_cassiterite_ore");
-    public static final DeferredItem<Item> CRUSHED_CHROMITE_ORE = ITEMS.registerSimpleItem("crushed_chromite_ore");
-    public static final DeferredItem<Item> CRUSHED_COBALTITE_ORE = ITEMS.registerSimpleItem("crushed_cobaltite_ore");
-    public static final DeferredItem<Item> CRUSHED_GALENA_ORE = ITEMS.registerSimpleItem("crushed_galena_ore");
-    public static final DeferredItem<Item> CRUSHED_GARNIERITE_ORE = ITEMS.registerSimpleItem("crushed_garnierite_ore");
-    public static final DeferredItem<Item> CRUSHED_GOLD_ORE = ITEMS.registerSimpleItem("crushed_gold_ore");
-    public static final DeferredItem<Item> CRUSHED_IRON_ORE = ITEMS.registerSimpleItem("crushed_iron_ore");
-    public static final DeferredItem<Item> CRUSHED_PYROLUSITE_ORE = ITEMS.registerSimpleItem("crushed_pyrolusite_ore");
-    public static final DeferredItem<Item> CRUSHED_RHENIITE_ORE = ITEMS.registerSimpleItem("crushed_rheniite_ore");
-    public static final DeferredItem<Item> CRUSHED_RUTILE_ORE = ITEMS.registerSimpleItem("crushed_rutile_ore");
-    public static final DeferredItem<Item> CRUSHED_SCHEELITE_ORE = ITEMS.registerSimpleItem("crushed_scheelite_ore");
-    public static final DeferredItem<Item> CRUSHED_SPHALERITE_ORE = ITEMS.registerSimpleItem("crushed_sphalerite_ore");
+    public static final ItemEntry<Item> CRUSHED_ARGENTITE_ORE = registerItem("crushed_argentite_ore");
+    public static final ItemEntry<Item> CRUSHED_BAUXITE_ORE = registerItem("crushed_bauxite_ore");
+    public static final ItemEntry<Item> CRUSHED_CASSITERITE_ORE = registerItem("crushed_cassiterite_ore");
+    public static final ItemEntry<Item> CRUSHED_CHROMITE_ORE = registerItem("crushed_chromite_ore");
+    public static final ItemEntry<Item> CRUSHED_COBALTITE_ORE = registerItem("crushed_cobaltite_ore");
+    public static final ItemEntry<Item> CRUSHED_GALENA_ORE = registerItem("crushed_galena_ore");
+    public static final ItemEntry<Item> CRUSHED_GARNIERITE_ORE = registerItem("crushed_garnierite_ore");
+    public static final ItemEntry<Item> CRUSHED_GOLD_ORE = registerItem("crushed_gold_ore");
+    public static final ItemEntry<Item> CRUSHED_IRON_ORE = registerItem("crushed_iron_ore");
+    public static final ItemEntry<Item> CRUSHED_PYROLUSITE_ORE = registerItem("crushed_pyrolusite_ore");
+    public static final ItemEntry<Item> CRUSHED_RHENIITE_ORE = registerItem("crushed_rheniite_ore");
+    public static final ItemEntry<Item> CRUSHED_RUTILE_ORE = registerItem("crushed_rutile_ore");
+    public static final ItemEntry<Item> CRUSHED_SCHEELITE_ORE = registerItem("crushed_scheelite_ore");
+    public static final ItemEntry<Item> CRUSHED_SPHALERITE_ORE = registerItem("crushed_sphalerite_ore");
     // Misc Resources
-    public static final DeferredItem<Item> LEPIDOLITE = ITEMS.registerSimpleItem("lepidolite");
-    public static final DeferredItem<Item> LITHIUM_DUST = ITEMS.registerSimpleItem("lithium_dust");
-    public static final DeferredItem<Item> CRUSHED_COAL = ITEMS.registerSimpleItem("crushed_coal");
-    public static final DeferredItem<Item> CRUSHED_DIAMOND = ITEMS.registerSimpleItem("crushed_diamond");
-    public static final DeferredItem<Item> TUNGSTEN_CARBIDE_DUST = ITEMS.registerSimpleItem("tungsten_carbide_dust");
-    public static final DeferredItem<Item> PHOSPHORUS = ITEMS.registerSimpleItem("phosphorus");
-    public static final DeferredItem<Item> ARSENIC = ITEMS.registerSimpleItem("arsenic");
-    public static final DeferredItem<Item> LEAD_SULFATE = ITEMS.registerSimpleItem("lead_sulfate");
-    public static final DeferredItem<Item> CALCIUM_OXIDE = ITEMS.registerSimpleItem("calcium_oxide");
-    public static final DeferredItem<Item> POTASSIUM_NITRATE = ITEMS.registerSimpleItem("potassium_nitrate");
-    public static final DeferredItem<Item> LITHIUM_IRON_PHOSPHATE = ITEMS.registerSimpleItem("lithium_iron_phosphate");
-    public static final DeferredItem<Item> WELDING_FLUX = ITEMS.registerSimpleItem("welding_flux");
-    public static final DeferredItem<Item> ETHYLENE_BOTTLE = ITEMS.registerSimpleItem("ethylene_bottle");
-    public static final DeferredItem<Item> ETHYLENE_GLYCOL_BOTTLE = ITEMS.registerSimpleItem("ethylene_glycol_bottle");
-    public static final DeferredItem<Item> METHANE_BOTTLE = ITEMS.registerSimpleItem("methane_bottle");
-    public static final DeferredItem<Item> PETROLEUM_BOTTLE = ITEMS.registerSimpleItem("petroleum_bottle");
-    public static final DeferredItem<Item> SULFURIC_ACID_BOTTLE = ITEMS.registerSimpleItem("sulfuric_acid_bottle");
+    public static final ItemEntry<Item> LEPIDOLITE = registerItem("lepidolite");
+    public static final ItemEntry<Item> LITHIUM_DUST = registerItem("lithium_dust");
+    public static final ItemEntry<Item> CRUSHED_COAL = registerItem("crushed_coal");
+    public static final ItemEntry<Item> CRUSHED_DIAMOND = registerItem("crushed_diamond");
+    public static final ItemEntry<Item> TUNGSTEN_CARBIDE_DUST = registerItem("tungsten_carbide_dust");
+    public static final ItemEntry<Item> PHOSPHORUS = registerItem("phosphorus");
+    public static final ItemEntry<Item> ARSENIC = registerItem("arsenic");
+    public static final ItemEntry<Item> LEAD_SULFATE = registerItem("lead_sulfate");
+    public static final ItemEntry<Item> CALCIUM_OXIDE = registerItem("calcium_oxide");
+    public static final ItemEntry<Item> POTASSIUM_NITRATE = registerItem("potassium_nitrate");
+    public static final ItemEntry<Item> LITHIUM_IRON_PHOSPHATE = registerItem("lithium_iron_phosphate");
+    public static final ItemEntry<Item> WELDING_FLUX = registerItem("welding_flux");
+    public static final ItemEntry<Item> ETHYLENE_BOTTLE = registerItem("ethylene_bottle");
+    public static final ItemEntry<Item> ETHYLENE_GLYCOL_BOTTLE = registerItem("ethylene_glycol_bottle");
+    public static final ItemEntry<Item> METHANE_BOTTLE = registerItem("methane_bottle");
+    public static final ItemEntry<Item> PETROLEUM_BOTTLE = registerItem("petroleum_bottle");
+    public static final ItemEntry<Item> SULFURIC_ACID_BOTTLE = registerItem("sulfuric_acid_bottle");
     // Lixiviants -- the leaching reagents an Autoclave recipe requires, matching each ore's real
     // acid/alkaline/cyanide leaching chemistry. See sulfuric_acid_bottle above for the acid case.
-    public static final DeferredItem<Item> SODIUM_HYDROXIDE_BOTTLE = ITEMS.registerSimpleItem("sodium_hydroxide_bottle");
-    public static final DeferredItem<Item> SODIUM_CYANIDE_BOTTLE = ITEMS.registerSimpleItem("sodium_cyanide_bottle");
+    public static final ItemEntry<Item> SODIUM_HYDROXIDE_BOTTLE = registerItem("sodium_hydroxide_bottle");
+    public static final ItemEntry<Item> SODIUM_CYANIDE_BOTTLE = registerItem("sodium_cyanide_bottle");
     // Pregnant leach solutions -- the Autoclave's output, and the Chemical Reactor's precipitation
     // input. Each is the real intermediate compound for that metal's leaching route.
-    public static final DeferredItem<Item> NICKEL_SULFATE_BOTTLE = ITEMS.registerSimpleItem("nickel_sulfate_bottle");
-    public static final DeferredItem<Item> ZINC_SULFATE_BOTTLE = ITEMS.registerSimpleItem("zinc_sulfate_bottle");
-    public static final DeferredItem<Item> COBALT_SULFATE_BOTTLE = ITEMS.registerSimpleItem("cobalt_sulfate_bottle");
-    public static final DeferredItem<Item> MANGANESE_SULFATE_BOTTLE = ITEMS.registerSimpleItem("manganese_sulfate_bottle");
-    public static final DeferredItem<Item> TITANYL_SULFATE_BOTTLE = ITEMS.registerSimpleItem("titanyl_sulfate_bottle");
-    public static final DeferredItem<Item> SODIUM_ALUMINATE_BOTTLE = ITEMS.registerSimpleItem("sodium_aluminate_bottle");
-    public static final DeferredItem<Item> SILVER_CYANIDE_BOTTLE = ITEMS.registerSimpleItem("silver_cyanide_bottle");
+    public static final ItemEntry<Item> NICKEL_SULFATE_BOTTLE = registerItem("nickel_sulfate_bottle");
+    public static final ItemEntry<Item> ZINC_SULFATE_BOTTLE = registerItem("zinc_sulfate_bottle");
+    public static final ItemEntry<Item> COBALT_SULFATE_BOTTLE = registerItem("cobalt_sulfate_bottle");
+    public static final ItemEntry<Item> MANGANESE_SULFATE_BOTTLE = registerItem("manganese_sulfate_bottle");
+    public static final ItemEntry<Item> TITANYL_SULFATE_BOTTLE = registerItem("titanyl_sulfate_bottle");
+    public static final ItemEntry<Item> SODIUM_ALUMINATE_BOTTLE = registerItem("sodium_aluminate_bottle");
+    public static final ItemEntry<Item> SILVER_CYANIDE_BOTTLE = registerItem("silver_cyanide_bottle");
     // Metal concentrates -- precipitated out of a leach solution by the Chemical Reactor; smelts
     // into the metal's ingot at a better yield than smelting the crushed ore directly.
-    public static final DeferredItem<Item> NICKEL_CONCENTRATE = ITEMS.registerSimpleItem("nickel_concentrate");
-    public static final DeferredItem<Item> ZINC_CONCENTRATE = ITEMS.registerSimpleItem("zinc_concentrate");
-    public static final DeferredItem<Item> COBALT_CONCENTRATE = ITEMS.registerSimpleItem("cobalt_concentrate");
-    public static final DeferredItem<Item> MANGANESE_CONCENTRATE = ITEMS.registerSimpleItem("manganese_concentrate");
-    public static final DeferredItem<Item> SYNTHETIC_RUTILE = ITEMS.registerSimpleItem("synthetic_rutile");
-    public static final DeferredItem<Item> ALUMINA = ITEMS.registerSimpleItem("alumina");
-    public static final DeferredItem<Item> SILVER_CONCENTRATE = ITEMS.registerSimpleItem("silver_concentrate");
+    public static final ItemEntry<Item> NICKEL_CONCENTRATE = registerItem("nickel_concentrate");
+    public static final ItemEntry<Item> ZINC_CONCENTRATE = registerItem("zinc_concentrate");
+    public static final ItemEntry<Item> COBALT_CONCENTRATE = registerItem("cobalt_concentrate");
+    public static final ItemEntry<Item> MANGANESE_CONCENTRATE = registerItem("manganese_concentrate");
+    public static final ItemEntry<Item> SYNTHETIC_RUTILE = registerItem("synthetic_rutile");
+    public static final ItemEntry<Item> ALUMINA = registerItem("alumina");
+    public static final ItemEntry<Item> SILVER_CONCENTRATE = registerItem("silver_concentrate");
     // Calcium sulfate (gypsum) -- the real byproduct of neutralizing a sulfate leach solution with
     // calcium oxide during precipitation. Not consumed by anything yet; noted as a future ROADMAP
     // item (decorative blocks, or a Cultivator fertilizer input).
-    public static final DeferredItem<Item> CALCIUM_SULFATE = ITEMS.registerSimpleItem("calcium_sulfate");
-    public static final DeferredItem<Item> COAL_COKE = ITEMS.registerSimpleItem("coal_coke");
-    public static final DeferredItem<Item> SILICON = ITEMS.registerSimpleItem("silicon");
-    public static final DeferredItem<Item> BITUMEN = ITEMS.registerSimpleItem("bitumen");
-    public static final DeferredItem<Item> OILY_SAND = ITEMS.registerSimpleItem("oily_sand");
-    public static final DeferredItem<Item> PEAT = ITEMS.registerSimpleItem("peat");
-    public static final DeferredItem<Item> FERTILIZER = ITEMS.registerSimpleItem("fertilizer");
-    public static final DeferredItem<Item> HDPE_SHEET = ITEMS.registerSimpleItem("hdpe_sheet");
-    public static final DeferredItem<Item> CERAMIC_FIBER = ITEMS.registerSimpleItem("ceramic_fiber");
-    public static final DeferredItem<Item> GRAPHITE_ROD = ITEMS.registerSimpleItem("graphite_rod");
-    public static final DeferredItem<Item> REFRACTORY_BRICK = ITEMS.registerSimpleItem("refractory_brick");
-    public static final DeferredItem<Item> REFRACTORY_COMPOSITE = ITEMS.registerSimpleItem("refractory_composite");
-    public static final DeferredItem<Item> PERMANENT_MAGNET = ITEMS.registerSimpleItem("permanent_magnet");
-    public static final DeferredItem<Item> DRY_CELL = ITEMS.registerSimpleItem("dry_cell");
-    public static final DeferredItem<Item> DRY_CELL_BANK = ITEMS.registerSimpleItem("dry_cell_bank");
-    public static final DeferredItem<Item> BATTERY_CELL = ITEMS.registerSimpleItem("battery_cell");
-    public static final DeferredItem<Item> BATTERY_BANK = ITEMS.registerSimpleItem("battery_bank");
-    public static final DeferredItem<Item> LITHIUM_BATTERY_CELL = ITEMS.registerSimpleItem("lithium_battery_cell");
-    public static final DeferredItem<Item> LITHIUM_BATTERY_BANK = ITEMS.registerSimpleItem("lithium_battery_bank");
-    public static final DeferredItem<Item> CONDUCTING_ELEMENT = ITEMS.registerSimpleItem("conducting_element");
-    public static final DeferredItem<Item> PRINTED_CIRCUIT_BOARD = ITEMS.registerSimpleItem("printed_circuit_board");
-    public static final DeferredItem<Item> INTEGRATED_CIRCUIT = ITEMS.registerSimpleItem("integrated_circuit");
-    public static final DeferredItem<Item> CONTROLLER_BOARD = ITEMS.registerSimpleItem("controller_board");
-    public static final DeferredItem<Item> CERAMIC_CAPACITOR = ITEMS.registerSimpleItem("ceramic_capacitor");
-    public static final DeferredItem<Item> ELECTROLYTIC_CAPACITOR = ITEMS.registerSimpleItem("electrolytic_capacitor");
-    public static final DeferredItem<Item> ELECTRIC_MOTOR = ITEMS.registerSimpleItem("electric_motor");
-    public static final DeferredItem<Item> STATOR = ITEMS.registerSimpleItem("stator");
-    public static final DeferredItem<Item> ROTOR = ITEMS.registerSimpleItem("rotor");
-    public static final DeferredItem<Item> FIELD_COIL = ITEMS.registerSimpleItem("field_coil");
-    public static final DeferredItem<Item> GEAR = ITEMS.registerSimpleItem("gear");
-    public static final DeferredItem<Item> HEAT_SINK = ITEMS.registerSimpleItem("heat_sink");
-    public static final DeferredItem<Item> HEATING_ELEMENT = ITEMS.registerSimpleItem("heating_element");
-    public static final DeferredItem<Item> INDUCTION_CORE = ITEMS.registerSimpleItem("induction_core");
+    public static final ItemEntry<Item> CALCIUM_SULFATE = registerItem("calcium_sulfate");
+    public static final ItemEntry<Item> COAL_COKE = registerItem("coal_coke");
+    public static final ItemEntry<Item> SILICON = registerItem("silicon");
+    public static final ItemEntry<Item> BITUMEN = registerItem("bitumen");
+    public static final ItemEntry<Item> OILY_SAND = registerItem("oily_sand");
+    public static final ItemEntry<Item> PEAT = registerItem("peat");
+    public static final ItemEntry<Item> FERTILIZER = registerItem("fertilizer");
+    public static final ItemEntry<Item> HDPE_SHEET = registerItem("hdpe_sheet");
+    public static final ItemEntry<Item> CERAMIC_FIBER = registerItem("ceramic_fiber");
+    public static final ItemEntry<Item> GRAPHITE_ROD = registerItem("graphite_rod");
+    public static final ItemEntry<Item> REFRACTORY_BRICK = registerItem("refractory_brick");
+    public static final ItemEntry<Item> REFRACTORY_COMPOSITE = registerItem("refractory_composite");
+    public static final ItemEntry<Item> PERMANENT_MAGNET = registerItem("permanent_magnet");
+    public static final ItemEntry<Item> DRY_CELL = registerItem("dry_cell");
+    public static final ItemEntry<Item> DRY_CELL_BANK = registerItem("dry_cell_bank");
+    public static final ItemEntry<Item> BATTERY_CELL = registerItem("battery_cell");
+    public static final ItemEntry<Item> BATTERY_BANK = registerItem("battery_bank");
+    public static final ItemEntry<Item> LITHIUM_BATTERY_CELL = registerItem("lithium_battery_cell");
+    public static final ItemEntry<Item> LITHIUM_BATTERY_BANK = registerItem("lithium_battery_bank");
+    public static final ItemEntry<Item> CONDUCTING_ELEMENT = registerItem("conducting_element");
+    public static final ItemEntry<Item> PRINTED_CIRCUIT_BOARD = registerItem("printed_circuit_board");
+    public static final ItemEntry<Item> INTEGRATED_CIRCUIT = registerItem("integrated_circuit");
+    public static final ItemEntry<Item> CONTROLLER_BOARD = registerItem("controller_board");
+    public static final ItemEntry<Item> CERAMIC_CAPACITOR = registerItem("ceramic_capacitor");
+    public static final ItemEntry<Item> ELECTROLYTIC_CAPACITOR = registerItem("electrolytic_capacitor");
+    public static final ItemEntry<Item> ELECTRIC_MOTOR = registerItem("electric_motor");
+    public static final ItemEntry<Item> STATOR = registerItem("stator");
+    public static final ItemEntry<Item> ROTOR = registerItem("rotor");
+    public static final ItemEntry<Item> FIELD_COIL = registerItem("field_coil");
+    public static final ItemEntry<Item> GEAR = registerItem("gear");
+    public static final ItemEntry<Item> HEAT_SINK = registerItem("heat_sink");
+    public static final ItemEntry<Item> HEATING_ELEMENT = registerItem("heating_element");
+    public static final ItemEntry<Item> INDUCTION_CORE = registerItem("induction_core");
     // Real thermocouples pair Constantan with Copper for the Seebeck effect -- this is that pair,
     // as an installed (not consumed) upgrade for the Thermoelectric Generator. See
     // ThermoelectricGeneratorBlockEntity#hasCoupling.
-    public static final DeferredItem<Item> THERMOELECTRIC_COUPLING = ITEMS.registerSimpleItem("thermoelectric_coupling");
-    public static final DeferredItem<Item> MAGNET_WIRE = ITEMS.registerSimpleItem("magnet_wire");
-    public static final DeferredItem<Item> MEMORY_WIRE = ITEMS.registerSimpleItem("memory_wire");
-    public static final DeferredItem<Item> RESISTANCE_WIRE = ITEMS.registerSimpleItem("resistance_wire");
-    public static final DeferredItem<Item> SOLDER_WIRE = ITEMS.registerSimpleItem("solder_wire");
+    public static final ItemEntry<Item> THERMOELECTRIC_COUPLING = registerItem("thermoelectric_coupling");
+    public static final ItemEntry<Item> MAGNET_WIRE = registerItem("magnet_wire");
+    public static final ItemEntry<Item> MEMORY_WIRE = registerItem("memory_wire");
+    public static final ItemEntry<Item> RESISTANCE_WIRE = registerItem("resistance_wire");
+    public static final ItemEntry<Item> SOLDER_WIRE = registerItem("solder_wire");
     // Burr sets have 480 durability; matches the original mod's behavior where wearing one out
     // shrinks the stack instead of "breaking" it (see CrusherBlockEntity#processRecipe).
-    public static final DeferredItem<Item> BRASS_BURR_SET = ITEMS.registerSimpleItem("brass_burr_set", props -> props.durability(480));
-    public static final DeferredItem<Item> STEEL_BURR_SET = ITEMS.registerSimpleItem("steel_burr_set", props -> props.durability(480));
-    public static final DeferredItem<Item> CHROMIUM_BURR_SET = ITEMS.registerSimpleItem("chromium_burr_set", props -> props.durability(480));
-    public static final DeferredItem<Item> TUNGSTEN_CARBIDE_BURR_SET = ITEMS.registerSimpleItem("tungsten_carbide_burr_set", props -> props.durability(480));
+    public static final ItemEntry<Item> BRASS_BURR_SET = registerItem("brass_burr_set", props -> props.durability(480));
+    public static final ItemEntry<Item> STEEL_BURR_SET = registerItem("steel_burr_set", props -> props.durability(480));
+    public static final ItemEntry<Item> CHROMIUM_BURR_SET = registerItem("chromium_burr_set", props -> props.durability(480));
+    public static final ItemEntry<Item> TUNGSTEN_CARBIDE_BURR_SET = registerItem("tungsten_carbide_burr_set", props -> props.durability(480));
     // Preserved from the original mod: the tungsten_rhenium burr set has no durability set (never wears out).
-    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_BURR_SET = ITEMS.registerSimpleItem("tungsten_rhenium_burr_set");
-    public static final DeferredItem<Item> LEAD_SULFATE_PLATE = ITEMS.registerSimpleItem("lead_sulfate_plate");
-    public static final DeferredItem<Item> SILICON_PLATE = ITEMS.registerSimpleItem("silicon_plate");
-    public static final DeferredItem<Item> STEEL_PLATE = ITEMS.registerSimpleItem("steel_plate");
-    public static final DeferredItem<Item> COPPER_PLATE = ITEMS.registerSimpleItem("copper_plate");
-    public static final DeferredItem<Item> INVAR_PLATE = ITEMS.registerSimpleItem("invar_plate");
-    public static final DeferredItem<Item> ALUMINUM_PLATE = ITEMS.registerSimpleItem("aluminum_plate");
-    public static final DeferredItem<Item> ALUMINUM_FOIL = ITEMS.registerSimpleItem("aluminum_foil");
+    public static final ItemEntry<Item> TUNGSTEN_RHENIUM_BURR_SET = registerItem("tungsten_rhenium_burr_set");
+    public static final ItemEntry<Item> LEAD_SULFATE_PLATE = registerItem("lead_sulfate_plate");
+    public static final ItemEntry<Item> SILICON_PLATE = registerItem("silicon_plate");
+    public static final ItemEntry<Item> STEEL_PLATE = registerItem("steel_plate");
+    public static final ItemEntry<Item> COPPER_PLATE = registerItem("copper_plate");
+    public static final ItemEntry<Item> INVAR_PLATE = registerItem("invar_plate");
+    public static final ItemEntry<Item> ALUMINUM_PLATE = registerItem("aluminum_plate");
+    public static final ItemEntry<Item> ALUMINUM_FOIL = registerItem("aluminum_foil");
     // Tools -- 5 tiers (Steel/Cobalt Steel/Stellite/Tungsten Steel/Tungsten-Rhenium), see ModToolMaterials
     // for the real-world justification behind each. Pickaxe/sword are plain Item + Properties#pickaxe/
     // sword; axe/hoe/shovel keep their dedicated classes for their unique right-click behavior.
-    public static final DeferredItem<Item> STEEL_PICKAXE = ITEMS.registerSimpleItem("steel_pickaxe", props -> props.pickaxe(ModToolMaterials.STEEL, 1.0F, -2.8F));
-    public static final DeferredItem<Item> STEEL_SWORD = ITEMS.registerSimpleItem("steel_sword", props -> props.sword(ModToolMaterials.STEEL, 3.0F, -2.4F));
+    public static final ItemEntry<Item> STEEL_PICKAXE = registerHandheldItem("steel_pickaxe", props -> props.pickaxe(ModToolMaterials.STEEL, 1.0F, -2.8F));
+    public static final ItemEntry<Item> STEEL_SWORD = registerHandheldItem("steel_sword", props -> props.sword(ModToolMaterials.STEEL, 3.0F, -2.4F));
     public static final DeferredItem<AxeItem> STEEL_AXE = ITEMS.registerItem("steel_axe", props -> new AxeItem(ModToolMaterials.STEEL, 5.0F, -3.0F, props), UnaryOperator.identity());
     public static final DeferredItem<HoeItem> STEEL_HOE = ITEMS.registerItem("steel_hoe", props -> new HoeItem(ModToolMaterials.STEEL, -3.0F, 0.0F, props), UnaryOperator.identity());
     public static final DeferredItem<ShovelItem> STEEL_SHOVEL = ITEMS.registerItem("steel_shovel", props -> new ShovelItem(ModToolMaterials.STEEL, 1.5F, -3.0F, props), UnaryOperator.identity());
 
-    public static final DeferredItem<Item> COBALT_STEEL_PICKAXE = ITEMS.registerSimpleItem("cobalt_steel_pickaxe", props -> props.pickaxe(ModToolMaterials.COBALT_STEEL, 1.0F, -2.8F));
-    public static final DeferredItem<Item> COBALT_STEEL_SWORD = ITEMS.registerSimpleItem("cobalt_steel_sword", props -> props.sword(ModToolMaterials.COBALT_STEEL, 3.0F, -2.4F));
+    public static final ItemEntry<Item> COBALT_STEEL_PICKAXE = registerHandheldItem("cobalt_steel_pickaxe", props -> props.pickaxe(ModToolMaterials.COBALT_STEEL, 1.0F, -2.8F));
+    public static final ItemEntry<Item> COBALT_STEEL_SWORD = registerHandheldItem("cobalt_steel_sword", props -> props.sword(ModToolMaterials.COBALT_STEEL, 3.0F, -2.4F));
     public static final DeferredItem<AxeItem> COBALT_STEEL_AXE = ITEMS.registerItem("cobalt_steel_axe", props -> new AxeItem(ModToolMaterials.COBALT_STEEL, 5.0F, -3.0F, props), UnaryOperator.identity());
     public static final DeferredItem<HoeItem> COBALT_STEEL_HOE = ITEMS.registerItem("cobalt_steel_hoe", props -> new HoeItem(ModToolMaterials.COBALT_STEEL, -3.0F, 0.0F, props), UnaryOperator.identity());
     public static final DeferredItem<ShovelItem> COBALT_STEEL_SHOVEL = ITEMS.registerItem("cobalt_steel_shovel", props -> new ShovelItem(ModToolMaterials.COBALT_STEEL, 1.5F, -3.0F, props), UnaryOperator.identity());
 
-    public static final DeferredItem<Item> STELLITE_PICKAXE = ITEMS.registerSimpleItem("stellite_pickaxe", props -> props.pickaxe(ModToolMaterials.STELLITE, 1.0F, -2.8F));
-    public static final DeferredItem<Item> STELLITE_SWORD = ITEMS.registerSimpleItem("stellite_sword", props -> props.sword(ModToolMaterials.STELLITE, 3.0F, -2.4F));
+    public static final ItemEntry<Item> STELLITE_PICKAXE = registerHandheldItem("stellite_pickaxe", props -> props.pickaxe(ModToolMaterials.STELLITE, 1.0F, -2.8F));
+    public static final ItemEntry<Item> STELLITE_SWORD = registerHandheldItem("stellite_sword", props -> props.sword(ModToolMaterials.STELLITE, 3.0F, -2.4F));
     public static final DeferredItem<AxeItem> STELLITE_AXE = ITEMS.registerItem("stellite_axe", props -> new AxeItem(ModToolMaterials.STELLITE, 5.0F, -3.0F, props), UnaryOperator.identity());
     public static final DeferredItem<HoeItem> STELLITE_HOE = ITEMS.registerItem("stellite_hoe", props -> new HoeItem(ModToolMaterials.STELLITE, -3.0F, 0.0F, props), UnaryOperator.identity());
     public static final DeferredItem<ShovelItem> STELLITE_SHOVEL = ITEMS.registerItem("stellite_shovel", props -> new ShovelItem(ModToolMaterials.STELLITE, 1.5F, -3.0F, props), UnaryOperator.identity());
 
-    public static final DeferredItem<Item> TUNGSTEN_STEEL_PICKAXE = ITEMS.registerSimpleItem("tungsten_steel_pickaxe", props -> props.pickaxe(ModToolMaterials.TUNGSTEN_STEEL, 1.0F, -2.8F));
-    public static final DeferredItem<Item> TUNGSTEN_STEEL_SWORD = ITEMS.registerSimpleItem("tungsten_steel_sword", props -> props.sword(ModToolMaterials.TUNGSTEN_STEEL, 3.0F, -2.4F));
+    public static final ItemEntry<Item> TUNGSTEN_STEEL_PICKAXE = registerHandheldItem("tungsten_steel_pickaxe", props -> props.pickaxe(ModToolMaterials.TUNGSTEN_STEEL, 1.0F, -2.8F));
+    public static final ItemEntry<Item> TUNGSTEN_STEEL_SWORD = registerHandheldItem("tungsten_steel_sword", props -> props.sword(ModToolMaterials.TUNGSTEN_STEEL, 3.0F, -2.4F));
     public static final DeferredItem<AxeItem> TUNGSTEN_STEEL_AXE = ITEMS.registerItem("tungsten_steel_axe", props -> new AxeItem(ModToolMaterials.TUNGSTEN_STEEL, 5.0F, -3.0F, props), UnaryOperator.identity());
     public static final DeferredItem<HoeItem> TUNGSTEN_STEEL_HOE = ITEMS.registerItem("tungsten_steel_hoe", props -> new HoeItem(ModToolMaterials.TUNGSTEN_STEEL, -3.0F, 0.0F, props), UnaryOperator.identity());
     public static final DeferredItem<ShovelItem> TUNGSTEN_STEEL_SHOVEL = ITEMS.registerItem("tungsten_steel_shovel", props -> new ShovelItem(ModToolMaterials.TUNGSTEN_STEEL, 1.5F, -3.0F, props), UnaryOperator.identity());
 
-    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_PICKAXE = ITEMS.registerSimpleItem("tungsten_rhenium_pickaxe", props -> props.pickaxe(ModToolMaterials.TUNGSTEN_RHENIUM, 1.0F, -2.8F));
-    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_SWORD = ITEMS.registerSimpleItem("tungsten_rhenium_sword", props -> props.sword(ModToolMaterials.TUNGSTEN_RHENIUM, 3.0F, -2.4F));
+    public static final ItemEntry<Item> TUNGSTEN_RHENIUM_PICKAXE = registerHandheldItem("tungsten_rhenium_pickaxe", props -> props.pickaxe(ModToolMaterials.TUNGSTEN_RHENIUM, 1.0F, -2.8F));
+    public static final ItemEntry<Item> TUNGSTEN_RHENIUM_SWORD = registerHandheldItem("tungsten_rhenium_sword", props -> props.sword(ModToolMaterials.TUNGSTEN_RHENIUM, 3.0F, -2.4F));
     public static final DeferredItem<AxeItem> TUNGSTEN_RHENIUM_AXE = ITEMS.registerItem("tungsten_rhenium_axe", props -> new AxeItem(ModToolMaterials.TUNGSTEN_RHENIUM, 5.0F, -3.0F, props), UnaryOperator.identity());
     public static final DeferredItem<HoeItem> TUNGSTEN_RHENIUM_HOE = ITEMS.registerItem("tungsten_rhenium_hoe", props -> new HoeItem(ModToolMaterials.TUNGSTEN_RHENIUM, -3.0F, 0.0F, props), UnaryOperator.identity());
     public static final DeferredItem<ShovelItem> TUNGSTEN_RHENIUM_SHOVEL = ITEMS.registerItem("tungsten_rhenium_shovel", props -> new ShovelItem(ModToolMaterials.TUNGSTEN_RHENIUM, 1.5F, -3.0F, props), UnaryOperator.identity());
 
     // Armor -- only 4 of the mod's ~28 metals, see ModArmorMaterials for why. Full-set bonuses for
     // Titanium/Stellite/Tungsten-Rhenium are applied in ArmorSetBonusHandler, not here.
-    public static final DeferredItem<Item> STEEL_HELMET = ITEMS.registerSimpleItem("steel_helmet", props -> props.humanoidArmor(ModArmorMaterials.STEEL, ArmorType.HELMET));
-    public static final DeferredItem<Item> STEEL_CHESTPLATE = ITEMS.registerSimpleItem("steel_chestplate", props -> props.humanoidArmor(ModArmorMaterials.STEEL, ArmorType.CHESTPLATE));
-    public static final DeferredItem<Item> STEEL_LEGGINGS = ITEMS.registerSimpleItem("steel_leggings", props -> props.humanoidArmor(ModArmorMaterials.STEEL, ArmorType.LEGGINGS));
-    public static final DeferredItem<Item> STEEL_BOOTS = ITEMS.registerSimpleItem("steel_boots", props -> props.humanoidArmor(ModArmorMaterials.STEEL, ArmorType.BOOTS));
+    public static final ItemEntry<Item> STEEL_HELMET = registerItem("steel_helmet", props -> props.humanoidArmor(ModArmorMaterials.STEEL, ArmorType.HELMET));
+    public static final ItemEntry<Item> STEEL_CHESTPLATE = registerItem("steel_chestplate", props -> props.humanoidArmor(ModArmorMaterials.STEEL, ArmorType.CHESTPLATE));
+    public static final ItemEntry<Item> STEEL_LEGGINGS = registerItem("steel_leggings", props -> props.humanoidArmor(ModArmorMaterials.STEEL, ArmorType.LEGGINGS));
+    public static final ItemEntry<Item> STEEL_BOOTS = registerItem("steel_boots", props -> props.humanoidArmor(ModArmorMaterials.STEEL, ArmorType.BOOTS));
 
-    public static final DeferredItem<Item> TITANIUM_HELMET = ITEMS.registerSimpleItem("titanium_helmet", props -> props.humanoidArmor(ModArmorMaterials.TITANIUM, ArmorType.HELMET));
-    public static final DeferredItem<Item> TITANIUM_CHESTPLATE = ITEMS.registerSimpleItem("titanium_chestplate", props -> props.humanoidArmor(ModArmorMaterials.TITANIUM, ArmorType.CHESTPLATE));
-    public static final DeferredItem<Item> TITANIUM_LEGGINGS = ITEMS.registerSimpleItem("titanium_leggings", props -> props.humanoidArmor(ModArmorMaterials.TITANIUM, ArmorType.LEGGINGS));
-    public static final DeferredItem<Item> TITANIUM_BOOTS = ITEMS.registerSimpleItem("titanium_boots", props -> props.humanoidArmor(ModArmorMaterials.TITANIUM, ArmorType.BOOTS));
+    public static final ItemEntry<Item> TITANIUM_HELMET = registerItem("titanium_helmet", props -> props.humanoidArmor(ModArmorMaterials.TITANIUM, ArmorType.HELMET));
+    public static final ItemEntry<Item> TITANIUM_CHESTPLATE = registerItem("titanium_chestplate", props -> props.humanoidArmor(ModArmorMaterials.TITANIUM, ArmorType.CHESTPLATE));
+    public static final ItemEntry<Item> TITANIUM_LEGGINGS = registerItem("titanium_leggings", props -> props.humanoidArmor(ModArmorMaterials.TITANIUM, ArmorType.LEGGINGS));
+    public static final ItemEntry<Item> TITANIUM_BOOTS = registerItem("titanium_boots", props -> props.humanoidArmor(ModArmorMaterials.TITANIUM, ArmorType.BOOTS));
 
-    public static final DeferredItem<Item> STELLITE_HELMET = ITEMS.registerSimpleItem("stellite_helmet", props -> props.humanoidArmor(ModArmorMaterials.STELLITE, ArmorType.HELMET));
-    public static final DeferredItem<Item> STELLITE_CHESTPLATE = ITEMS.registerSimpleItem("stellite_chestplate", props -> props.humanoidArmor(ModArmorMaterials.STELLITE, ArmorType.CHESTPLATE));
-    public static final DeferredItem<Item> STELLITE_LEGGINGS = ITEMS.registerSimpleItem("stellite_leggings", props -> props.humanoidArmor(ModArmorMaterials.STELLITE, ArmorType.LEGGINGS));
-    public static final DeferredItem<Item> STELLITE_BOOTS = ITEMS.registerSimpleItem("stellite_boots", props -> props.humanoidArmor(ModArmorMaterials.STELLITE, ArmorType.BOOTS));
+    public static final ItemEntry<Item> STELLITE_HELMET = registerItem("stellite_helmet", props -> props.humanoidArmor(ModArmorMaterials.STELLITE, ArmorType.HELMET));
+    public static final ItemEntry<Item> STELLITE_CHESTPLATE = registerItem("stellite_chestplate", props -> props.humanoidArmor(ModArmorMaterials.STELLITE, ArmorType.CHESTPLATE));
+    public static final ItemEntry<Item> STELLITE_LEGGINGS = registerItem("stellite_leggings", props -> props.humanoidArmor(ModArmorMaterials.STELLITE, ArmorType.LEGGINGS));
+    public static final ItemEntry<Item> STELLITE_BOOTS = registerItem("stellite_boots", props -> props.humanoidArmor(ModArmorMaterials.STELLITE, ArmorType.BOOTS));
 
-    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_HELMET = ITEMS.registerSimpleItem("tungsten_rhenium_helmet", props -> props.humanoidArmor(ModArmorMaterials.TUNGSTEN_RHENIUM, ArmorType.HELMET));
-    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_CHESTPLATE = ITEMS.registerSimpleItem("tungsten_rhenium_chestplate", props -> props.humanoidArmor(ModArmorMaterials.TUNGSTEN_RHENIUM, ArmorType.CHESTPLATE));
-    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_LEGGINGS = ITEMS.registerSimpleItem("tungsten_rhenium_leggings", props -> props.humanoidArmor(ModArmorMaterials.TUNGSTEN_RHENIUM, ArmorType.LEGGINGS));
-    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_BOOTS = ITEMS.registerSimpleItem("tungsten_rhenium_boots", props -> props.humanoidArmor(ModArmorMaterials.TUNGSTEN_RHENIUM, ArmorType.BOOTS));
+    public static final ItemEntry<Item> TUNGSTEN_RHENIUM_HELMET = registerItem("tungsten_rhenium_helmet", props -> props.humanoidArmor(ModArmorMaterials.TUNGSTEN_RHENIUM, ArmorType.HELMET));
+    public static final ItemEntry<Item> TUNGSTEN_RHENIUM_CHESTPLATE = registerItem("tungsten_rhenium_chestplate", props -> props.humanoidArmor(ModArmorMaterials.TUNGSTEN_RHENIUM, ArmorType.CHESTPLATE));
+    public static final ItemEntry<Item> TUNGSTEN_RHENIUM_LEGGINGS = registerItem("tungsten_rhenium_leggings", props -> props.humanoidArmor(ModArmorMaterials.TUNGSTEN_RHENIUM, ArmorType.LEGGINGS));
+    public static final ItemEntry<Item> TUNGSTEN_RHENIUM_BOOTS = registerItem("tungsten_rhenium_boots", props -> props.humanoidArmor(ModArmorMaterials.TUNGSTEN_RHENIUM, ArmorType.BOOTS));
 
     // Power tool implements -- worn/replaced independently of the tool body they're socketed
     // into. Same 5-tier durability ladder as the hand tools (ModToolMaterials), but each gets the
     // Tool component matching what it actually does: drill bits mine (pickaxe rules), chains fell
     // trees (axe rules -- logs are axe-mineable, not hardness-gated), cultivator blades till
     // (hoe rules, mostly just for durability/enchantability since tilling isn't tier-gated).
-    public static final DeferredItem<Item> STEEL_DRILL_BIT = ITEMS.registerSimpleItem("steel_drill_bit", props -> props.pickaxe(ModToolMaterials.STEEL, 1.0F, -2.8F));
-    public static final DeferredItem<Item> COBALT_STEEL_DRILL_BIT = ITEMS.registerSimpleItem("cobalt_steel_drill_bit", props -> props.pickaxe(ModToolMaterials.COBALT_STEEL, 1.0F, -2.8F));
-    public static final DeferredItem<Item> STELLITE_DRILL_BIT = ITEMS.registerSimpleItem("stellite_drill_bit", props -> props.pickaxe(ModToolMaterials.STELLITE, 1.0F, -2.8F));
-    public static final DeferredItem<Item> TUNGSTEN_STEEL_DRILL_BIT = ITEMS.registerSimpleItem("tungsten_steel_drill_bit", props -> props.pickaxe(ModToolMaterials.TUNGSTEN_STEEL, 1.0F, -2.8F));
-    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_DRILL_BIT = ITEMS.registerSimpleItem("tungsten_rhenium_drill_bit", props -> props.pickaxe(ModToolMaterials.TUNGSTEN_RHENIUM, 1.0F, -2.8F));
+    public static final ItemEntry<Item> STEEL_DRILL_BIT = registerItem("steel_drill_bit", props -> props.pickaxe(ModToolMaterials.STEEL, 1.0F, -2.8F));
+    public static final ItemEntry<Item> COBALT_STEEL_DRILL_BIT = registerItem("cobalt_steel_drill_bit", props -> props.pickaxe(ModToolMaterials.COBALT_STEEL, 1.0F, -2.8F));
+    public static final ItemEntry<Item> STELLITE_DRILL_BIT = registerItem("stellite_drill_bit", props -> props.pickaxe(ModToolMaterials.STELLITE, 1.0F, -2.8F));
+    public static final ItemEntry<Item> TUNGSTEN_STEEL_DRILL_BIT = registerItem("tungsten_steel_drill_bit", props -> props.pickaxe(ModToolMaterials.TUNGSTEN_STEEL, 1.0F, -2.8F));
+    public static final ItemEntry<Item> TUNGSTEN_RHENIUM_DRILL_BIT = registerItem("tungsten_rhenium_drill_bit", props -> props.pickaxe(ModToolMaterials.TUNGSTEN_RHENIUM, 1.0F, -2.8F));
 
-    public static final DeferredItem<Item> STEEL_CHAIN = ITEMS.registerSimpleItem("steel_chain", props -> props.axe(ModToolMaterials.STEEL, 5.0F, -3.0F));
-    public static final DeferredItem<Item> COBALT_STEEL_CHAIN = ITEMS.registerSimpleItem("cobalt_steel_chain", props -> props.axe(ModToolMaterials.COBALT_STEEL, 5.0F, -3.0F));
-    public static final DeferredItem<Item> STELLITE_CHAIN = ITEMS.registerSimpleItem("stellite_chain", props -> props.axe(ModToolMaterials.STELLITE, 5.0F, -3.0F));
-    public static final DeferredItem<Item> TUNGSTEN_STEEL_CHAIN = ITEMS.registerSimpleItem("tungsten_steel_chain", props -> props.axe(ModToolMaterials.TUNGSTEN_STEEL, 5.0F, -3.0F));
-    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_CHAIN = ITEMS.registerSimpleItem("tungsten_rhenium_chain", props -> props.axe(ModToolMaterials.TUNGSTEN_RHENIUM, 5.0F, -3.0F));
+    public static final ItemEntry<Item> STEEL_CHAIN = registerItem("steel_chain", props -> props.axe(ModToolMaterials.STEEL, 5.0F, -3.0F));
+    public static final ItemEntry<Item> COBALT_STEEL_CHAIN = registerItem("cobalt_steel_chain", props -> props.axe(ModToolMaterials.COBALT_STEEL, 5.0F, -3.0F));
+    public static final ItemEntry<Item> STELLITE_CHAIN = registerItem("stellite_chain", props -> props.axe(ModToolMaterials.STELLITE, 5.0F, -3.0F));
+    public static final ItemEntry<Item> TUNGSTEN_STEEL_CHAIN = registerItem("tungsten_steel_chain", props -> props.axe(ModToolMaterials.TUNGSTEN_STEEL, 5.0F, -3.0F));
+    public static final ItemEntry<Item> TUNGSTEN_RHENIUM_CHAIN = registerItem("tungsten_rhenium_chain", props -> props.axe(ModToolMaterials.TUNGSTEN_RHENIUM, 5.0F, -3.0F));
 
-    public static final DeferredItem<Item> STEEL_CULTIVATOR_BLADE = ITEMS.registerSimpleItem("steel_cultivator_blade", props -> props.hoe(ModToolMaterials.STEEL, -3.0F, 0.0F));
-    public static final DeferredItem<Item> COBALT_STEEL_CULTIVATOR_BLADE = ITEMS.registerSimpleItem("cobalt_steel_cultivator_blade", props -> props.hoe(ModToolMaterials.COBALT_STEEL, -3.0F, 0.0F));
-    public static final DeferredItem<Item> STELLITE_CULTIVATOR_BLADE = ITEMS.registerSimpleItem("stellite_cultivator_blade", props -> props.hoe(ModToolMaterials.STELLITE, -3.0F, 0.0F));
-    public static final DeferredItem<Item> TUNGSTEN_STEEL_CULTIVATOR_BLADE = ITEMS.registerSimpleItem("tungsten_steel_cultivator_blade", props -> props.hoe(ModToolMaterials.TUNGSTEN_STEEL, -3.0F, 0.0F));
-    public static final DeferredItem<Item> TUNGSTEN_RHENIUM_CULTIVATOR_BLADE = ITEMS.registerSimpleItem("tungsten_rhenium_cultivator_blade", props -> props.hoe(ModToolMaterials.TUNGSTEN_RHENIUM, -3.0F, 0.0F));
+    public static final ItemEntry<Item> STEEL_CULTIVATOR_BLADE = registerItem("steel_cultivator_blade", props -> props.hoe(ModToolMaterials.STEEL, -3.0F, 0.0F));
+    public static final ItemEntry<Item> COBALT_STEEL_CULTIVATOR_BLADE = registerItem("cobalt_steel_cultivator_blade", props -> props.hoe(ModToolMaterials.COBALT_STEEL, -3.0F, 0.0F));
+    public static final ItemEntry<Item> STELLITE_CULTIVATOR_BLADE = registerItem("stellite_cultivator_blade", props -> props.hoe(ModToolMaterials.STELLITE, -3.0F, 0.0F));
+    public static final ItemEntry<Item> TUNGSTEN_STEEL_CULTIVATOR_BLADE = registerItem("tungsten_steel_cultivator_blade", props -> props.hoe(ModToolMaterials.TUNGSTEN_STEEL, -3.0F, 0.0F));
+    public static final ItemEntry<Item> TUNGSTEN_RHENIUM_CULTIVATOR_BLADE = registerItem("tungsten_rhenium_cultivator_blade", props -> props.hoe(ModToolMaterials.TUNGSTEN_RHENIUM, -3.0F, 0.0F));
 
     // Battery packs -- rechargeable FE storage for the power tools, crafted from the lithium
     // battery chain (the only chemistry in the mod that's actually right for a cordless tool).
@@ -478,7 +477,43 @@ public class RegistryHandler {
     public static final BlockEntry<Block> AUTOCLAVE = registerFacingBlock("autoclave", p -> new AutoclaveBlock(p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
 
     private static void trackBlockItem(BlockEntry<Block> block) {
-        BLOCK_ITEMS_IN_ORDER.add(() -> block.get().asItem());
+        REGISTRATE_ITEMS_IN_ORDER.add(() -> block.get().asItem());
+    }
+
+    private static void trackItem(ItemEntry<Item> item) {
+        REGISTRATE_ITEMS_IN_ORDER.add(item);
+    }
+
+    // Registers a plain Item through Registrate with its default flat/generated model (from
+    // ItemBuilder.create()'s own defaults, matching every plain item's actual model here --
+    // parent item/generated, texture industrialmetallurgy:item/<name> -- see Registrate's
+    // ItemBuilder.java), suppressing the also-defaulted lang generation (same reasoning as blocks:
+    // Registrate's lang provider writes a whole, non-merging file that would otherwise clobber
+    // the hand-authored one).
+    private static ItemEntry<Item> registerItem(String name) {
+        return registerItem(name, p -> p);
+    }
+
+    private static ItemEntry<Item> registerItem(String name, NonNullUnaryOperator<Item.Properties> properties) {
+        ItemEntry<Item> item = IndustrialMetallurgy.REGISTRATE.item(name, Item::new)
+                .properties(properties)
+                .setData(ProviderType.LANG, (ctx, prov) -> {})
+                .register();
+        trackItem(item);
+        return item;
+    }
+
+    // Registers a plain Item whose model is item/handheld rather than the default item/generated
+    // -- the pickaxe/sword tiers, which (per CLAUDE.md) are plain Item + Properties#pickaxe/sword
+    // rather than a dedicated class, unlike axe/hoe/shovel.
+    private static ItemEntry<Item> registerHandheldItem(String name, NonNullUnaryOperator<Item.Properties> properties) {
+        ItemEntry<Item> item = IndustrialMetallurgy.REGISTRATE.item(name, Item::new)
+                .properties(properties)
+                .model(() -> (ctx, prov) -> prov.generateFlatItem(ctx.get(), ModelTemplates.FLAT_HANDHELD_ITEM))
+                .setData(ProviderType.LANG, (ctx, prov) -> {})
+                .register();
+        trackItem(item);
+        return item;
     }
 
     // Registers a block through Registrate with its default cube_all blockstate and drop-self
@@ -498,7 +533,7 @@ public class RegistryHandler {
     // raw drop item -- BlockLootSubProvider#createOreDrop) through Registrate, keeping the default
     // cube_all blockstate. Used for ore blocks and oil_sand (whose "raw drop" is oily_sand).
     private static BlockEntry<Block> registerOreBlock(String name, NonNullFunction<BlockBehaviour.Properties, Block> factory,
-            Supplier<BlockBehaviour.Properties> properties, DeferredItem<Item> drop) {
+            Supplier<BlockBehaviour.Properties> properties, Supplier<Item> drop) {
         BlockEntry<Block> block = IndustrialMetallurgy.REGISTRATE.<Block>block(name, factory)
                 .properties(p -> properties.get())
                 .simpleItem()
