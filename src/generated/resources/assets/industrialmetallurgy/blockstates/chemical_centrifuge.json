@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "industrialmetallurgy:block/chemical_centrifuge",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "industrialmetallurgy:block/chemical_centrifuge"
+    },
+    "facing=south": {
+      "model": "industrialmetallurgy:block/chemical_centrifuge",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "industrialmetallurgy:block/chemical_centrifuge",
+      "y": 270
+    }
+  }
+}

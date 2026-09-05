@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "industrialmetallurgy:battery_box"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "industrialmetallurgy:blocks/battery_box"
+}

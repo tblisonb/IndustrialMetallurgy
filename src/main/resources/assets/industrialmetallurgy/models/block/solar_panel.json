@@ -1,8 +1,0 @@
-{
-    "parent": "block/cube_bottom_top",
-    "textures": {
-        "top": "industrialmetallurgy:block/solar_panel_top",
-        "bottom": "industrialmetallurgy:block/solar_panel_bottom",
-        "side": "industrialmetallurgy:block/solar_panel_side"
-    }
-}

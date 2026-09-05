@@ -1,0 +1,138 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "industrialmetallurgy:block/io_port_input_core"
+      },
+      "when": {
+        "mode": "input"
+      }
+    },
+    {
+      "apply": {
+        "model": "industrialmetallurgy:block/io_port_output_core"
+      },
+      "when": {
+        "mode": "output"
+      }
+    },
+    {
+      "apply": {
+        "model": "industrialmetallurgy:block/io_port_both_core"
+      },
+      "when": {
+        "mode": "both"
+      }
+    },
+    {
+      "apply": {
+        "model": "industrialmetallurgy:block/io_port_disabled_core"
+      },
+      "when": {
+        "mode": "disabled"
+      }
+    },
+    {
+      "apply": {
+        "model": "industrialmetallurgy:block/conduit_arm_horizontal"
+      },
+      "when": {
+        "north": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "industrialmetallurgy:block/conduit_arm_horizontal",
+        "y": 90
+      },
+      "when": {
+        "east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "industrialmetallurgy:block/conduit_arm_horizontal",
+        "y": 180
+      },
+      "when": {
+        "south": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "industrialmetallurgy:block/conduit_arm_horizontal",
+        "y": 270
+      },
+      "when": {
+        "west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "industrialmetallurgy:block/conduit_arm_up"
+      },
+      "when": {
+        "up": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "industrialmetallurgy:block/conduit_arm_down"
+      },
+      "when": {
+        "down": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "industrialmetallurgy:block/io_port_host_horizontal"
+      },
+      "when": {
+        "facing": "north"
+      }
+    },
+    {
+      "apply": {
+        "model": "industrialmetallurgy:block/io_port_host_horizontal",
+        "y": 180
+      },
+      "when": {
+        "facing": "south"
+      }
+    },
+    {
+      "apply": {
+        "model": "industrialmetallurgy:block/io_port_host_horizontal",
+        "y": 90
+      },
+      "when": {
+        "facing": "east"
+      }
+    },
+    {
+      "apply": {
+        "model": "industrialmetallurgy:block/io_port_host_horizontal",
+        "y": 270
+      },
+      "when": {
+        "facing": "west"
+      }
+    },
+    {
+      "apply": {
+        "model": "industrialmetallurgy:block/io_port_host_down"
+      },
+      "when": {
+        "facing": "up"
+      }
+    },
+    {
+      "apply": {
+        "model": "industrialmetallurgy:block/io_port_host_up"
+      },
+      "when": {
+        "facing": "down"
+      }
+    }
+  ]
+}

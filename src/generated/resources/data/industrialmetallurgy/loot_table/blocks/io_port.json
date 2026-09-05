@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "industrialmetallurgy:io_port"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "industrialmetallurgy:blocks/io_port"
+}

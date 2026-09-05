@@ -1,0 +1,60 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "industrialmetallurgy:block/conduit_core"
+      }
+    },
+    {
+      "apply": {
+        "model": "industrialmetallurgy:block/conduit_arm_horizontal"
+      },
+      "when": {
+        "north": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "industrialmetallurgy:block/conduit_arm_horizontal",
+        "y": 90
+      },
+      "when": {
+        "east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "industrialmetallurgy:block/conduit_arm_horizontal",
+        "y": 180
+      },
+      "when": {
+        "south": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "industrialmetallurgy:block/conduit_arm_horizontal",
+        "y": 270
+      },
+      "when": {
+        "west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "industrialmetallurgy:block/conduit_arm_up"
+      },
+      "when": {
+        "up": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "industrialmetallurgy:block/conduit_arm_down"
+      },
+      "when": {
+        "down": "true"
+      }
+    }
+  ]
+}

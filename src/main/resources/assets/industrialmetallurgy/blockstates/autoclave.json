@@ -1,8 +1,0 @@
-{
-    "variants": {
-        "facing=north": {"model": "industrialmetallurgy:block/autoclave"},
-        "facing=east":  {"model": "industrialmetallurgy:block/autoclave", "y": 90 },
-        "facing=south": {"model": "industrialmetallurgy:block/autoclave", "y": 180 },
-        "facing=west":  {"model": "industrialmetallurgy:block/autoclave", "y": 270 }
-    }
-}
