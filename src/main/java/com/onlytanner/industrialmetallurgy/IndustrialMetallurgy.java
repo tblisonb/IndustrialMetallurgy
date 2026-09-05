@@ -4,6 +4,7 @@ import com.onlytanner.industrialmetallurgy.init.ModContainerTypes;
 import com.onlytanner.industrialmetallurgy.init.ModDataComponents;
 import com.onlytanner.industrialmetallurgy.init.ModRecipes;
 import com.onlytanner.industrialmetallurgy.init.ModTileEntityTypes;
+import com.onlytanner.industrialmetallurgy.util.IMRegistrate;
 import com.onlytanner.industrialmetallurgy.util.RegistryHandler;
 import org.slf4j.Logger;
 
@@ -29,6 +30,23 @@ public class IndustrialMetallurgy {
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
 
+    // Registrate: fluent registration + automatic datagen wrapper (see build.gradle). Full-mod
+    // migration in progress (see registrate-migration branch / task list) -- entries not yet
+    // migrated stay on the plain DeferredRegister pattern below until their phase lands.
+    //
+    // skipErrors(true): on this NeoForge version, RegisterEvent for minecraft:block genuinely
+    // fires more than once before FMLCommonSetupEvent (Registrate's own AbstractRegistrate source
+    // comments "Register events fire multiple times, so clean them up on common setup"), but
+    // AbstractRegistrate#onRegister doesn't clear its per-registry registrations map after a
+    // successful pass -- a second firing within that window re-attempts every entry and throws
+    // "duplicate key" for entries already registered by the first pass, crashing mod load.
+    // skipErrors downgrades that (harmless, already-registered) failure to a logged error instead
+    // of a thrown exception, which is exactly the case here. Confirmed via reproducing on
+    // runServer/runData and reading Registrate's own AbstractRegistrate.java. IMRegistrate (util
+    // package) is a minimal subclass working around the same root issue's other symptom: a second
+    // GatherDataEvent.Client firing crashing `./gradlew runData` with a duplicate data provider.
+    public static final IMRegistrate REGISTRATE = IMRegistrate.create(MODID).skipErrors(true);
+
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, MODID);
 
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB = CREATIVE_MODE_TABS.register("industrial_metallurgy", () -> CreativeModeTab.builder()
@@ -41,6 +59,10 @@ public class IndustrialMetallurgy {
     // The constructor for the mod class is the first code that is run when your mod is loaded.
     // FML will recognize some parameter types like IEventBus or ModContainer and pass them in automatically.
     public IndustrialMetallurgy(IEventBus modEventBus, ModContainer modContainer) {
+        // Must run before RegistryHandler.init (which triggers RegistryHandler's static
+        // initializers, including its Registrate-based registrations) so Registrate's
+        // RegisterEvent/GatherDataEvent listeners are attached in time to see them.
+        REGISTRATE.registerEventListeners(modEventBus);
         ModDataComponents.init(modEventBus);
         RegistryHandler.init(modEventBus);
         ModTileEntityTypes.init(modEventBus);
