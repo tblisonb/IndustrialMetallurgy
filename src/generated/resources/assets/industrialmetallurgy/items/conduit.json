@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "industrialmetallurgy:block/conduit"
+    "model": "industrialmetallurgy:item/conduit"
   }
 }

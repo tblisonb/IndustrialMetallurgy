@@ -197,7 +197,9 @@ public class RegistryHandler {
     public static final ItemEntry<Item> COAL_COKE = registerItem("coal_coke");
     public static final ItemEntry<Item> SILICON = registerItem("silicon");
     public static final ItemEntry<Item> BITUMEN = registerItem("bitumen");
-    public static final ItemEntry<Item> OILY_SAND = registerItem("oily_sand");
+    // Reuses oil_sand's own block texture for its flat icon (no separate item/oily_sand.png
+    // exists) -- registerItem()'s default model would look for one and render untextured.
+    public static final ItemEntry<Item> OILY_SAND = registerItemWithBlockTexture("oily_sand", "oil_sand");
     public static final ItemEntry<Item> PEAT = registerItem("peat");
     public static final ItemEntry<Item> FERTILIZER = registerItem("fertilizer");
     public static final ItemEntry<Item> HDPE_SHEET = registerItem("hdpe_sheet");
@@ -455,7 +457,10 @@ public class RegistryHandler {
     public static final BlockEntry<Block> BATTERY_BOX = registerFacingLitBlock("battery_box", p -> new BatteryBoxBlock(p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
     public static final BlockEntry<Block> ELECTRIC_FURNACE = registerFacingLitBlock("electric_furnace", p -> new ElectricFurnaceBlock(p), () -> BlockBehaviour.Properties.ofFullCopy(Blocks.FURNACE));
     // Solar Panel -- passive FE generator, no fuel/recipe, see SolarPanelBlockEntity.
-    public static final BlockEntry<Block> SOLAR_PANEL = registerBlock("solar_panel", p -> new SolarPanelBlock(p), SolarPanelBlock::newProperties);
+    // Not a plain cube -- top/bottom/side are three distinct textures (models/block/solar_panel.json),
+    // so it can't use registerBlock's default cube_all blockstate; references the existing model
+    // file instead, same as the facing/lit machine blocks.
+    public static final BlockEntry<Block> SOLAR_PANEL = registerSingleModelBlock("solar_panel", p -> new SolarPanelBlock(p), SolarPanelBlock::newProperties);
     // Minimal in-mod logistics (Part 4/ROADMAP): an I/O Port exposes a neighboring machine's
     // energy capability with an Input/Output/Both filter; a Conduit relays energy between
     // whatever I/O Ports or raw machines sit at the ends of a connected run of Conduits. See
@@ -504,6 +509,17 @@ public class RegistryHandler {
         ItemEntry<Item> item = IndustrialMetallurgy.REGISTRATE.item(name, Item::new)
                 .properties(properties)
                 .model(() -> (ctx, prov) -> prov.generateFlatItem(ctx.get(), ModelTemplates.FLAT_HANDHELD_ITEM))
+                .setData(ProviderType.LANG, (ctx, prov) -> {})
+                .register();
+        trackItem(item);
+        return item;
+    }
+
+    // Registers a plain Item whose flat icon texture is an existing BLOCK texture rather than a
+    // dedicated item/<name>.png -- oily_sand, which reuses oil_sand's own block texture.
+    private static ItemEntry<Item> registerItemWithBlockTexture(String name, String blockTextureName) {
+        ItemEntry<Item> item = IndustrialMetallurgy.REGISTRATE.item(name, Item::new)
+                .model(() -> (ctx, prov) -> prov.generateFlatItem(ctx.get(), prov.modBlockTexture(blockTextureName)))
                 .setData(ProviderType.LANG, (ctx, prov) -> {})
                 .register();
         trackItem(item);
@@ -572,6 +588,21 @@ public class RegistryHandler {
         return block;
     }
 
+    // Registers a block whose blockstate is a single, non-rotated variant referencing an existing
+    // model file (industrialmetallurgy:block/<name>) rather than Registrate's default cube_all --
+    // for blocks whose model isn't a simple single-textured cube (e.g. distinct top/bottom/side
+    // textures) but also don't need facing rotation. Reuses the existing hand-authored model file.
+    private static BlockEntry<Block> registerSingleModelBlock(String name, NonNullFunction<BlockBehaviour.Properties, Block> factory, Supplier<BlockBehaviour.Properties> properties) {
+        BlockEntry<Block> block = IndustrialMetallurgy.REGISTRATE.<Block>block(name, factory)
+                .properties(p -> properties.get())
+                .simpleItem()
+                .blockstate(() -> (ctx, prov) -> prov.create(ctx.getEntry(), prov.modLoc("block/" + name)))
+                .setData(ProviderType.LANG, (ctx, prov) -> {})
+                .register();
+        trackBlockItem(block);
+        return block;
+    }
+
     // Registers a furnace-like block whose blockstate is just 4 horizontal-facing rotations of a
     // single existing model (industrialmetallurgy:block/<name>) -- crusher, extruder, soldering
     // station, chemical centrifuge/reactor, autoclave. Reuses the existing hand-authored model
@@ -627,7 +658,12 @@ public class RegistryHandler {
     private static BlockEntry<Block> registerConduit() {
         BlockEntry<Block> block = IndustrialMetallurgy.REGISTRATE.<Block>block("conduit", p -> new ConduitBlock(p))
                 .properties(p -> ConduitBlock.newProperties())
-                .simpleItem()
+                // A real, standalone 6-armed-hub item model (models/item/conduit.json) -- not
+                // referenced by the blockstate -- reads far better as an inventory icon than the
+                // placed block's mostly-hidden small core. .simpleItem()'s default model derivation
+                // only works for single-variant blockstates and falls back to a flat icon for a
+                // multipart one like this, so it's overridden here to reuse that existing file.
+                .item().model(() -> (ctx, prov) -> prov.createWithExistingModel(ctx.get(), prov.modLoc("item/conduit"))).build()
                 .blockstate(() -> (ctx, prov) -> prov.blockStateOutput.accept(
                         addConduitArms(
                                 MultiPartGenerator.multiPart(ctx.getEntry())
@@ -642,7 +678,8 @@ public class RegistryHandler {
     private static BlockEntry<Block> registerIoPort() {
         BlockEntry<Block> block = IndustrialMetallurgy.REGISTRATE.<Block>block("io_port", p -> new IOPortBlock(p))
                 .properties(p -> IOPortBlock.newProperties())
-                .simpleItem()
+                // See registerConduit's comment -- same standalone-icon reasoning, models/item/io_port.json.
+                .item().model(() -> (ctx, prov) -> prov.createWithExistingModel(ctx.get(), prov.modLoc("item/io_port"))).build()
                 .blockstate(() -> (ctx, prov) -> {
                     MultiPartGenerator generator = MultiPartGenerator.multiPart(ctx.getEntry())
                             .with(new ConditionBuilder().term(IOPortBlock.MODE, IOPortBlockEntity.Mode.INPUT), BlockModelGenerators.plainVariant(prov.modLoc("block/io_port_input_core")))

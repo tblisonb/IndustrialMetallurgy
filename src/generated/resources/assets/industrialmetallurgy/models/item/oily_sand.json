@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "industrialmetallurgy:item/oily_sand"
+    "layer0": "industrialmetallurgy:block/oil_sand"
   }
 }

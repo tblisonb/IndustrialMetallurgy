@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "industrialmetallurgy:block/io_port"
+    "model": "industrialmetallurgy:item/io_port"
   }
 }
